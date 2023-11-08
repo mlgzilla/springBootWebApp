@@ -1,13 +1,15 @@
 package egar.domain.report.dto;
 
+import egar.domain.task.entity.Task;
+
 import java.time.LocalDateTime;
 
-public class ReportCriteria {
+public class ReportDtoRead {
     private Integer id;
     private String name;
     private String description;
     private LocalDateTime dateFiled;
-    private Integer taskId; //TODO id or task???
+    private Task task; //TODO id or task???
 
     public Integer getId() {
         return id;
@@ -41,19 +43,19 @@ public class ReportCriteria {
         this.dateFiled = dateFiled;
     }
 
-    public Integer getTaskId() {
-        return taskId;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTaskId(Integer taskId) {
-        this.taskId = taskId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
-    public ReportCriteria(Integer id, String name, String description, LocalDateTime dateFiled, Integer taskId) {
+    public ReportDtoRead(Integer id, String name, String description, LocalDateTime dateFiled, Task task) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.dateFiled = dateFiled;
-        this.taskId = taskId;
+        this.task = task;
     }
 }

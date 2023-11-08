@@ -1,13 +1,17 @@
 package egar.domain.task.entity;
 
 import egar.domain.employee.entity.Employee;
+import egar.domain.report.entity.Report;
 import egar.enums.TaskStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "task")
+@Data
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,43 +26,7 @@ public class Task {
 
     private TaskStatus status;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "task")
+    private Set<Report> reports;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getDueTime() {
-        return dueTime;
-    }
-
-    public void setDueTime(LocalDateTime dueTime) {
-        this.dueTime = dueTime;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
 }
