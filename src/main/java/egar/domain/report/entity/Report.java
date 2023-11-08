@@ -19,6 +19,17 @@ public class Report {
     @JoinColumn(name = "task_id")
     private Task task;
 
+    public Report() {
+    }
+
+    public Report(Integer id, String name, String description, LocalDateTime dateFiled, Task task) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.dateFiled = dateFiled;
+        this.task = task;
+    }
+
     public Integer getId() {
         return id;
     }

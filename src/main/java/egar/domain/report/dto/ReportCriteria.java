@@ -1,7 +1,5 @@
 package egar.domain.report.dto;
 
-import egar.domain.task.entity.Task;
-
 import java.time.LocalDateTime;
 
 public class ReportCriteria {
@@ -9,7 +7,7 @@ public class ReportCriteria {
     private String name;
     private String description;
     private LocalDateTime dateFiled;
-    private Task task; //TODO id or task???
+    private Integer taskId; //TODO id or task???
 
     public Integer getId() {
         return id;
@@ -43,12 +41,19 @@ public class ReportCriteria {
         this.dateFiled = dateFiled;
     }
 
-    public Task getTask() {
-        return task;
+    public Integer getTaskId() {
+        return taskId;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 
+    public ReportCriteria(Integer id, String name, String description, LocalDateTime dateFiled, Integer taskId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.dateFiled = dateFiled;
+        this.taskId = taskId;
+    }
 }

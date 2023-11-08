@@ -1,6 +1,6 @@
 package egar.service;
 
-import egar.repo.ReportRepository;
+import egar.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
 @Service
