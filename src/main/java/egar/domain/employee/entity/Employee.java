@@ -36,6 +36,6 @@ public class Employee implements Serializable {
     @Column(name = "contract_type")
     private ContractType contractType;
 
-    @OneToMany(mappedBy = "assignee")
+    @OneToMany(mappedBy = "employee")
     private Set<Task> tasks;
 }
