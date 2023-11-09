@@ -1,18 +1,16 @@
 package egar.domain.report.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 public class ReportDtoRead {
     private Integer id;
     private String name;
     private String description;
     private LocalDateTime dateFiled;
-    private Integer taskId; //TODO id or task???
+    private Integer taskId;
 
     public ReportDtoRead(Integer id, String name, String description, LocalDateTime dateFiled, Integer taskId) {
         this.id = id;

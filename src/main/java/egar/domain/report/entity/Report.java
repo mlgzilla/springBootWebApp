@@ -16,10 +16,14 @@ public class Report implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
     private String description;
+
     @Column(name = "date_filed")
     private LocalDateTime dateFiled;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "report_fk_1"))
     private Task task;

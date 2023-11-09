@@ -11,10 +11,16 @@ import java.util.Set;
 @Data
 public class TaskDtoRead {
     private Integer id;
+
     private String name;
+
     private String description;
+
     private LocalDateTime dueTime;
+
     private Employee employee;
+
     private TaskStatus status;
+
     private Set<Report> reports;
 }
