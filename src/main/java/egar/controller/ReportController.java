@@ -1,13 +1,13 @@
 package egar.controller;
 
 import egar.domain.report.dto.ReportDtoRead;
+import egar.domain.report.entity.Report;
 import egar.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -25,5 +25,13 @@ public class ReportController {
         else
             model.addAttribute("report", reportRead.get());
         return "show";
+    }
+
+    @PostMapping("/")
+    public String create(@ModelAttribute("report") Report report, BindingResult bindingResult){
+        if (bindingResult.hasErrors())
+            return "500";
+        reportService.create(report);
+        return "200";
     }
 }

@@ -22,6 +22,21 @@ public class ReportService {
                 ));
     }
 
+    public Optional<ReportDtoRead> create(Report report){
+        try{
+            Report savedReport = reportRepository.save(report);
+            return Optional.of(new ReportDtoRead(
+                    savedReport.getId(),
+                    savedReport.getName(),
+                    savedReport.getDescription(),
+                    savedReport.getDateFiled(),
+                    savedReport.getTask().getId()
+            ));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public ReportService(ReportRepository reportRepository) {
         this.reportRepository = reportRepository;
     }

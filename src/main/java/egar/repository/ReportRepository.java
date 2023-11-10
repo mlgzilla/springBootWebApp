@@ -1,6 +1,7 @@
 package egar.repository;
 
 import egar.domain.report.entity.Report;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
