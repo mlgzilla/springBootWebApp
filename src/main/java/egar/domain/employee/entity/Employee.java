@@ -34,6 +34,7 @@ public class Employee implements Serializable {
     private Integer cardNumber;
 
     @Column(name = "contract_type")
+    @Enumerated(EnumType.STRING)
     private ContractType contractType;
 
     @OneToMany(mappedBy = "employee")

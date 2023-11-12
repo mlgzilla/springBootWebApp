@@ -1,5 +1,7 @@
 package egar;
 
+import egar.repository.ReportRepository;
+import egar.service.ReportService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -36,4 +36,6 @@ public class Task implements Serializable {
 
     @OneToMany(mappedBy = "task")
     private Set<Report> reports;
+
+
 }

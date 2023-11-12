@@ -30,8 +30,15 @@ public class ReportController {
     @PostMapping("/")
     public String create(@ModelAttribute("report") Report report, BindingResult bindingResult){
         if (bindingResult.hasErrors())
+            return "400";
+        if(reportService.create(report).isEmpty())
             return "500";
-        reportService.create(report);
         return "200";
+    }
+
+    @GetMapping("/new")
+    public String getNew(Model model){
+        model.addAttribute(new Report());
+        return "new";
     }
 }

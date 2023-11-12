@@ -24,7 +24,8 @@ public class ReportService {
 
     public Optional<ReportDtoRead> create(Report report){
         try{
-            Report savedReport = reportRepository.save(report);
+            //report.setId(reportRepository.count());
+            Report savedReport = reportRepository.saveAndFlush(report);
             return Optional.of(new ReportDtoRead(
                     savedReport.getId(),
                     savedReport.getName(),
