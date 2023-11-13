@@ -5,7 +5,7 @@
   <title>name Report</title>
 </head>
 <body>
-<form th:action="@{/}" th:object="${task}" th:method="post">
+<form th:action="@{/task/}" th:object="${task}" th:method="post">
 
   <label for="name">name </label>
   <input type="text" th:field="*{name}" id="name"/>
@@ -27,10 +27,10 @@
   <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
   <br/>
 
-  <select id="status" th:field="*{status}">
-    <option value="">Select task for disable</option>
-    <option th:each="statusValue : ${taskStatus}" th:value="${statusValue}" th:text="${statusValue}"></option>
-  </select>
+<!--  <select id="status" th:field="*{status}">-->
+<!--    <option value="">Select status</option>-->
+<!--    <option th:each="taskStatus : ${taskStatus}" th:value="${taskStatus}" th:text="${taskStatus}"></option>-->
+<!--  </select>-->
 
   <br/>
 

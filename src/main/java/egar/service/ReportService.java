@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ReportService {
     private final ReportRepository reportRepository;
 
@@ -49,5 +48,9 @@ public class ReportService {
                 report.getDateFiled(),
                 report.getTask().getId()
         )).collect(Collectors.toList());
+    }
+
+    public ReportService(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
     }
 }

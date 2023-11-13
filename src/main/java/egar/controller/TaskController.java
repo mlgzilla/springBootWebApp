@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/task") 
 public class TaskController {
     private TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model){
@@ -41,6 +44,7 @@ public class TaskController {
     @GetMapping("/new")
     public String getNew(Model model){
         model.addAttribute(new Task());
+        model.addAttribute("taskStatus", TaskStatus.values());
         return "task/new";
     }
 
@@ -48,7 +52,6 @@ public class TaskController {
     public String findByEmployeeId(@PathVariable Integer id, Model model){
         List<TaskDtoRead> taskList = taskService.findByEmployeeId(id);
         model.addAttribute("taskList", taskList);
-        model.addAttribute("taskStatus", TaskStatus.values());
         return "task/showList";
     }
 }

@@ -4,6 +4,7 @@ import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
+import egar.enums.TaskStatus;
 import egar.repository.ReportRepository;
 import egar.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class TaskService {
     private TaskRepository taskRepository;
     private ReportRepository reportRepository;
@@ -33,6 +33,7 @@ public class TaskService {
 
     public Optional<TaskDtoRead> create(Task task){
         try{
+            task.setStatus(TaskStatus.NotStarted);
             Task savedTask = taskRepository.saveAndFlush(task);
             return Optional.of(new TaskDtoRead(
                     savedTask.getId(),
@@ -56,5 +57,10 @@ public class TaskService {
                 task.getEmployee().getId(),
                 task.getStatus()
         )).collect(Collectors.toList());
+    }
+
+    public TaskService(TaskRepository taskRepository, ReportRepository reportRepository) {
+        this.taskRepository = taskRepository;
+        this.reportRepository = reportRepository;
     }
 }

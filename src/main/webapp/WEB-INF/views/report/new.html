@@ -5,7 +5,7 @@
   <title>name Report</title>
 </head>
 <body>
-<form th:action="@{/}" th:object="${report}" th:method="post">
+<form th:action="@{/report/}" th:object="${report}" th:method="post">
 
   <label for="name">name </label>
   <input type="text" th:field="*{name}" id="name"/>
