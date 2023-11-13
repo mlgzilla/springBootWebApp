@@ -1,8 +1,8 @@
 package egar.controller;
 
-import egar.domain.report.dto.ReportDtoRead;
-import egar.domain.report.entity.Report;
-import egar.service.ReportService;
+import egar.domain.task.dto.TaskDtoRead;
+import egar.domain.task.entity.Task;
+import egar.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,39 +14,39 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/report")
-public class ReportController {
-    private final ReportService reportService;
+@RequestMapping("/task") 
+public class TaskController {
+    private TaskService taskService;
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model){
-        Optional<ReportDtoRead> reportRead = reportService.findById(id);
-        if(reportRead.isEmpty())
+        Optional<TaskDtoRead> taskRead = taskService.findById(id);
+        if(taskRead.isEmpty())
             return "404";
         else
-            model.addAttribute("report", reportRead.get());
-        return "report/show";
+            model.addAttribute("task", taskRead.get());
+        return "task/show";
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("report") Report report, BindingResult bindingResult){
+    public String create(@ModelAttribute("task") Task task, BindingResult bindingResult){
         if (bindingResult.hasErrors())
             return "400";
-        if(reportService.create(report).isEmpty())
+        if(taskService.create(task).isEmpty())
             return "500";
         return "200";
     }
 
     @GetMapping("/new")
     public String getNew(Model model){
-        model.addAttribute(new Report());
-        return "report/new";
+        model.addAttribute(new Task());
+        return "task/new";
     }
 
     @GetMapping("/findByTaskId/{id}")
     public String findByTaskId(@PathVariable Integer id, Model model){
-        List<ReportDtoRead> reportList = reportService.findByTaskId(id);
-        model.addAttribute("reportList", reportList);
-        return "report/showList";
+        List<TaskDtoRead> taskList = taskService.findByTaskId(id);
+        model.addAttribute("taskList", taskList);
+        return "task/showList";
     }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each="report: ${reportList}">
+    <p><b>id: </b><span th:text="${report.id}"></span></p>
+    <p><b>имя: </b><span th:text="${report.name}"></span></p>
+    <p><b>описание: </b><span th:text="${report.description}"></span></p>
+    <p><b>дата: </b><span th:text="${report.dateFiled}"></span></p>
+    <p><b>id задачи: </b><span th:text="${report.taskId}"></span></p>
+    <p>---------------------------------------------------------------</p>
+</div>
+</body>
+</html>

@@ -18,9 +18,18 @@ public class TaskDtoRead {
 
     private LocalDateTime dueTime;
 
-    private Employee employee;
+    private Integer employeeId;
 
     private TaskStatus status;
 
     private Set<Report> reports;
+
+    public TaskDtoRead(Integer id, String name, String description, LocalDateTime dueTime, Integer employeeId, TaskStatus status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.dueTime = dueTime;
+        this.employeeId = employeeId;
+        this.status = status;
+    }
 }
