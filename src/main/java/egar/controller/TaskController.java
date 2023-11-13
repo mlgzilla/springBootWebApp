@@ -2,6 +2,7 @@ package egar.controller;
 
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
+import egar.enums.TaskStatus;
 import egar.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -43,10 +44,11 @@ public class TaskController {
         return "task/new";
     }
 
-    @GetMapping("/findByTaskId/{id}")
-    public String findByTaskId(@PathVariable Integer id, Model model){
-        List<TaskDtoRead> taskList = taskService.findByTaskId(id);
+    @GetMapping("/findByEmployeeId/{id}")
+    public String findByEmployeeId(@PathVariable Integer id, Model model){
+        List<TaskDtoRead> taskList = taskService.findByEmployeeId(id);
         model.addAttribute("taskList", taskList);
+        model.addAttribute("taskStatus", TaskStatus.values());
         return "task/showList";
     }
 }

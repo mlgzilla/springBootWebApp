@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>name Report</title>
+</head>
+<body>
+<form th:action="@{/}" th:object="${task}" th:method="post">
+
+  <label for="name">name </label>
+  <input type="text" th:field="*{name}" id="name"/>
+  <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Err</div>
+  <br/>
+
+  <label for="description">description </label>
+  <input type="text" th:field="*{description}" id="description"/>
+  <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Err</div>
+  <br/>
+
+  <label for="dueTime">dueTime </label>
+  <input type="text" th:field="*{dueTime}" id="dueTime"/>
+  <div th:if="${#fields.hasErrors('dueTime')}" th:errors="*{dueTime}">Err</div>
+  <br/>
+
+  <label for="employee.id">Task </label>
+  <input type="number" th:field="*{employee.id}" id="employee.id"/>
+  <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
+  <br/>
+
+  <select id="status" th:field="*{status}">
+    <option value="">Select task for disable</option>
+    <option th:each="statusValue : ${taskStatus}" th:value="${statusValue}" th:text="${statusValue}"></option>
+  </select>
+
+  <br/>
+
+  <input type="submit" value="Create"/>
+
+</form>
+
+</body>
+</html>
