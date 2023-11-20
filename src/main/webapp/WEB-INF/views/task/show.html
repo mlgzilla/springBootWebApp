@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
 <p><b>id: </b><span th:text="${task.id}"></span></p>
@@ -11,9 +11,17 @@
 <p><b>дата сдачи: </b><span th:text="${task.dueTime}"></span></p>
 <p><b>id работника: </b><span th:text="${task.employeeId}"></span></p>
 <p><b>статус: </b><span th:text="${task.status}"></span></p>
+<p th:if="${!task.reports.isEmpty()}"><b>Отчеты: </b>
+<div th:each="report: ${task.reports}">
+    <p><b>id: </b><span th:text="${report.id}"></span></p>
+    <p><b>имя: </b><span th:text="${report.name}"></span></p>
+    <p><b>описание: </b><span th:text="${report.description}"></span></p>
+    <p><b>дата: </b><span th:text="${report.dateFiled}"></span></p>
+    <p><b>id задачи: </b><span th:text="${report.taskId}"></span></p>
+    <p>---------------------------------------------------------------</p>
+</div>
+</p>
+
 </body>
-<form th:action="@{/findByTaskId/{id}(id=${task.id})}" th:method="get">
-  <input type="submit" value="Вывести отчеты по задаче"/>
-</form>
 
 </html>

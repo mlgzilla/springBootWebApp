@@ -1,11 +1,13 @@
 package egar.domain.task.dto;
 
 import egar.domain.employee.entity.Employee;
+import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
 import egar.enums.TaskStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Set;
 
 @Data
@@ -22,7 +24,7 @@ public class TaskDtoRead {
 
     private TaskStatus status;
 
-    private Set<Report> reports;
+    private Set<ReportDtoRead> reports;
 
     public TaskDtoRead(Integer id, String name, String description, LocalDateTime dueTime, Integer employeeId, TaskStatus status) {
         this.id = id;
@@ -31,5 +33,6 @@ public class TaskDtoRead {
         this.dueTime = dueTime;
         this.employeeId = employeeId;
         this.status = status;
+        reports = Collections.emptySet();
     }
 }

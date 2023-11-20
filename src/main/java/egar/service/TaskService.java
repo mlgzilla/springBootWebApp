@@ -59,6 +59,27 @@ public class TaskService {
         )).collect(Collectors.toList());
     }
 
+    public List<TaskDtoRead> findByStatus(TaskStatus status){
+        return taskRepository.findByStatus(status).stream().map(task -> new TaskDtoRead(
+                task.getId(),
+                task.getName(),
+                task.getDescription(),
+                task.getDueTime(),
+                task.getEmployee().getId(),
+                task.getStatus()
+        )).collect(Collectors.toList());
+    }
+
+    public List<ReportDtoRead> findReportsByTaskId(Integer id){
+        return reportRepository.findByTaskId(id).stream().map(report -> new ReportDtoRead(
+                report.getId(),
+                report.getName(),
+                report.getDescription(),
+                report.getDateFiled(),
+                report.getTask().getId()
+        )).collect(Collectors.toList());
+    }
+
     public TaskService(TaskRepository taskRepository, ReportRepository reportRepository) {
         this.taskRepository = taskRepository;
         this.reportRepository = reportRepository;

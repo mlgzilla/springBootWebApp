@@ -22,7 +22,7 @@
   <div th:if="${#fields.hasErrors('dueTime')}" th:errors="*{dueTime}">Err</div>
   <br/>
 
-  <label for="employee.id">Task </label>
+  <label for="employee.id">Assignee </label>
   <input type="number" th:field="*{employee.id}" id="employee.id"/>
   <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
   <br/>
