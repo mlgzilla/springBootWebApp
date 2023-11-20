@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
-    private TaskRepository taskRepository;
-    private ReportRepository reportRepository;
+    private final TaskRepository taskRepository;
+    private final ReportRepository reportRepository;
 
     public Optional<TaskDtoRead> findById(Integer id){
         return taskRepository.findById(id).map
