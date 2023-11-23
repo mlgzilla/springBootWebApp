@@ -20,64 +20,29 @@ public class TaskService {
     private final ReportRepository reportRepository;
 
     public Optional<TaskDtoRead> findById(Integer id){
-        return taskRepository.findById(id).map
-                (task -> new TaskDtoRead(
-                        task.getId(),
-                        task.getName(),
-                        task.getDescription(),
-                        task.getDueTime(),
-                        task.getEmployee().getId(),
-                        task.getStatus()
-                ));
+        return taskRepository.findById(id).map(Task::mapToDto);
     }
 
     public Optional<TaskDtoRead> create(Task task){
         try{
             task.setStatus(TaskStatus.NotStarted);
             Task savedTask = taskRepository.saveAndFlush(task);
-            return Optional.of(new TaskDtoRead(
-                    savedTask.getId(),
-                    savedTask.getName(),
-                    savedTask.getDescription(),
-                    savedTask.getDueTime(),
-                    savedTask.getEmployee().getId(),
-                    savedTask.getStatus()
-            ));
+            return Optional.of(savedTask.mapToDto());
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
     public List<TaskDtoRead> findByEmployeeId(Integer id){
-        return taskRepository.findByEmployeeId(id).stream().map(task -> new TaskDtoRead(
-                task.getId(),
-                task.getName(),
-                task.getDescription(),
-                task.getDueTime(),
-                task.getEmployee().getId(),
-                task.getStatus()
-        )).collect(Collectors.toList());
+        return taskRepository.findByEmployeeId(id).stream().map(Task::mapToDto).collect(Collectors.toList());
     }
 
     public List<TaskDtoRead> findByStatus(TaskStatus status){
-        return taskRepository.findByStatus(status).stream().map(task -> new TaskDtoRead(
-                task.getId(),
-                task.getName(),
-                task.getDescription(),
-                task.getDueTime(),
-                task.getEmployee().getId(),
-                task.getStatus()
-        )).collect(Collectors.toList());
+        return taskRepository.findByStatus(status).stream().map(Task::mapToDto).collect(Collectors.toList());
     }
 
     public List<ReportDtoRead> findReportsByTaskId(Integer id){
-        return reportRepository.findByTaskId(id).stream().map(report -> new ReportDtoRead(
-                report.getId(),
-                report.getName(),
-                report.getDescription(),
-                report.getDateFiled(),
-                report.getTask().getId()
-        )).collect(Collectors.toList());
+        return reportRepository.findByTaskId(id).stream().map(Report::mapToDto).collect(Collectors.toList());
     }
 
     public TaskService(TaskRepository taskRepository, ReportRepository reportRepository) {

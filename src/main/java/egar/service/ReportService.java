@@ -15,39 +15,20 @@ public class ReportService {
     private final ReportRepository reportRepository;
 
     public Optional<ReportDtoRead> findById(Integer id){
-        return reportRepository.findById(id).map
-                (report -> new ReportDtoRead(
-                        report.getId(),
-                        report.getName(),
-                        report.getDescription(),
-                        report.getDateFiled(),
-                        report.getTask().getId()
-                ));
+        return reportRepository.findById(id).map(Report::mapToDto);
     }
 
     public Optional<ReportDtoRead> create(Report report){
         try{
             Report savedReport = reportRepository.saveAndFlush(report);
-            return Optional.of(new ReportDtoRead(
-                    savedReport.getId(),
-                    savedReport.getName(),
-                    savedReport.getDescription(),
-                    savedReport.getDateFiled(),
-                    savedReport.getTask().getId()
-            ));
+            return Optional.of(savedReport.mapToDto());
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
     public List<ReportDtoRead> findByTaskId(Integer id){
-        return reportRepository.findByTaskId(id).stream().map(report -> new ReportDtoRead(
-                report.getId(),
-                report.getName(),
-                report.getDescription(),
-                report.getDateFiled(),
-                report.getTask().getId()
-        )).collect(Collectors.toList());
+        return reportRepository.findByTaskId(id).stream().map(Report::mapToDto).collect(Collectors.toList());
     }
 
     public ReportService(ReportRepository reportRepository) {
