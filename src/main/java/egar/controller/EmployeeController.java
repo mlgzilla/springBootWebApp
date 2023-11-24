@@ -1,6 +1,7 @@
 package egar.controller;
 
 import egar.domain.employee.dto.EmployeeDtoRead;
+import egar.enums.ContractType;
 import egar.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -47,5 +48,10 @@ public class EmployeeController {
         return "employee/showList";
     }
 
-
+    @GetMapping("/findByContractType/{contractType}")
+    public String findByContractType(@PathVariable ContractType contractType, Model model) {
+        List<EmployeeDtoRead> employeeList = employeeService.findByContractType(contractType);
+        model.addAttribute("employeeList", employeeList);
+        return "employee/showList";
+    }
 }
