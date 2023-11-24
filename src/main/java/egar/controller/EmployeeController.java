@@ -1,8 +1,6 @@
 package egar.controller;
 
-import egar.domain.employee.dto.EmployeeReadDto;
-import egar.domain.report.dto.ReportDtoRead;
-import egar.enums.ContractType;
+import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,10 +17,10 @@ import java.util.Optional;
 @RequestMapping("/employee")
 public class EmployeeController {
     private final EmployeeService employeeService;
-
+    
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model){
-        Optional<EmployeeReadDto> employeeRead = employeeService.findById(id);
+        Optional<EmployeeDtoRead> employeeRead = employeeService.findById(id);
         if(employeeRead.isEmpty())
             return "404";
         else
@@ -30,10 +28,24 @@ public class EmployeeController {
         return "employee/show";
     }
 
-    @GetMapping("/findByContractType/{contractType}")
-    public String findByContractType(@PathVariable ContractType contractType, Model model){
-        List<EmployeeReadDto> employeeList = employeeService.findByContractType(contractType);
+    @GetMapping("/findByFirstName/{firstName}")
+    public String findByFirstName(@PathVariable String firstName, Model model) {
+        List<EmployeeDtoRead> employeeList = employeeService.findByFirstName(firstName);
         model.addAttribute("employeeList", employeeList);
         return "employee/showList";
     }
+    @GetMapping("/findByMiddleName/{middleName}")
+    public String findByMiddleName(@PathVariable String middleName, Model model) {
+        List<EmployeeDtoRead> employeeList = employeeService.findByMiddleName(middleName);
+        model.addAttribute("employeeList", employeeList);
+        return "employee/showList";
+    }
+    @GetMapping("/findBySecondName/{secondName}")
+    public String findBySecondName(@PathVariable String secondName, Model model) {
+        List<EmployeeDtoRead> employeeList = employeeService.findBySecondName(secondName);
+        model.addAttribute("employeeList", employeeList);
+        return "employee/showList";
+    }
+
+
 }

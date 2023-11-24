@@ -1,7 +1,8 @@
 package egar.service;
 
-import egar.domain.employee.dto.EmployeeReadDto;
-import egar.domain.report.dto.ReportDtoRead;
+import egar.domain.employee.dto.EmployeeDtoRead;
+import egar.domain.employee.dto.EmployeeDtoRead;
+import egar.domain.employee.entity.Employee;
 import egar.enums.ContractType;
 import egar.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -18,29 +19,23 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Optional<EmployeeReadDto> findById(Integer id){
-        return employeeRepository.findById(id).map
-                (employee -> new EmployeeReadDto(
-                        employee.getId(),
-                        employee.getFirstName(),
-                        employee.getMiddleName(),
-                        employee.getSecondName(),
-                        employee.getPhoneNumber(),
-                        employee.getCardNumber(),
-                        employee.getContractType()
-                ));
+    public Optional<EmployeeDtoRead> findById(Integer id) {
+        return employeeRepository.findById(id).map(Employee::mapToDto);
     }
 
-    public List<EmployeeReadDto> findByContractType(ContractType contractType){
-        return employeeRepository.findByContractType(contractType).stream().map(
-                employee -> new EmployeeReadDto(
-                        employee.getId(),
-                        employee.getFirstName(),
-                        employee.getMiddleName(),
-                        employee.getSecondName(),
-                        employee.getPhoneNumber(),
-                        employee.getCardNumber(),
-                        employee.getContractType()
-                )).collect(Collectors.toList());
+    public List<EmployeeDtoRead> findByFirstName(String firstName) {
+        return employeeRepository.findByFirstName(firstName).stream().map(Employee::mapToDto).collect(Collectors.toList());
     }
+
+    public List<EmployeeDtoRead> findByMiddleName(String middleName) {
+        return employeeRepository.findByMiddleName(middleName).stream().map(Employee::mapToDto).collect(Collectors.toList());
+    }
+    public List<EmployeeDtoRead> findBySecondName(String secondName) {
+        return employeeRepository.findBySecondName(secondName).stream().map(Employee::mapToDto).collect(Collectors.toList());
+    }
+
+    public List<EmployeeDtoRead> findByContractType(ContractType contractType) {
+        return employeeRepository.findByContractType(contractType).stream().map(Employee::mapToDto).collect(Collectors.toList());
+    }
+
 }

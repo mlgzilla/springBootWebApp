@@ -1,7 +1,9 @@
 package egar.domain.task.entity;
 
+import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.entity.Employee;
 import egar.domain.report.entity.Report;
+import egar.domain.task.dto.TaskDtoRead;
 import egar.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,5 +39,14 @@ public class Task implements Serializable {
     @OneToMany(mappedBy = "task")
     private Set<Report> reports;
 
-
+    public TaskDtoRead mapToDto(){
+        return new TaskDtoRead(
+                this.id,
+                this.name,
+                this.description,
+                this.dueTime,
+                this.employee.getId(),
+                this.status
+        );
+    }
 }

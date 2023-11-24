@@ -1,5 +1,7 @@
 package egar.domain.report.entity;
 
+import egar.domain.employee.dto.EmployeeDtoRead;
+import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.task.entity.Task;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,4 +29,14 @@ public class Report implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "report_fk_1"))
     private Task task;
+
+    public ReportDtoRead mapToDto(){
+        return new ReportDtoRead(
+                this.id,
+                this.name,
+                this.description,
+                this.dateFiled,
+                this.task.getId()
+        );
+    }
 }

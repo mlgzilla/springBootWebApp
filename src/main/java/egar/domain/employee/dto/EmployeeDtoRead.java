@@ -1,14 +1,10 @@
 package egar.domain.employee.dto;
 
-import egar.domain.task.entity.Task;
 import egar.enums.ContractType;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 @Data
-public class EmployeeReadDto {
+public class EmployeeDtoRead {
     private Integer id;
 
     private String firstName;
@@ -23,7 +19,7 @@ public class EmployeeReadDto {
 
     private ContractType contractType;
 
-    public EmployeeReadDto(Integer id, String firstName, String middleName, String secondName, String phoneNumber, Integer cardNumber, ContractType contractType) {
+    public EmployeeDtoRead(Integer id, String firstName, String middleName, String secondName, String phoneNumber, Integer cardNumber, ContractType contractType) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
