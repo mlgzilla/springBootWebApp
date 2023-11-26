@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ReportRepository extends BaseRepository<Report, Integer> {
-    Optional<Report> findById(Integer id);
 
     @Query("SELECT r from Report r")
     List<Report> findAll();
