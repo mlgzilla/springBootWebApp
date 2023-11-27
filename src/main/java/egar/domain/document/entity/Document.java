@@ -5,6 +5,7 @@ import egar.domain.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,15 @@ public class Document {
     @ManyToOne()
     @JoinColumn(name = "employee_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
     private Employee employee;
+
+    public Document(Integer id, String name, Integer pageCount, String path, LocalDateTime creationDate, Employee employee) {
+        this.id = id;
+        this.name = name;
+        this.pageCount = pageCount;
+        this.path = path;
+        this.creationDate = creationDate;
+        this.employee = employee;
+    }
 
     public DocumentDtoRead mapToDto(){
         return new DocumentDtoRead(
