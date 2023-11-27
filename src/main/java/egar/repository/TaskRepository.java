@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends BaseRepository<Task, Integer> {
-    Optional<Task> findById(Integer id);
 
     @Query("select t from Task t where t.employee.id = :id")
     List<Task> findByEmployeeId(Integer id);
