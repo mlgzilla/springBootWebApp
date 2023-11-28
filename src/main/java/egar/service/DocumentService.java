@@ -4,16 +4,13 @@ import egar.domain.document.dto.DocumentDtoRead;
 import egar.domain.document.entity.Document;
 import egar.domain.employee.entity.Employee;
 import egar.repository.DocumentRepository;
-import org.hibernate.id.uuid.UuidGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentService {
     private final DocumentRepository documentRepository;
-    private final String uploadFolder = "D:\\java";
+    private final String uploadFolder;
 
-    public DocumentService(DocumentRepository documentRepository) {
+    public DocumentService(DocumentRepository documentRepository, @Value("${uploadFolder}") String uploadFolder) {
         this.documentRepository = documentRepository;
+        this.uploadFolder = uploadFolder;
     }
 
     public Optional<DocumentDtoRead> findById(Integer id) {
@@ -37,13 +35,13 @@ public class DocumentService {
         return documentRepository.findByName(firstName).stream().map(Document::mapToDto).collect(Collectors.toList());
     }
 
-//    public List<DocumentDtoRead> findByCreationDateBefore(LocalDateTime date) {
-//        return documentRepository.findByCreationDateBefore(date).stream().map(Document::mapToDto).collect(Collectors.toList());
-//    }
+    public List<DocumentDtoRead> findByCreationDateBefore(LocalDateTime date) {
+        return documentRepository.findByCreationDateBefore(date).stream().map(Document::mapToDto).collect(Collectors.toList());
+    }
 
-//    public List<DocumentDtoRead> findByCreationDateAfter(LocalDateTime date) {
-//        return documentRepository.findByCreationDateAfter(date).stream().map(Document::mapToDto).collect(Collectors.toList());
-//    }
+    public List<DocumentDtoRead> findByCreationDateAfter(LocalDateTime date) {
+        return documentRepository.findByCreationDateAfter(date).stream().map(Document::mapToDto).collect(Collectors.toList());
+    }
 
     public Optional<String> upload(MultipartFile file){
         String[] split = file.getOriginalFilename().split("\\.");
@@ -63,7 +61,8 @@ public class DocumentService {
                     employee);
             documentRepository.saveAndFlush(document);
             return Optional.of(newPath);
-        } catch (IOException e) {
+        } catch (IOException e){
+            System.out.println(e.getMessage());
             return Optional.empty();
         }
 
