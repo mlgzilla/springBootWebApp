@@ -6,15 +6,8 @@
 </head>
 <body>
 <form th:method="POST" th:action="@{/document/}" enctype="multipart/form-data">
-    <table>
-        <tr>
-            <td><label path="file">Select a file to upload</label></td>
-            <td><input type="file" name="file" /></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Submit" /></td>
-        </tr>
-    </table>
+    <input type="file" name="file" accept=".doc, .docx, .pdf"/>
+    <p><input type="submit" value="Отправить"/></p>
 </form>
 </body>
 </html>

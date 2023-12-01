@@ -46,7 +46,7 @@ public class DocumentService {
     public Optional<String> upload(MultipartFile file){
         String[] split = file.getOriginalFilename().split("\\.");
         String ext = split[split.length-1];
-        String newPath = uploadFolder + "\\" + UUID.randomUUID() + "." + ext;
+        String newPath = uploadFolder + "/" + UUID.randomUUID() + "." + ext;
         File outputFile = new File(newPath);
         try (FileOutputStream outputStream = new FileOutputStream(outputFile)){
             Employee employee = new Employee();
@@ -63,6 +63,15 @@ public class DocumentService {
             return Optional.of(newPath);
         } catch (IOException e){
             System.out.println(e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> delete(Integer id){
+        try {
+            documentRepository.deleteById(id);
+            return Optional.of("Delete ok");
+        } catch (Exception e) {
             return Optional.empty();
         }
 
