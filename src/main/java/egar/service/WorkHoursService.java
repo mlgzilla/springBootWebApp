@@ -1,0 +1,46 @@
+package egar.service;
+
+import egar.domain.vacation.entity.Vacation;
+import egar.domain.work_hours.dto.WorkHoursDtoRead;
+import egar.domain.work_hours.entity.WorkHours;
+import egar.enums.VacationStatus;
+import egar.repository.VacationRepository;
+import egar.repository.WorkHoursRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class WorkHoursService {
+    private final WorkHoursRepository workHoursRepository;
+    private final VacationRepository vacationRepository;
+
+    public WorkHoursService(WorkHoursRepository workHoursRepository, VacationRepository vacationRepository) {
+        this.workHoursRepository = workHoursRepository;
+        this.vacationRepository = vacationRepository;
+    }
+
+    public Optional<WorkHoursDtoRead> findById(Integer id){
+        return workHoursRepository.findById(id).map(WorkHours::mapToDto);
+    }
+
+    public Optional<WorkHoursDtoRead> create(WorkHours workHours){
+        try{
+            if (vacationRepository.findByEmployeeIdAndStatusInRange(workHours.getEmployee().getId(), VacationStatus.OnGoing, workHours.getTimeStart(), workHours.getTimeFinish()).isEmpty())
+                return Optional.empty();
+            WorkHours savedWorkHours = workHoursRepository.saveAndFlush(workHours);
+            return Optional.of(savedWorkHours.mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public List<WorkHoursDtoRead> findByEmployeeId(Integer id){
+        return workHoursRepository.findByEmployeeId(id).stream().map(WorkHours::mapToDto).collect(Collectors.toList());
+    }
+
+
+}

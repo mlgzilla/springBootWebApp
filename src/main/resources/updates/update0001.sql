@@ -23,6 +23,7 @@ CREATE TABLE public.vacation (
                                  time_finish timestamp NOT NULL,
                                  employee_id int4 NOT NULL,
                                  description varchar NULL,
+                                 status varchar NOT NULL,
                                  CONSTRAINT vacation_pk PRIMARY KEY (id),
                                  CONSTRAINT vacation_fk FOREIGN KEY (employee_id) REFERENCES public.employee(id)
 );

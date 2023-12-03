@@ -14,5 +14,6 @@ public interface BaseRepository<T, ID> extends Repository<T, ID> {
     Optional<T> findById(ID id);
 
     void deleteById(ID id);
+
     Integer count();
 }
