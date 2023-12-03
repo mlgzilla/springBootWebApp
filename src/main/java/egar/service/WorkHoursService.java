@@ -8,6 +8,7 @@ import egar.repository.VacationRepository;
 import egar.repository.WorkHoursRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +41,10 @@ public class WorkHoursService {
 
     public List<WorkHoursDtoRead> findByEmployeeId(Integer id){
         return workHoursRepository.findByEmployeeId(id).stream().map(WorkHours::mapToDto).collect(Collectors.toList());
+    }
+
+    public List<WorkHoursDtoRead> findByEmployeeIdInRange(Integer id, LocalDateTime timeStart, LocalDateTime timeFinish){
+        return workHoursRepository.findByEmployeeIdInRange(id, timeStart, timeFinish).stream().map(WorkHours::mapToDto).collect(Collectors.toList());
     }
 
 

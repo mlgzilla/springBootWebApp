@@ -43,16 +43,4 @@ public class VacationService {
         return vacationRepository.findByEmployeeIdAndStatusInRange(id, status, timeStart, timeFinish).stream().map(Vacation::mapToDto).collect(Collectors.toList());
     }
 
-    public List<VacationDtoRead> findByTimeStartBefore(LocalDateTime dateTime){
-        return vacationRepository.findByTimeStartBefore(dateTime).stream().map(Vacation::mapToDto).collect(Collectors.toList());
-    }
-    public List<VacationDtoRead> findByTimeStartAfter(LocalDateTime dateTime){
-        return vacationRepository.findByTimeStartAfter(dateTime).stream().map(Vacation::mapToDto).collect(Collectors.toList());
-    }
-    public List<VacationDtoRead> findByTimeFinishBefore(LocalDateTime dateTime){
-        return vacationRepository.findByTimeFinishBefore(dateTime).stream().map(Vacation::mapToDto).collect(Collectors.toList());
-    }
-    public List<VacationDtoRead> findByTimeFinishAfter(LocalDateTime dateTime){
-        return vacationRepository.findByTimeFinishAfter(dateTime).stream().map(Vacation::mapToDto).collect(Collectors.toList());
-    }
 }
