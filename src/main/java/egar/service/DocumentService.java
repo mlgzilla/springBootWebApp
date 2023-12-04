@@ -29,13 +29,11 @@ public class DocumentService {
     }
 
     public Result<DocumentDtoRead> findById(Integer id) {
-        try {
-            Document document = documentRepository.findById2(id);
-            return new Result<>(document.mapToDto(), null) ;
-        } catch (Exception e) {
-            System.out.println();
-            return new Result<>(null, e.getMessage()) ;
-        }
+        Document document = documentRepository.findById2(id);
+        if (document == null)
+            return new Result<>(null, "Document was not found");
+        else
+            return new Result<>(document.mapToDto(), null);
 
     }
 
@@ -51,12 +49,12 @@ public class DocumentService {
         return documentRepository.findByCreationDateAfter(date).stream().map(Document::mapToDto).collect(Collectors.toList());
     }
 
-    public Optional<String> upload(MultipartFile file){
+    public Optional<String> upload(MultipartFile file) {
         String[] split = file.getOriginalFilename().split("\\.");
-        String ext = split[split.length-1];
+        String ext = split[split.length - 1];
         String newPath = uploadFolder + "/" + UUID.randomUUID() + "." + ext;
         File outputFile = new File(newPath);
-        try (FileOutputStream outputStream = new FileOutputStream(outputFile)){
+        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
             Employee employee = new Employee();
             employee.setId(1);
             outputStream.write(file.getBytes());
@@ -69,13 +67,13 @@ public class DocumentService {
                     employee);
             documentRepository.saveAndFlush(document);
             return Optional.of(newPath);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             return Optional.empty();
         }
     }
 
-    public Optional<String> delete(Integer id){
+    public Optional<String> delete(Integer id) {
         try {
             documentRepository.deleteById(id);
             return Optional.of("Delete ok");
