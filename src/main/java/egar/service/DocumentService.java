@@ -4,6 +4,7 @@ import egar.domain.document.dto.DocumentDtoRead;
 import egar.domain.document.entity.Document;
 import egar.domain.employee.entity.Employee;
 import egar.repository.DocumentRepository;
+import egar.utils.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,8 +28,15 @@ public class DocumentService {
         this.uploadFolder = uploadFolder;
     }
 
-    public Optional<DocumentDtoRead> findById(Integer id) {
-        return documentRepository.findById(id).map(Document::mapToDto);
+    public Result<DocumentDtoRead> findById(Integer id) {
+        try {
+            Document document = documentRepository.findById2(id);
+            return new Result<>(document.mapToDto(), null) ;
+        } catch (Exception e) {
+            System.out.println();
+            return new Result<>(null, e.getMessage()) ;
+        }
+
     }
 
     public List<DocumentDtoRead> findByName(String firstName) {

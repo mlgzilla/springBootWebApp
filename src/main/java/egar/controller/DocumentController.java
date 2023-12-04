@@ -2,6 +2,7 @@ package egar.controller;
 
 import egar.domain.document.dto.DocumentDtoRead;
 import egar.service.DocumentService;
+import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;
@@ -25,10 +26,10 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
-        Optional<DocumentDtoRead> documentRead = documentService.findById(id);
-        if (documentRead.isEmpty())
-            return "404";
-        model.addAttribute("path", documentRead.get().getPath());
+        Result<DocumentDtoRead> documentRead = documentService.findById(id);
+//        if (documentRead.isEmpty())
+//            return "404";
+        model.addAttribute("path", documentRead.getObject().getPath());
         return "document/show";
     }
 
