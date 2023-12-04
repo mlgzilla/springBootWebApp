@@ -29,7 +29,7 @@ public class DocumentService {
     }
 
     public Result<DocumentDtoRead> findById(Integer id) {
-        Document document = documentRepository.findById2(id);
+        Document document = documentRepository.findById(id);
         if (document == null)
             return new Result<>(null, "Document was not found");
         else

@@ -1,5 +1,6 @@
 package egar.repository;
 
+import egar.utils.Result;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -11,7 +12,7 @@ import java.util.Optional;
 public interface BaseRepository<T, ID> extends Repository<T, ID> {
     <S extends T> S saveAndFlush(S entity);
 
-    Optional<T> findById(ID id);
+    T findById(ID id);
 
     void deleteById(ID id);
 

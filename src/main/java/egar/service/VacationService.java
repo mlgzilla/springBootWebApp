@@ -4,6 +4,7 @@ import egar.domain.vacation.dto.VacationDtoRead;
 import egar.domain.vacation.entity.Vacation;
 import egar.enums.VacationStatus;
 import egar.repository.VacationRepository;
+import egar.utils.Result;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,8 +20,12 @@ public class VacationService {
         this.vacationRepository = vacationRepository;
     }
 
-    public Optional<VacationDtoRead> findById(Integer id){
-        return vacationRepository.findById(id).map(Vacation::mapToDto);
+    public Result<VacationDtoRead> findById(Integer id){
+        Vacation vacation = vacationRepository.findById(id);
+        if (vacation == null)
+            return new Result<>(null, "WorkHours were not found");
+        else
+            return new Result<>(vacation.mapToDto(), null);
     }
 
     public Optional<VacationDtoRead> create(Vacation vacation){

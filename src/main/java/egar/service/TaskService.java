@@ -7,6 +7,7 @@ import egar.domain.task.entity.Task;
 import egar.enums.TaskStatus;
 import egar.repository.ReportRepository;
 import egar.repository.TaskRepository;
+import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,9 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ReportRepository reportRepository;
 
-    public Optional<TaskDtoRead> findById(Integer id){
-        return taskRepository.findById(id).map(Task::mapToDto);
+    public Result<TaskDtoRead> findById(Integer id){
+        Task task = taskRepository.findById(id);
+
     }
 
     public Optional<TaskDtoRead> create(Task task){

@@ -3,6 +3,7 @@ package egar.controller;
 import egar.domain.work_hours.dto.WorkHoursDtoRead;
 import egar.domain.work_hours.entity.WorkHours;
 import egar.service.WorkHoursService;
+import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +22,12 @@ public class WorkHoursController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
-        Optional<WorkHoursDtoRead> workHoursRead = workHoursService.findById(id);
-        if (workHoursRead.isEmpty())
+        Result<WorkHoursDtoRead> workHoursRead = workHoursService.findById(id);
+        if (workHoursRead.isError()) {
+            model.addAttribute("message", workHoursRead.getErrorMessage());
             return "404";
-        model.addAttribute("workHours", workHoursRead.get());
+        }
+        model.addAttribute("workHours", workHoursRead.getObject());
         return "workHours/show";
     }
 

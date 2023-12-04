@@ -1,7 +1,5 @@
 package egar.utils;
 
-import java.util.Optional;
-
 public class Result<T> {
     private final T object;
     private final String errorMessage;

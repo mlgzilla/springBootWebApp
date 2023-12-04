@@ -5,6 +5,7 @@ import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.entity.Employee;
 import egar.enums.ContractType;
 import egar.repository.EmployeeRepository;
+import egar.utils.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,12 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Optional<EmployeeDtoRead> findById(Integer id) {
-        return employeeRepository.findById(id).map(Employee::mapToDto);
+    public Result<EmployeeDtoRead> findById(Integer id) {
+        Employee employee = employeeRepository.findById(id);
+        if (employee == null)
+            return new Result<>(null, "Report was not found");
+        else
+            return new Result<>(employee.mapToDto(), null);
     }
 
     public List<EmployeeDtoRead> findByFirstName(String firstName) {
