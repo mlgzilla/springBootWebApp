@@ -3,6 +3,7 @@ package egar.controller;
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
 import egar.service.ReportService;
+import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +21,11 @@ public class ReportController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model){
-        Optional<ReportDtoRead> reportRead = reportService.findById(id);
-        if(reportRead.isEmpty())
+        Result<ReportDtoRead> reportRead = reportService.findById(id);
+        if(reportRead.isError())
             return "404";
         else
-            model.addAttribute("report", reportRead.get());
+            model.addAttribute("report", reportRead.getObject());
         return "report/show";
     }
 

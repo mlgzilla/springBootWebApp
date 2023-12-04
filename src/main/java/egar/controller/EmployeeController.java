@@ -3,6 +3,7 @@ package egar.controller;
 import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.enums.ContractType;
 import egar.service.EmployeeService;
+import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +22,11 @@ public class EmployeeController {
     
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model){
-        Optional<EmployeeDtoRead> employeeRead = employeeService.findById(id);
-        if(employeeRead.isEmpty())
+        Result<EmployeeDtoRead> employeeRead = employeeService.findById(id);
+        if(employeeRead.isError())
             return "404";
         else
-            model.addAttribute("employee", employeeRead.get());
+            model.addAttribute("employee", employeeRead.getObject());
         return "employee/show";
     }
 

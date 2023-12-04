@@ -1,25 +1,22 @@
 package egar.controller;
 
-import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
 import egar.enums.TaskStatus;
 import egar.service.TaskService;
-import lombok.RequiredArgsConstructor;
+import egar.utils.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/task")
 public class TaskController {
-    private TaskService taskService;
+    private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -27,11 +24,11 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
-        Optional<TaskDtoRead> taskRead = taskService.findById(id);
-        if (taskRead.isEmpty())
+        Result<TaskDtoRead> taskRead = taskService.findById(id);
+        if (taskRead.isError())
             return "404";
         else
-            model.addAttribute("task", taskRead.get());
+            model.addAttribute("task", taskRead.getObject());
         return "task/show";
     }
 
@@ -67,11 +64,11 @@ public class TaskController {
 
     @GetMapping("/findWithReportsById/{id}")
     public String findWithReportsById(@PathVariable Integer id, Model model) {
-        Optional<TaskDtoRead> taskRead = taskService.findById(id);
-        if (taskRead.isEmpty())
+        Result<TaskDtoRead> taskRead = taskService.findById(id);
+        if (taskRead.isError())
             return "404";
         else {
-            TaskDtoRead task = taskRead.get();
+            TaskDtoRead task = taskRead.getObject();
             task.setReports(taskService.findReportsByTaskId(id).stream().collect(Collectors.toSet()));
             model.addAttribute("task", task);
             return "task/show";
