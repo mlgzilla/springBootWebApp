@@ -27,9 +27,9 @@ public class WorkHoursService {
     public Result<WorkHoursDtoRead> findById(Integer id){
         WorkHours workHours = workHoursRepository.findById(id);
         if (workHours == null)
-            return new Result<>(null, "WorkHours were not found");
+            return Result.error("WorkHours was not found");
         else
-            return new Result<>(workHours.mapToDto(), null);
+            return Result.ok(workHours.mapToDto());
     }
 
     public Optional<WorkHoursDtoRead> create(WorkHours workHours){

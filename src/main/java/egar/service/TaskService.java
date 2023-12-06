@@ -23,9 +23,9 @@ public class TaskService {
     public Result<TaskDtoRead> findById(Integer id){
         Task task = taskRepository.findById(id);
         if (task == null)
-            return new Result<>(null, "Task was not found");
+            return Result.error("Task was not found");
         else
-            return new Result<>(task.mapToDto(), null);
+            return Result.ok(task.mapToDto());
     }
 
     public Optional<TaskDtoRead> create(Task task){

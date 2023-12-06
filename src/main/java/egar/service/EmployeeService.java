@@ -23,9 +23,9 @@ public class EmployeeService {
     public Result<EmployeeDtoRead> findById(Integer id) {
         Employee employee = employeeRepository.findById(id);
         if (employee == null)
-            return new Result<>(null, "Report was not found");
+            return Result.error("Employee was not found");
         else
-            return new Result<>(employee.mapToDto(), null);
+            return Result.ok(employee.mapToDto());
     }
 
     public List<EmployeeDtoRead> findByFirstName(String firstName) {

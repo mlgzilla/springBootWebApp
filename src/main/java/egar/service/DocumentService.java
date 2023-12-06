@@ -31,9 +31,9 @@ public class DocumentService {
     public Result<DocumentDtoRead> findById(Integer id) {
         Document document = documentRepository.findById(id);
         if (document == null)
-            return new Result<>(null, "Document was not found");
+            return Result.error("Document was not found");
         else
-            return new Result<>(document.mapToDto(), null);
+            return Result.ok(document.mapToDto());
 
     }
 

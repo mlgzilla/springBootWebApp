@@ -23,9 +23,9 @@ public class VacationService {
     public Result<VacationDtoRead> findById(Integer id){
         Vacation vacation = vacationRepository.findById(id);
         if (vacation == null)
-            return new Result<>(null, "WorkHours were not found");
+            return Result.error("Vacation was not found");
         else
-            return new Result<>(vacation.mapToDto(), null);
+            return Result.ok(vacation.mapToDto());
     }
 
     public Optional<VacationDtoRead> create(Vacation vacation){
