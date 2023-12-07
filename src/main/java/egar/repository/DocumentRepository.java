@@ -20,4 +20,7 @@ public interface DocumentRepository extends BaseRepository<Document, Integer>{
     @Query("select d from Document d where d.creationDate < cast(?1 as timestamp)")
     List<Document> findByCreationDateAfter(LocalDateTime date);
 
+    @Query("select d from Document d where d.employee.id = ?1")
+    void deleteAllByEmployeeId(Integer id);
+
 }

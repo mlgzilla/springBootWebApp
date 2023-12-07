@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends BaseRepository<Task, Integer> {
@@ -16,5 +15,8 @@ public interface TaskRepository extends BaseRepository<Task, Integer> {
 
     @Query("select t from Task t where t.status = :taskStatus")
     List<Task> findByStatus(TaskStatus taskStatus);
+
+    @Query("select t from Task t where t.employee.id = ?1")
+    void deleteAllByEmployeeId(Integer id);
 
 }

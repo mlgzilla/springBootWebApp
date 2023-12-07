@@ -1,5 +1,6 @@
 package egar.controller;
 
+import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
 import egar.enums.TaskStatus;
@@ -25,20 +26,54 @@ public class TaskController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
         Result<TaskDtoRead> taskRead = taskService.findById(id);
-        if (taskRead.isError())
-            return "404";
-        else
+        if (taskRead.isError()) {
+            model.addAttribute("message", taskRead.getMessage());
+            return taskRead.getCode();
+        } else
             model.addAttribute("task", taskRead.getObject());
         return "task/show";
     }
 
-    @PostMapping("/")
-    public String create(@ModelAttribute("task") Task task, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "400";
-        if (taskService.create(task).isEmpty())
-            return "500";
-        return "200";
+    @GetMapping("/findByEmployeeId/{id}")
+    public String findByEmployeeId(@PathVariable Integer id, Model model) {
+        Result<List<TaskDtoRead>> taskList = taskService.findByEmployeeId(id);
+        if (taskList.isError()) {
+            model.addAttribute("message", taskList.getMessage());
+            return taskList.getCode();
+        } else
+            model.addAttribute("taskList", taskList.getObject());
+        return "task/showList";
+    }
+
+    @GetMapping("/findByStatus/{status}")
+    public String findByStatus(@PathVariable TaskStatus status, Model model) {
+        Result<List<TaskDtoRead>> taskList = taskService.findByStatus(status);
+        if (taskList.isError()) {
+            model.addAttribute("message", taskList.getMessage());
+            return taskList.getCode();
+        } else
+            model.addAttribute("taskList", taskList.getObject());
+        return "task/showList";
+    }
+
+    @GetMapping("/findWithReportsById/{id}")
+    public String findWithReportsById(@PathVariable Integer id, Model model) {
+        Result<TaskDtoRead> taskRead = taskService.findById(id);
+        if (taskRead.isError()) {
+            model.addAttribute("message", taskRead.getMessage());
+            return taskRead.getCode();
+        } else {
+            TaskDtoRead task = taskRead.getObject();
+            Result<List<ReportDtoRead>> reports = taskService.findReportsByTaskId(id);
+            if (reports.isError()) {
+                model.addAttribute("message", reports.getMessage());
+                return reports.getCode();
+            } else {
+                task.setReports(reports.getObject().stream().collect(Collectors.toSet()));
+                model.addAttribute("task", task);
+                return "task/show";
+            }
+        }
     }
 
     @GetMapping("/new")
@@ -48,30 +83,31 @@ public class TaskController {
         return "task/new";
     }
 
-    @GetMapping("/findByEmployeeId/{id}")
-    public String findByEmployeeId(@PathVariable Integer id, Model model) {
-        List<TaskDtoRead> taskList = taskService.findByEmployeeId(id);
-        model.addAttribute("taskList", taskList);
-        return "task/showList";
+    @PostMapping("/")
+    public String create(@ModelAttribute("task") Task task, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("message", "Error in filled fields");
+            return "400";
+        }
+        Result<TaskDtoRead> savedTask = taskService.create(task);
+        if (savedTask.isError()) {
+            model.addAttribute("message", savedTask.getMessage());
+            return savedTask.getCode();
+        } else {
+            model.addAttribute("message", "Task create ok");
+            return "200";
+        }
     }
 
-    @GetMapping("/findByStatus/{status}")
-    public String findByStatus(@PathVariable TaskStatus status, Model model) {
-        List<TaskDtoRead> taskList = taskService.findByStatus(status);
-        model.addAttribute("taskList", taskList);
-        return "task/showList";
-    }
-
-    @GetMapping("/findWithReportsById/{id}")
-    public String findWithReportsById(@PathVariable Integer id, Model model) {
-        Result<TaskDtoRead> taskRead = taskService.findById(id);
-        if (taskRead.isError())
-            return "404";
-        else {
-            TaskDtoRead task = taskRead.getObject();
-            task.setReports(taskService.findReportsByTaskId(id).stream().collect(Collectors.toSet()));
-            model.addAttribute("task", task);
-            return "task/show";
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Integer id, Model model) {
+        Result<String> delete = taskService.delete(id);
+        if (delete.isError()) {
+            model.addAttribute("message", delete.getMessage());
+            return delete.getCode();
+        } else {
+            model.addAttribute("message", delete.getObject());
+            return "200";
         }
     }
 }

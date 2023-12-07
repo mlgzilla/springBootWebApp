@@ -14,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,27 +28,58 @@ public class DocumentService {
     }
 
     public Result<DocumentDtoRead> findById(Integer id) {
-        Document document = documentRepository.findById(id);
-        if (document == null)
-            return Result.error("Document was not found");
-        else
-            return Result.ok(document.mapToDto());
-
+        try {
+            Document document = documentRepository.findById(id);
+            if (document == null)
+                return Result.error("Document was not found", "404");
+            else
+                return Result.ok(document.mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding document", "500");
+        }
     }
 
-    public List<DocumentDtoRead> findByName(String firstName) {
-        return documentRepository.findByName(firstName).stream().map(Document::mapToDto).collect(Collectors.toList());
+    public Result<List<DocumentDtoRead>> findByName(String firstName) {
+        try {
+            List<Document> document = documentRepository.findByName(firstName);
+            if (document.isEmpty())
+                return Result.error("Documents by name were not found", "404");
+            else
+                return Result.ok(document.stream().map(Document::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding documents by name", "500");
+        }
     }
 
-    public List<DocumentDtoRead> findByCreationDateBefore(LocalDateTime date) {
-        return documentRepository.findByCreationDateBefore(date).stream().map(Document::mapToDto).collect(Collectors.toList());
+    public Result<List<DocumentDtoRead>> findByCreationDateBefore(LocalDateTime date) {
+        try {
+            List<Document> document = documentRepository.findByCreationDateBefore(date);
+            if (document.isEmpty())
+                return Result.error("Documents by name were not found", "404");
+            else
+                return Result.ok(document.stream().map(Document::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding documents by name", "500");
+        }
     }
 
-    public List<DocumentDtoRead> findByCreationDateAfter(LocalDateTime date) {
-        return documentRepository.findByCreationDateAfter(date).stream().map(Document::mapToDto).collect(Collectors.toList());
+    public Result<List<DocumentDtoRead>> findByCreationDateAfter(LocalDateTime date) {
+        try {
+            List<Document> document = documentRepository.findByCreationDateAfter(date);
+            if (document.isEmpty())
+                return Result.error("Documents by name were not found", "404");
+            else
+                return Result.ok(document.stream().map(Document::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding documents by name", "500");
+        }
     }
 
-    public Optional<String> upload(MultipartFile file) {
+    public Result<String> upload(MultipartFile file) {
         String[] split = file.getOriginalFilename().split("\\.");
         String ext = split[split.length - 1];
         String newPath = uploadFolder + "/" + UUID.randomUUID() + "." + ext;
@@ -66,20 +96,19 @@ public class DocumentService {
                     LocalDateTime.now(),
                     employee);
             documentRepository.saveAndFlush(document);
-            return Optional.of(newPath);
+            return Result.ok(newPath);
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            return Optional.empty();
+            return Result.error("Failed to upload file", "500");
         }
     }
 
-    public Optional<String> delete(Integer id) {
+    public Result<String> delete(Integer id) {
         try {
             documentRepository.deleteById(id);
-            return Optional.of("Delete ok");
+            return Result.ok("Delete ok");
         } catch (Exception e) {
-            return Optional.empty();
+            return Result.error("Failed to delete report", "500");
         }
-
     }
 }

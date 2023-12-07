@@ -6,33 +6,70 @@ import egar.repository.ReportRepository;
 import egar.utils.Result;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
     private final ReportRepository reportRepository;
 
-    public Result<ReportDtoRead> findById(Integer id){
-        Report report = reportRepository.findById(id);
-        if (report == null)
-            return Result.error("Report was not found");
-        else
-            return Result.ok(report.mapToDto());
+    public Result<ReportDtoRead> findById(Integer id) {
+        try {
+            Report report = reportRepository.findById(id);
+            if (report == null)
+                return Result.error("Report was not found", "404");
+            else
+                return Result.ok(report.mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Reports", "500");
+        }
+
     }
 
-    public Optional<ReportDtoRead> create(Report report){
-        try{
-            Report savedReport = reportRepository.saveAndFlush(report);
-            return Optional.of(savedReport.mapToDto());
+    public Result<List<ReportDtoRead>> findByTaskIdInRange(Integer id, LocalDateTime timeStart, LocalDateTime timeFinish) {
+        try {
+            List<Report> reports = reportRepository.findByTaskIdInRange(id, timeStart, timeFinish);
+            if (reports.isEmpty())
+                return Result.error("Reports by task id in range were not found", "404");
+            else
+                return Result.ok(reports.stream().map(Report::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
-            return Optional.empty();
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Reports by task id in range", "500");
         }
     }
 
-    public List<ReportDtoRead> findByTaskId(Integer id){
-        return reportRepository.findByTaskId(id).stream().map(Report::mapToDto).collect(Collectors.toList());
+    public Result<List<ReportDtoRead>> findByTaskId(Integer id) {
+        try {
+            List<Report> reports = reportRepository.findByTaskId(id);
+            if (reports.isEmpty())
+                return Result.error("Reports by task id were not found", "404");
+            else
+                return Result.ok(reports.stream().map(Report::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Reports by task id", "500");
+        }
+    }
+
+    public Result<ReportDtoRead> create(Report report) {
+        try {
+            Report savedReport = reportRepository.saveAndFlush(report);
+            return Result.ok(savedReport.mapToDto());
+        } catch (Exception e) {
+            return Result.error("Error creating Reports", "500");
+        }
+    }
+
+    public Result<String> delete(Integer id) {
+        try {
+            reportRepository.deleteById(id);
+            return Result.ok("Delete ok");
+        } catch (Exception e) {
+            return Result.error("Failed to delete file", "500");
+        }
     }
 
     public ReportService(ReportRepository reportRepository) {
