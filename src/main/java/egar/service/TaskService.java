@@ -11,6 +11,7 @@ import egar.utils.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,11 +20,16 @@ public class TaskService {
     private final ReportRepository reportRepository;
 
     public Result<TaskDtoRead> findById(Integer id){
-        Task task = taskRepository.findById(id);
-        if (task == null)
-            return Result.error("Task was not found", "404");
-        else
-            return Result.ok(task.mapToDto());
+        try {
+            Optional<Task> task = taskRepository.findById(id);
+            if (task.isEmpty())
+                return Result.error("Task was not found", "404");
+            else
+                return Result.ok(task.get().mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding task", "500");
+        }
     }
 
     public Result<List<TaskDtoRead>> findByEmployeeId(Integer id){

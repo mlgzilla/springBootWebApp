@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,20 +28,20 @@ public class DocumentService {
 
     public Result<DocumentDtoRead> findById(Integer id) {
         try {
-            Document document = documentRepository.findById(id);
-            if (document == null)
+            Optional<Document> document = documentRepository.findById(id);
+            if (document.isEmpty())
                 return Result.error("Document was not found", "404");
             else
-                return Result.ok(document.mapToDto());
+                return Result.ok(document.get().mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding document", "500");
         }
     }
 
-    public Result<List<DocumentDtoRead>> findByName(String firstName) {
+    public Result<List<DocumentDtoRead>> findByName(String name) {
         try {
-            List<Document> document = documentRepository.findByName(firstName);
+            List<Document> document = documentRepository.findByName(name + '%');
             if (document.isEmpty())
                 return Result.error("Documents by name were not found", "404");
             else
@@ -96,10 +95,22 @@ public class DocumentService {
                     LocalDateTime.now(),
                     employee);
             documentRepository.saveAndFlush(document);
+            outputStream.close();
             return Result.ok(newPath);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return Result.error("Failed to upload file", "500");
+        }
+    }
+
+    public Result<byte[]> getFile(String path){
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(path);
+            return Result.ok(fis.readAllBytes());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to prepare file", "500");
         }
     }
 

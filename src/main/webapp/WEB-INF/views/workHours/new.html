@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>timeStart Report</title>
+</head>
+<body>
+<form th:action="@{/workHours/}" th:object="${workHours}" th:method="post">
+
+  <label for="timeStart">timeStart </label>
+  <input type="date" th:field="*{timeStart}" id="timeStart"/>
+  <div th:if="${#fields.hasErrors('timeStart')}" th:errors="*{timeStart}">Err</div>
+  <br/>
+
+  <label for="timeFinish">timeFinish </label>
+  <input type="date" th:field="*{timeFinish}" id="timeFinish"/>
+  <div th:if="${#fields.hasErrors('timeFinish')}" th:errors="*{timeFinish}">Err</div>
+  <br/>
+
+  <label for="employee.id">employee </label>
+  <input type="number" th:field="*{employee.id}" id="employee.id"/>
+  <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
+  <br/>
+
+  <label for="comment">comment </label>
+  <input type="text" th:field="*{comment}" id="comment"/>
+  <div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">Err</div>
+  <br/>
+
+  <br/>
+
+  <input type="submit" value="Create"/>
+
+</form>
+
+</body>
+</html>

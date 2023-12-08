@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface BaseRepository<T, ID> extends Repository<T, ID> {
     <S extends T> S saveAndFlush(S entity);
 
-    T findById(ID id);
+    Optional<T> findById(ID id);
 
     void deleteById(ID id);
 

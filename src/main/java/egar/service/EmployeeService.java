@@ -34,11 +34,11 @@ public class EmployeeService {
 
     public Result<EmployeeDtoRead> findById(Integer id) {
         try {
-            Employee employee = employeeRepository.findById(id);
-            if (employee == null)
+            Optional<Employee> employee = employeeRepository.findById(id);
+            if (employee.isEmpty())
                 return Result.error("Employee was not found", "404");
             else
-                return Result.ok(employee.mapToDto());
+                return Result.ok(employee.get().mapToDto());
         } catch (Exception e) {
             return Result.error("Error finding employee", "500");
         }
@@ -47,7 +47,7 @@ public class EmployeeService {
 
     public Result<List<EmployeeDtoRead>> findByFirstName(String firstName) {
         try {
-            List<Employee> employees = employeeRepository.findByFirstName(firstName);
+            List<Employee> employees = employeeRepository.findByFirstName(firstName + '%');
             if (employees.isEmpty())
                 return Result.error("Employees by first name were not found", "404");
             else
@@ -60,7 +60,7 @@ public class EmployeeService {
 
     public Result<List<EmployeeDtoRead>> findByMiddleName(String middleName) {
         try {
-            List<Employee> employees = employeeRepository.findByMiddleName(middleName);
+            List<Employee> employees = employeeRepository.findByMiddleName(middleName + '%');
             if (employees.isEmpty())
                 return Result.error("Employees by middle name were not found", "404");
             else
@@ -72,7 +72,7 @@ public class EmployeeService {
     }
     public Result<List<EmployeeDtoRead>> findBySecondName(String secondName) {
         try {
-            List<Employee> employees = employeeRepository.findBySecondName(secondName);
+            List<Employee> employees = employeeRepository.findBySecondName(secondName + '%');
             if (employees.isEmpty())
                 return Result.error("Employees by second name were not found", "404");
             else

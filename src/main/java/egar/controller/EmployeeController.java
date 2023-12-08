@@ -6,6 +6,7 @@ import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
 import egar.enums.ContractType;
+import egar.enums.TaskStatus;
 import egar.service.EmployeeService;
 import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class EmployeeController {
             model.addAttribute("message", employeeList.getMessage());
             return employeeList.getCode();
         } else
-            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("employeeList", employeeList.getObject());
         return "employee/showList";
     }
 
@@ -51,7 +52,7 @@ public class EmployeeController {
             model.addAttribute("message", employeeList.getMessage());
             return employeeList.getCode();
         } else
-            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("employeeList", employeeList.getObject());
         return "employee/showList";
     }
 
@@ -62,7 +63,7 @@ public class EmployeeController {
             model.addAttribute("message", employeeList.getMessage());
             return employeeList.getCode();
         } else
-            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("employeeList", employeeList.getObject());
         return "employee/showList";
     }
 
@@ -73,13 +74,14 @@ public class EmployeeController {
             model.addAttribute("message", employeeList.getMessage());
             return employeeList.getCode();
         } else
-            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("employeeList", employeeList.getObject());
         return "employee/showList";
     }
 
     @GetMapping("/new")
     public String getNew(Model model) {
         model.addAttribute(new Employee());
+        model.addAttribute("types", ContractType.values());
         return "employee/new";
     }
 

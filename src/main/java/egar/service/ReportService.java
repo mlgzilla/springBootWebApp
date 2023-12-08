@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,11 +17,11 @@ public class ReportService {
 
     public Result<ReportDtoRead> findById(Integer id) {
         try {
-            Report report = reportRepository.findById(id);
-            if (report == null)
+            Optional<Report> report = reportRepository.findById(id);
+            if (report.isEmpty())
                 return Result.error("Report was not found", "404");
             else
-                return Result.ok(report.mapToDto());
+                return Result.ok(report.get().mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding Reports", "500");

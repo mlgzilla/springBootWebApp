@@ -3,13 +3,22 @@ package egar.controller;
 import egar.domain.document.dto.DocumentDtoRead;
 import egar.service.DocumentService;
 import egar.utils.Result;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -18,15 +27,37 @@ import java.util.List;
 public class DocumentController {
     private final DocumentService documentService;
 
+//    @GetMapping("/{id}")
+//    public String findById(@PathVariable("id") Integer id, Model model) {
+//        Result<DocumentDtoRead> documentRead = documentService.findById(id);
+//        if (documentRead.isError()) {
+//            model.addAttribute("message", documentRead.getMessage());
+//            return documentRead.getCode();
+//        } else
+//            model.addAttribute("path", documentRead.getObject().getPath());
+//        return "document/show";
+//    }
+
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") Integer id, Model model) {
+    public void findById(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         Result<DocumentDtoRead> documentRead = documentService.findById(id);
         if (documentRead.isError()) {
-            model.addAttribute("message", documentRead.getMessage());
-            return documentRead.getCode();
-        } else
-            model.addAttribute("path", documentRead.getObject().getPath());
-        return "document/show";
+            return;
+        }
+        DocumentDtoRead document = documentRead.getObject();
+
+        Result<byte[]> byteArray = documentService.getFile(document.getPath());
+        if(byteArray.isError()){
+            return;
+        }
+
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader("Content-Disposition", "attachment; filename=" + document.getName());
+        response.setContentLength(byteArray.getObject().length);
+
+        try (OutputStream os = response.getOutputStream()) {
+            os.write(byteArray.getObject(), 0, byteArray.getObject().length);
+        }
     }
 
     @GetMapping("/findByName/{name}")
@@ -36,7 +67,7 @@ public class DocumentController {
             model.addAttribute("message", documentList.getMessage());
             return documentList.getCode();
         } else
-            model.addAttribute("documentList", documentList);
+            model.addAttribute("documentList", documentList.getObject());
         return "document/showList";
     }
 
@@ -47,7 +78,7 @@ public class DocumentController {
             model.addAttribute("message", documentList.getMessage());
             return documentList.getCode();
         } else
-            model.addAttribute("documentList", documentList);
+            model.addAttribute("documentList", documentList.getObject());
         return "document/showList";
     }
 
@@ -58,7 +89,7 @@ public class DocumentController {
             model.addAttribute("message", documentList.getMessage());
             return documentList.getCode();
         } else
-            model.addAttribute("documentList", documentList);
+            model.addAttribute("documentList", documentList.getObject());
         return "document/showList";
     }
 

@@ -9,25 +9,31 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class VacationService {
     private final VacationRepository vacationRepository;
-    
+
     public VacationService(VacationRepository vacationRepository) {
         this.vacationRepository = vacationRepository;
     }
 
-    public Result<VacationDtoRead> findById(Integer id){
-        Vacation vacation = vacationRepository.findById(id);
-        if (vacation == null)
-            return Result.error("Vacation was not found", "404");
-        else
-            return Result.ok(vacation.mapToDto());
+    public Result<VacationDtoRead> findById(Integer id) {
+        try {
+            Optional<Vacation> vacation = vacationRepository.findById(id);
+            if (vacation.isEmpty())
+                return Result.error("Vacation was not found", "404");
+            else
+                return Result.ok(vacation.get().mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding vacation", "500");
+        }
     }
 
-    public Result<List<VacationDtoRead>> findByEmployeeId(Integer id){
+    public Result<List<VacationDtoRead>> findByEmployeeId(Integer id) {
         try {
             List<Vacation> vacations = vacationRepository.findByEmployeeId(id);
             if (vacations.isEmpty())
@@ -39,7 +45,8 @@ public class VacationService {
             return Result.error("Error finding vacation by employee", "500");
         }
     }
-    public Result<List<VacationDtoRead>> findByEmployeeIdAndStatus(Integer id, VacationStatus status){
+
+    public Result<List<VacationDtoRead>> findByEmployeeIdAndStatus(Integer id, VacationStatus status) {
         try {
             List<Vacation> vacations = vacationRepository.findByEmployeeIdAndStatus(id, status);
             if (vacations.isEmpty())
@@ -51,7 +58,8 @@ public class VacationService {
             return Result.error("Error finding vacation by employee and status", "500");
         }
     }
-    public Result<List<VacationDtoRead>> findByEmployeeIdAndStatusInRange(Integer id, VacationStatus status, LocalDateTime timeStart, LocalDateTime timeFinish){
+
+    public Result<List<VacationDtoRead>> findByEmployeeIdAndStatusInRange(Integer id, VacationStatus status, LocalDateTime timeStart, LocalDateTime timeFinish) {
         try {
             List<Vacation> vacations = vacationRepository.findByEmployeeIdAndStatusInRange(id, status, timeStart, timeFinish);
             if (vacations.isEmpty())
@@ -64,8 +72,8 @@ public class VacationService {
         }
     }
 
-    public Result<VacationDtoRead> create(Vacation vacation){
-        try{
+    public Result<VacationDtoRead> create(Vacation vacation) {
+        try {
             Vacation savedVacation = vacationRepository.saveAndFlush(vacation);
             return Result.ok(savedVacation.mapToDto());
         } catch (Exception e) {

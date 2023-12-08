@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +24,16 @@ public class WorkHoursService {
     }
 
     public Result<WorkHoursDtoRead> findById(Integer id) {
-        WorkHours workHours = workHoursRepository.findById(id);
-        if (workHours == null)
-            return Result.error("WorkHours was not found", "404");
-        else
-            return Result.ok(workHours.mapToDto());
+        try {
+            Optional<WorkHours> workHours = workHoursRepository.findById(id);
+            if (workHours.isEmpty())
+                return Result.error("WorkHours was not found", "404");
+            else
+                return Result.ok(workHours.get().mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding work hours", "500");
+        }
     }
 
     public Result<List<WorkHoursDtoRead>> findByEmployeeId(Integer id) {
