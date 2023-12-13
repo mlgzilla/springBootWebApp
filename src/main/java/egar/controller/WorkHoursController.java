@@ -58,6 +58,22 @@ public class WorkHoursController {
         return "workHours/new";
     }
 
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Result<WorkHoursDtoRead> workHoursRead = workHoursService.findById(id);
+        if (workHoursRead.isError()) {
+            model.addAttribute("message", workHoursRead.getMessage());
+            return workHoursRead.getCode();
+        }
+        model.addAttribute("workHours", workHoursRead.getObject());
+        return "workHours/update";
+    }
+
+    @GetMapping("/")
+    public String getHome() {
+        return "index";
+    }
+
     @PostMapping("/")
     public String create(@ModelAttribute("workHours") WorkHours workHours, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -72,6 +88,16 @@ public class WorkHoursController {
             model.addAttribute("message", "WorkHours create ok");
             return "200";
         }
+    }
+
+    @PutMapping("/{id}")
+    public String update(@ModelAttribute("workHours") WorkHoursDtoRead workHours, @PathVariable("id") Integer id, Model model) {
+        Result<String> upload = workHoursService.update(id, workHours);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "200";
     }
 
     @DeleteMapping("/{id}")

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/document/{id}(id=${number})}" th:method="get">
+    <input type="number" th:object="${number}" id="idInput"/>
+    <input type="submit" value="Поиск по id"/>
+</form>
+</body>
+</html>

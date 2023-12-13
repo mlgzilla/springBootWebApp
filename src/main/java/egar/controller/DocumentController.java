@@ -1,24 +1,20 @@
 package egar.controller;
 
 import egar.domain.document.dto.DocumentDtoRead;
+import egar.enums.ContractType;
 import egar.service.DocumentService;
 import egar.utils.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -26,17 +22,6 @@ import java.util.List;
 @RequestMapping("/document")
 public class DocumentController {
     private final DocumentService documentService;
-
-//    @GetMapping("/{id}")
-//    public String findById(@PathVariable("id") Integer id, Model model) {
-//        Result<DocumentDtoRead> documentRead = documentService.findById(id);
-//        if (documentRead.isError()) {
-//            model.addAttribute("message", documentRead.getMessage());
-//            return documentRead.getCode();
-//        } else
-//            model.addAttribute("path", documentRead.getObject().getPath());
-//        return "document/show";
-//    }
 
     @GetMapping("/{id}")
     public void findById(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
@@ -50,7 +35,6 @@ public class DocumentController {
         if(byteArray.isError()){
             return;
         }
-
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader("Content-Disposition", "attachment; filename=" + document.getName());
         response.setContentLength(byteArray.getObject().length);
@@ -98,9 +82,39 @@ public class DocumentController {
         return "document/upload";
     }
 
+
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Result<DocumentDtoRead> documentRead = documentService.findById(id);
+        if (documentRead.isError()) {
+            model.addAttribute("message", documentRead.getMessage());
+            return documentRead.getCode();
+        }
+        model.addAttribute("document", documentRead.getObject());
+        model.addAttribute("types", ContractType.values());
+        return "document/update";
+    }
+
+    @GetMapping("/")
+    public String getHome(Model model) {
+        model.addAttribute("string", "");
+        model.addAttribute("number", Integer.valueOf(0));
+        return "index";
+    }
+
     @PostMapping("/")
     public String create(@ModelAttribute("file") MultipartFile file, Model model) {
         Result<String> upload = documentService.upload(file);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "200";
+    }
+
+    @PutMapping ("/{id}")
+    public String update(@ModelAttribute("document") DocumentDtoRead document, @PathVariable("id") Integer id, Model model) {
+        Result<String> upload = documentService.update(id, document);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();

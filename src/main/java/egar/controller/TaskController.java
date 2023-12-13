@@ -83,6 +83,22 @@ public class TaskController {
         return "task/new";
     }
 
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Result<TaskDtoRead> taskRead = taskService.findById(id);
+        if (taskRead.isError()) {
+            model.addAttribute("message", taskRead.getMessage());
+            return taskRead.getCode();
+        }
+        model.addAttribute("task", taskRead.getObject());
+        return "task/update";
+    }
+
+    @GetMapping("/")
+    public String getHome() {
+        return "index";
+    }
+
     @PostMapping("/")
     public String create(@ModelAttribute("task") Task task, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -97,6 +113,16 @@ public class TaskController {
             model.addAttribute("message", "Task create ok");
             return "200";
         }
+    }
+
+    @PutMapping("/{id}")
+    public String update(@ModelAttribute("task") TaskDtoRead task, @PathVariable("id") Integer id, Model model) {
+        Result<String> upload = taskService.update(id, task);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "200";
     }
 
     @DeleteMapping("/{id}")

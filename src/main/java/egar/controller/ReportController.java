@@ -58,6 +58,22 @@ public class ReportController {
         return "report/new";
     }
 
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Result<ReportDtoRead> reportRead = reportService.findById(id);
+        if (reportRead.isError()) {
+            model.addAttribute("message", reportRead.getMessage());
+            return reportRead.getCode();
+        }
+        model.addAttribute("report", reportRead.getObject());
+        return "report/update";
+    }
+
+    @GetMapping("/")
+    public String getHome() {
+        return "index";
+    }
+
     @PostMapping("/")
     public String create(@ModelAttribute("report") Report report, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -72,6 +88,16 @@ public class ReportController {
             model.addAttribute("message", "Report create ok");
             return "200";
         }
+    }
+
+    @PutMapping ("/{id}")
+    public String update(@ModelAttribute("report") ReportDtoRead report, @PathVariable("id") Integer id, Model model) {
+        Result<String> upload = reportService.update(id, report);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "200";
     }
 
     @DeleteMapping("/{id}")

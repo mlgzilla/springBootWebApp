@@ -74,6 +74,23 @@ public class WorkHoursService {
         }
     }
 
+    public Result<String> update(Integer id, WorkHoursDtoRead workHoursDto) {
+        try {
+            Optional<WorkHours> workHoursRead = workHoursRepository.findById(id);
+            if (workHoursRead.isEmpty())
+                return Result.error("WorkHours was not found", "404");
+            WorkHours workHours = workHoursRead.get();
+            workHours.setTimeStart(workHoursDto.getTimeStart());
+            workHours.setTimeFinish(workHoursDto.getTimeFinish());
+            workHours.setComment(workHoursDto.getComment());
+            workHoursRepository.saveAndFlush(workHours);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update workHours", "500");
+        }
+    }
+
     public Result<String> delete(Integer id) {
         try {
             workHoursRepository.deleteById(id);

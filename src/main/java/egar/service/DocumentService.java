@@ -114,11 +114,27 @@ public class DocumentService {
         }
     }
 
+    public Result<String> update(Integer id, DocumentDtoRead documentDto) {
+        try {
+            Optional<Document> documentRead = documentRepository.findById(id);
+            if (documentRead.isEmpty())
+                return Result.error("Document was not found", "404");
+            Document document = documentRead.get();
+            document.setName(documentDto.getName());
+            documentRepository.saveAndFlush(document);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update document", "500");
+        }
+    }
+
     public Result<String> delete(Integer id) {
         try {
             documentRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return Result.error("Failed to delete report", "500");
         }
     }

@@ -1,5 +1,7 @@
 package egar.service;
 
+import egar.domain.employee.dto.EmployeeDtoRead;
+import egar.domain.employee.entity.Employee;
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
@@ -78,6 +80,23 @@ public class TaskService {
             return Result.ok(savedTask.mapToDto());
         } catch (Exception e) {
             return Result.error("Failed to create task", "500");
+        }
+    }
+
+    public Result<String> update(Integer id, TaskDtoRead taskDto) {
+        try {
+            Optional<Task> taskRead = taskRepository.findById(id);
+            if (taskRead.isEmpty())
+                return Result.error("Task was not found", "404");
+            Task task = taskRead.get();
+            task.setName(taskDto.getName());
+            task.setDescription(taskDto.getDescription());
+            task.setDueTime(taskDto.getDueTime());
+            taskRepository.saveAndFlush(task);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update task", "500");
         }
     }
 

@@ -105,6 +105,25 @@ public class EmployeeService {
         }
     }
 
+    public Result<String> update(Integer id, EmployeeDtoRead employeeDto) {
+        try {
+            Optional<Employee> employeeRead = employeeRepository.findById(id);
+            if (employeeRead.isEmpty())
+                return Result.error("Employee was not found", "404");
+            Employee employee = employeeRead.get();
+            employee.setFirstName(employeeDto.getFirstName());
+            employee.setSecondName(employeeDto.getSecondName());
+            employee.setCardNumber(employeeDto.getCardNumber());
+            employee.setPhoneNumber(employeeDto.getPhoneNumber());
+            employee.setContractType(employeeDto.getContractType());
+            employeeRepository.saveAndFlush(employee);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update employee", "500");
+        }
+    }
+
     public Result<String> delete(Integer id) {
         try {
             documentRepository.deleteAllByEmployeeId(id);

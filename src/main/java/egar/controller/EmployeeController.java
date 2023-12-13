@@ -1,12 +1,9 @@
 package egar.controller;
 
+import egar.domain.document.dto.DocumentDtoRead;
 import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.entity.Employee;
-import egar.domain.report.entity.Report;
-import egar.domain.task.dto.TaskDtoRead;
-import egar.domain.task.entity.Task;
 import egar.enums.ContractType;
-import egar.enums.TaskStatus;
 import egar.service.EmployeeService;
 import egar.utils.Result;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +82,22 @@ public class EmployeeController {
         return "employee/new";
     }
 
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Result<EmployeeDtoRead> employeeRead = employeeService.findById(id);
+        if (employeeRead.isError()) {
+            model.addAttribute("message", employeeRead.getMessage());
+            return employeeRead.getCode();
+        }
+        model.addAttribute("employee", employeeRead.getObject());
+        return "employee/update";
+    }
+
+    @GetMapping("/")
+    public String getHome() {
+        return "index";
+    }
+
     @PostMapping("/")
     public String create(@ModelAttribute("employee") Employee employee, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -99,6 +112,16 @@ public class EmployeeController {
             model.addAttribute("message", "Employee create ok");
             return "200";
         }
+    }
+
+    @PutMapping ("/{id}")
+    public String update(@ModelAttribute("employee") EmployeeDtoRead employee, @PathVariable("id") Integer id, Model model) {
+        Result<String> upload = employeeService.update(id, employee);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "200";
     }
 
     @DeleteMapping("/{id}")

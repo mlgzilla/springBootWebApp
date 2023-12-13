@@ -2,6 +2,8 @@ package egar.service;
 
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
+import egar.domain.report.dto.ReportDtoRead;
+import egar.domain.report.entity.Report;
 import egar.repository.ReportRepository;
 import egar.utils.Result;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ public class ReportService {
             System.out.println(e.getMessage());
             return Result.error("Error finding Reports", "500");
         }
-
     }
 
     public Result<List<ReportDtoRead>> findByTaskIdInRange(Integer id, LocalDateTime timeStart, LocalDateTime timeFinish) {
@@ -61,6 +62,22 @@ public class ReportService {
             return Result.ok(savedReport.mapToDto());
         } catch (Exception e) {
             return Result.error("Error creating Reports", "500");
+        }
+    }
+
+    public Result<String> update(Integer id, ReportDtoRead reportDto) {
+        try {
+            Optional<Report> reportRead = reportRepository.findById(id);
+            if (reportRead.isEmpty())
+                return Result.error("Report was not found", "404");
+            Report report = reportRead.get();
+            report.setName(reportDto.getName());
+            report.setDescription(reportDto.getDescription());
+            reportRepository.saveAndFlush(report);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update report", "500");
         }
     }
 
