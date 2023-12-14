@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<form th:action="@{/task/submit}" th:method="post">
+    <input th:name="id" type="number" th:object="${id}" id="idInput"/>
+    <input type="submit" value="Поиск по id"/>
+    <br>
+    <label for="checkboxInput">Включить отчеты в поиск</label>
+    <input th:name="includeReports" type="checkbox" id="checkboxInput"/>
+</form>
+
+<br>
+<br>
+
+<form th:action="@{/task/submit}" th:method="post">
+    <input th:name="employeeId" type="number" th:object="${employeeId}" id="employeeIdInput"/>
+    <input type="submit" value="Поиск по id работника"/>
+</form>
+
+<br>
+
+<form th:action="@{/employee/submit}" th:method="post">
+    <select th:name="status" id="statusInput">
+        <option value="">Выберите состояние задачи</option>
+        <option th:each="status : ${status}" th:value="${status}" th:text="${status}"></option>
+    </select>
+    <input type="submit" value="Поиск по состоянию задачи"/>
+</form>
 
 </body>
 </html>

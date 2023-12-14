@@ -1,6 +1,5 @@
 package egar.controller;
 
-import egar.domain.document.dto.DocumentDtoRead;
 import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.entity.Employee;
 import egar.enums.ContractType;
@@ -94,8 +93,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/")
-    public String getHome() {
-        return "index";
+    public String getHome(Model model) {
+        model.addAttribute("types", ContractType.values());
+        return "employee/index";
     }
 
     @PostMapping("/")
@@ -114,7 +114,29 @@ public class EmployeeController {
         }
     }
 
-    @PutMapping ("/{id}")
+    @PostMapping("/submit")
+    public String inputSubmit(
+            @RequestParam(required = false, name = "id") Integer id,
+            @RequestParam(required = false, name = "firstName") String firstName,
+            @RequestParam(required = false, name = "middleName") String middleName,
+            @RequestParam(required = false, name = "secondName") String secondName,
+            @RequestParam(required = false, name = "contractType") ContractType contractType
+    ) {
+        if (id != null)
+            return "redirect:/employee/" + id;
+        if (firstName != null)
+            return "redirect:/employee/findByFirstName/" + firstName;
+        if (middleName != null)
+            return "redirect:/employee/findByMiddleName/" + middleName;
+        if (secondName != null)
+            return "redirect:/employee/findBySecondName/" + secondName;
+        if (contractType != null)
+            return "redirect:/employee/findByContractType/" + contractType;
+
+        return "redirect:/employee/";
+    }
+
+    @PutMapping("/{id}")
     public String update(@ModelAttribute("employee") EmployeeDtoRead employee, @PathVariable("id") Integer id, Model model) {
         Result<String> upload = employeeService.update(id, employee);
         if (upload.isError()) {

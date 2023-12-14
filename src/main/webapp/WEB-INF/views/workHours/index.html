@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<form th:action="@{/workHours/submit}" th:method="post">
+    <input th:name="id" type="number" th:object="${id}" id="idInput"/>
+    <input type="submit" value="Поиск по id"/>
+</form>
+
+<br>
+
+<form th:action="@{/workHours/submit}" th:method="post">
+    <input th:name="employeeId" type="number" th:object="${employeeId}" id="employeeIdInput"/>
+    <input type="submit" value="Поиск по id работника"/>
+
+    <br>
+
+    <label for="checkboxInput">Поиск в промежутке времени</label>
+    <input th:name="inDateRange" type="checkbox" id="checkboxInput"/>
+
+    <br>
+
+    <label for="dateStartInput">Со скольки: </label>
+    <input th:name="dateStart" type="datetime-local" th:object="${dateStart}" id="dateStartInput"/>
+
+    <br>
+
+    <label for="dateFinishInput">До скольки: </label>
+    <input th:name="dateFinish" type="datetime-local" th:object="${dateFinish}" id="dateFinishInput"/>
+
+</form>
 
 </body>
 </html>

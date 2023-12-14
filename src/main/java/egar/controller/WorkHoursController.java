@@ -41,7 +41,7 @@ public class WorkHoursController {
         return "workHours/showList";
     }
 
-    @GetMapping("/findByEmployeeIdInRange/{id}{timeStart}{timeFinish}")
+    @GetMapping("/findByEmployeeIdInRange/{id}/{timeStart}/{timeFinish}")
     public String findByEmployeeIdInRange(@PathVariable Integer id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
         Result<List<WorkHoursDtoRead>> workHoursList = workHoursService.findByEmployeeIdInRange(id, timeStart, timeFinish);
         if (workHoursList.isError()) {
@@ -71,7 +71,7 @@ public class WorkHoursController {
 
     @GetMapping("/")
     public String getHome() {
-        return "index";
+        return "workHours/index";
     }
 
     @PostMapping("/")
@@ -88,6 +88,25 @@ public class WorkHoursController {
             model.addAttribute("message", "WorkHours create ok");
             return "200";
         }
+    }
+
+    @PostMapping("/submit")
+    public String inputSubmit(
+            @RequestParam(required = false, name = "id") Integer id,
+            @RequestParam(required = false, name = "employeeId") Integer employeeId,
+            @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
+            @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
+            @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
+    ) {
+        if (id != null)
+            return "redirect:/workHours/" + id;
+        if (employeeId != null) {
+            if (inDateRange)
+                return "redirect:/workHours/findByEmployeeIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
+            else
+                return "redirect:/workHours/findByEmployeeId/" + employeeId;
+        }
+        return "redirect:/workHours/";
     }
 
     @PutMapping("/{id}")

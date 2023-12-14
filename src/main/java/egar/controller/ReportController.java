@@ -41,7 +41,7 @@ public class ReportController {
         return "report/showList";
     }
 
-    @GetMapping("/findByTaskId/{id}{timeStart}{timeFinish}")
+    @GetMapping("/findByTaskIdInRange/{id}/{timeStart}/{timeFinish}")
     public String findByTaskIdInRange(@PathVariable Integer id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
         Result<List<ReportDtoRead>> reportList = reportService.findByTaskIdInRange(id, timeStart, timeFinish);
         if (reportList.isError()) {
@@ -71,7 +71,7 @@ public class ReportController {
 
     @GetMapping("/")
     public String getHome() {
-        return "index";
+        return "report/index";
     }
 
     @PostMapping("/")
@@ -90,7 +90,26 @@ public class ReportController {
         }
     }
 
-    @PutMapping ("/{id}")
+    @PostMapping("/submit")
+    public String inputSubmit(
+            @RequestParam(required = false, name = "id") Integer id,
+            @RequestParam(required = false, name = "taskId") Integer taskId,
+            @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
+            @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
+            @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
+    ) {
+        if (id != null)
+            return "redirect:/report/" + id;
+        if (taskId != null) {
+            if (inDateRange)
+                return "redirect:/report/findByTaskIdInRange/" + taskId + "/" + dateStart + "/" + dateFinish;
+            else
+                return "redirect:/report/findByTaskId/" + taskId;
+        }
+        return "redirect:/report/";
+    }
+
+    @PutMapping("/{id}")
     public String update(@ModelAttribute("report") ReportDtoRead report, @PathVariable("id") Integer id, Model model) {
         Result<String> upload = reportService.update(id, report);
         if (upload.isError()) {

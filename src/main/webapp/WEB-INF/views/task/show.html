@@ -11,7 +11,8 @@
 <p><b>дата сдачи: </b><span th:text="${task.dueTime}"></span></p>
 <p><b>id работника: </b><span th:text="${task.employeeId}"></span></p>
 <p><b>статус: </b><span th:text="${task.status}"></span></p>
-<p th:if="${!task.reports.isEmpty()}"><b>Отчеты: </b>
+<p><b>Отчеты: </b><span th:if="${task.reports.isEmpty()}">отсутствуют</span></p>
+<p th:if="${!task.reports.isEmpty()}">
 <div th:each="report: ${task.reports}">
     <p><b>id: </b><span th:text="${report.id}"></span></p>
     <p><b>имя: </b><span th:text="${report.name}"></span></p>

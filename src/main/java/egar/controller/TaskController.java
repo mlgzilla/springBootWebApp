@@ -3,6 +3,7 @@ package egar.controller;
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
+import egar.enums.ContractType;
 import egar.enums.TaskStatus;
 import egar.service.TaskService;
 import egar.utils.Result;
@@ -66,8 +67,14 @@ public class TaskController {
             TaskDtoRead task = taskRead.getObject();
             Result<List<ReportDtoRead>> reports = taskService.findReportsByTaskId(id);
             if (reports.isError()) {
-                model.addAttribute("message", reports.getMessage());
-                return reports.getCode();
+                if (reports.getCode().equals("404")){
+                    model.addAttribute("task", task);
+                    return "task/show";
+                }
+                else {
+                    model.addAttribute("message", reports.getMessage());
+                    return reports.getCode();
+                }
             } else {
                 task.setReports(reports.getObject().stream().collect(Collectors.toSet()));
                 model.addAttribute("task", task);
@@ -96,7 +103,7 @@ public class TaskController {
 
     @GetMapping("/")
     public String getHome() {
-        return "index";
+        return "task/index";
     }
 
     @PostMapping("/")
@@ -113,6 +120,27 @@ public class TaskController {
             model.addAttribute("message", "Task create ok");
             return "200";
         }
+    }
+
+    @PostMapping("/submit")
+    public String inputSubmit(
+            @RequestParam(required = false, name = "id") Integer id,
+            @RequestParam(required = false, name = "employeeId") Integer employeeId,
+            @RequestParam(required = false, name = "status") String status,
+            @RequestParam(required = false, name = "includeReports") boolean includeReports
+    ) {
+        if (id != null) {
+            if (includeReports)
+                return "redirect:/task/findWithReportsById/" + id;
+            else
+                return "redirect:/task/" + id;
+        }
+        if (employeeId != null)
+            return "redirect:/task/findByEmployeeId/" + employeeId;
+        if (status != null)
+            return "redirect:/task/findByStatus/" + status;
+
+        return "redirect:/task/";
     }
 
     @PutMapping("/{id}")

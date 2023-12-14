@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<div><iframe th:attr="data=${path}" type="application/pdf" width="100%" height="800px"></iframe></div>
+<p><b>id: </b><span th:text="${document.id}"></span></p>
+<p><b>имя: </b><span th:text="${document.name}"></span></p>
+<p><b>дата загрузки: </b><span th:text="${document.creationDate}"></span></p>
+<p><b>id загрузившего: </b><span th:text="${document.employeeId}"></span></p>
+<p><a th:href="@{/document/{id}(id=${document.id})}">скачать</a></p>
 </body>
 </html>

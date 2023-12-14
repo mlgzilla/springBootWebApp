@@ -24,7 +24,7 @@ public class DocumentController {
     private final DocumentService documentService;
 
     @GetMapping("/{id}")
-    public void findById(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
+    public void download(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         Result<DocumentDtoRead> documentRead = documentService.findById(id);
         if (documentRead.isError()) {
             return;
@@ -42,6 +42,17 @@ public class DocumentController {
         try (OutputStream os = response.getOutputStream()) {
             os.write(byteArray.getObject(), 0, byteArray.getObject().length);
         }
+    }
+
+    @GetMapping("/findById/{id}")
+    public String findById(@PathVariable Integer id, Model model) {
+        Result<DocumentDtoRead> document = documentService.findById(id);
+        if (document.isError()) {
+            model.addAttribute("message", document.getMessage());
+            return document.getCode();
+        } else
+            model.addAttribute("document", document.getObject());
+        return "document/show";
     }
 
     @GetMapping("/findByName/{name}")
@@ -97,9 +108,7 @@ public class DocumentController {
 
     @GetMapping("/")
     public String getHome(Model model) {
-        model.addAttribute("string", "");
-        model.addAttribute("number", Integer.valueOf(0));
-        return "index";
+        return "document/index";
     }
 
     @PostMapping("/")
@@ -110,6 +119,25 @@ public class DocumentController {
             return upload.getCode();
         } else
             return "200";
+    }
+
+    @PostMapping("/submit")
+    public String inputSubmit(
+            @RequestParam(required = false, name = "string") String string,
+            @RequestParam(required = false, name = "number") Integer number,
+            @RequestParam(required = false, name = "dateBefore") LocalDateTime dateBefore,
+            @RequestParam(required = false, name = "dateAfter") LocalDateTime dateAfter
+            ) {
+        if(string != null)
+            return "redirect:/document/findByName/" + string;
+        if(number != null)
+            return "redirect:/document/findById/" + number;
+        if(dateBefore != null)
+            return "redirect:/document/findByCreationDateBefore/" + dateBefore;
+        if(dateAfter != null)
+            return "redirect:/document/findByCreationDateAfter/" + dateAfter;
+
+        return "redirect:/document/";
     }
 
     @PutMapping ("/{id}")

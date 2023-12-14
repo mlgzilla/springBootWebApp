@@ -5,9 +5,31 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/document/{id}(id=${number})}" th:method="get">
-    <input type="number" th:object="${number}" id="idInput"/>
+<form th:action="@{/document/submit}" th:method="post">
+    <input th:name="number" type="number" th:object="${number}" id="idInput"/>
     <input type="submit" value="Поиск по id"/>
 </form>
+
+<br>
+
+<form th:action="@{/document/submit}" th:method="post">
+    <input th:name="string" type="text" th:object="${string}" id="stringInput"/>
+    <input type="submit" value="Поиск по имени"/>
+</form>
+
+<br>
+
+<form th:action="@{/document/submit}" th:method="post">
+    <input th:name="dateBefore" type="datetime-local" th:object="${dateBefore}" id="dateBeforeInput"/>
+    <input type="submit" value="Поиск до указанной даты"/>
+</form>
+
+<br>
+
+<form th:action="@{/document/submit}" th:method="post">
+    <input th:name="dateAfter" type="datetime-local" th:object="${dateAfter}" id="dateAfterInput"/>
+    <input type="submit" value="Поиск после указанной даты"/>
+</form>
+
 </body>
 </html>
