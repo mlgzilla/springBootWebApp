@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
 <form th:action="@{/report/{id}(id=${report.getId()})}" th:object="${report}" th:method="put">
-  
-  <label for="name">Новое имя отчета </label>
-  <input type="text" th:field="*{name}" id="name"/>
 
-  <label for="description">Новое описание отчета </label>
-  <input type="text" th:field="*{description}" id="description"/>
-  
-  <input type="submit" value="Отправить"/>
+    <label for="name">Новое имя отчета </label>
+    <input type="text" th:field="*{name}" id="name"/>
+
+    <label for="description">Новое описание отчета </label>
+    <input type="text" th:field="*{description}" id="description"/>
+
+    <input type="submit" value="Отправить"/>
 </form>
 </body>
 </html>

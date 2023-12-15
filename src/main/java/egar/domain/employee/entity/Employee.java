@@ -41,8 +41,8 @@ public class Employee implements Serializable {
     @OneToMany(mappedBy = "employee")
     private Set<Task> tasks;
 
-    public EmployeeDtoRead mapToDto(){
-       return new EmployeeDtoRead(
+    public EmployeeDtoRead mapToDto() {
+        return new EmployeeDtoRead(
                 this.id,
                 this.firstName,
                 this.middleName,

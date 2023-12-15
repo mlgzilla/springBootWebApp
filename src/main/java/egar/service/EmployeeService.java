@@ -1,12 +1,7 @@
 package egar.service;
 
-import egar.domain.document.dto.DocumentDtoRead;
-import egar.domain.document.entity.Document;
-import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.dto.EmployeeDtoRead;
 import egar.domain.employee.entity.Employee;
-import egar.domain.report.dto.ReportDtoRead;
-import egar.domain.report.entity.Report;
 import egar.enums.ContractType;
 import egar.repository.*;
 import egar.utils.Result;
@@ -70,6 +65,7 @@ public class EmployeeService {
             return Result.error("Error finding Employees by middle name", "500");
         }
     }
+
     public Result<List<EmployeeDtoRead>> findBySecondName(String secondName) {
         try {
             List<Employee> employees = employeeRepository.findBySecondName(secondName + '%');
@@ -96,8 +92,8 @@ public class EmployeeService {
         }
     }
 
-    public Result<EmployeeDtoRead> create(Employee employee){
-        try{
+    public Result<EmployeeDtoRead> create(Employee employee) {
+        try {
             Employee savedEmployee = employeeRepository.saveAndFlush(employee);
             return Result.ok(savedEmployee.mapToDto());
         } catch (Exception e) {

@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +106,7 @@ public class DocumentService {
         }
     }
 
-    public Result<byte[]> getFile(String path){
+    public Result<byte[]> getFile(String path) {
         FileInputStream fis;
         try {
             fis = new FileInputStream(path);

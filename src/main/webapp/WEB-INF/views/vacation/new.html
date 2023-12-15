@@ -5,7 +5,7 @@
     <title>timeStart Report</title>
 </head>
 <body>
-<form th:action="@{/workHours/}" th:object="${workHours}" th:method="post">
+<form th:action="@{/vacation/}" th:object="${vacation}" th:method="post">
 
     <label for="timeStart">timeStart </label>
     <input type="date" th:field="*{timeStart}" id="timeStart"/>
@@ -22,9 +22,16 @@
     <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
     <br/>
 
-    <label for="comment">comment </label>
-    <input type="text" th:field="*{comment}" id="comment"/>
-    <div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">Err</div>
+    <label for="description">description </label>
+    <input type="text" th:field="*{description}" id="description"/>
+    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Err</div>
+    <br/>
+
+    <select id="status" th:field="*{status}">
+        <option value="">Select status</option>
+        <option th:each="vacationStatus : ${vacationStatus}" th:value="${vacationStatus}"
+                th:text="${vacationStatus}"></option>
+    </select>
     <br/>
 
     <br/>

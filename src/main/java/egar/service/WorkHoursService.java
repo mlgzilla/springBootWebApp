@@ -70,7 +70,7 @@ public class WorkHoursService {
             return Result.ok(savedWorkHours.mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Failed to create work hours", "500"); //TODO 403?
+            return Result.error("Failed to create work hours", "500");
         }
     }
 

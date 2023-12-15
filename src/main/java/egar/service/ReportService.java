@@ -2,8 +2,6 @@ package egar.service;
 
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
-import egar.domain.report.dto.ReportDtoRead;
-import egar.domain.report.entity.Report;
 import egar.repository.ReportRepository;
 import egar.utils.Result;
 import org.springframework.stereotype.Service;

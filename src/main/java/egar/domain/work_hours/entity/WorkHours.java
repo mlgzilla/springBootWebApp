@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "work_hours")
@@ -32,7 +30,7 @@ public class WorkHours implements Serializable {
 
     private String comment;
 
-    public WorkHoursDtoRead mapToDto(){
+    public WorkHoursDtoRead mapToDto() {
         return new WorkHoursDtoRead(
                 this.id,
                 this.timeStart,

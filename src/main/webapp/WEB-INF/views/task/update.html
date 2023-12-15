@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
 <form th:action="@{/task/{id}(id=${task.getId()})}" th:object="${task}" th:method="put">
-  
-  <label for="name">Новое имя отчета </label>
-  <input type="text" th:field="*{name}" id="name"/>
 
-  <label for="description">Новое описание отчета </label>
-  <input type="text" th:field="*{description}" id="description"/>
+    <label for="name">Новое имя отчета </label>
+    <input type="text" th:field="*{name}" id="name"/>
 
-  <label for="dueTime">Новое описание отчета </label>
-  <input type="date" th:field="*{dueTime}" id="dueTime"/>
-  
-  <input type="submit" value="Отправить"/>
+    <label for="description">Новое описание отчета </label>
+    <input type="text" th:field="*{description}" id="description"/>
+
+    <label for="dueTime">Новое описание отчета </label>
+    <input type="date" th:field="*{dueTime}" id="dueTime"/>
+
+    <input type="submit" value="Отправить"/>
 </form>
 </body>
 </html>

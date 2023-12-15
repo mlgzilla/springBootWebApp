@@ -3,7 +3,6 @@ package egar.controller;
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
-import egar.enums.ContractType;
 import egar.enums.TaskStatus;
 import egar.service.TaskService;
 import egar.utils.Result;
@@ -67,11 +66,10 @@ public class TaskController {
             TaskDtoRead task = taskRead.getObject();
             Result<List<ReportDtoRead>> reports = taskService.findReportsByTaskId(id);
             if (reports.isError()) {
-                if (reports.getCode().equals("404")){
+                if (reports.getCode().equals("404")) {
                     model.addAttribute("task", task);
                     return "task/show";
-                }
-                else {
+                } else {
                     model.addAttribute("message", reports.getMessage());
                     return reports.getCode();
                 }

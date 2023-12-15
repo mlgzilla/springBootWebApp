@@ -1,8 +1,6 @@
 package egar.domain.task.dto;
 
-import egar.domain.employee.entity.Employee;
 import egar.domain.report.dto.ReportDtoRead;
-import egar.domain.report.entity.Report;
 import egar.enums.TaskStatus;
 import lombok.Data;
 

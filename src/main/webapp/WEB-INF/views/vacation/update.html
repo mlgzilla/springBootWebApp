@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/workHours/{id}(id=${workHours.getId()})}" th:object="${workHours}" th:method="put">
+<form th:action="@{/vacation/{id}(id=${vacation.getId()})}" th:object="${vacation}" th:method="put">
 
     <label for="timeStart">Новое описание отчета </label>
     <input type="date" th:field="*{timeStart}" id="timeStart"/>
@@ -13,8 +13,8 @@
     <label for="timeFinish">Новое описание отчета </label>
     <input type="date" th:field="*{timeFinish}" id="timeFinish"/>
 
-    <label for="comment">Новое описание отчета </label>
-    <input type="text" th:field="*{comment}" id="comment"/>
+    <label for="description">Новое описание отчета </label>
+    <input type="text" th:field="*{description}" id="description"/>
 
     <input type="submit" value="Отправить"/>
 </form>

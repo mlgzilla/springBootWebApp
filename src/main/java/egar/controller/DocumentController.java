@@ -32,7 +32,7 @@ public class DocumentController {
         DocumentDtoRead document = documentRead.getObject();
 
         Result<byte[]> byteArray = documentService.getFile(document.getPath());
-        if(byteArray.isError()){
+        if (byteArray.isError()) {
             return;
         }
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
@@ -127,20 +127,20 @@ public class DocumentController {
             @RequestParam(required = false, name = "number") Integer number,
             @RequestParam(required = false, name = "dateBefore") LocalDateTime dateBefore,
             @RequestParam(required = false, name = "dateAfter") LocalDateTime dateAfter
-            ) {
-        if(string != null)
+    ) {
+        if (string != null)
             return "redirect:/document/findByName/" + string;
-        if(number != null)
+        if (number != null)
             return "redirect:/document/findById/" + number;
-        if(dateBefore != null)
+        if (dateBefore != null)
             return "redirect:/document/findByCreationDateBefore/" + dateBefore;
-        if(dateAfter != null)
+        if (dateAfter != null)
             return "redirect:/document/findByCreationDateAfter/" + dateAfter;
 
         return "redirect:/document/";
     }
 
-    @PutMapping ("/{id}")
+    @PutMapping("/{id}")
     public String update(@ModelAttribute("document") DocumentDtoRead document, @PathVariable("id") Integer id, Model model) {
         Result<String> upload = documentService.update(id, document);
         if (upload.isError()) {

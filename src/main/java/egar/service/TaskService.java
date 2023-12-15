@@ -1,7 +1,5 @@
 package egar.service;
 
-import egar.domain.employee.dto.EmployeeDtoRead;
-import egar.domain.employee.entity.Employee;
 import egar.domain.report.dto.ReportDtoRead;
 import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
@@ -21,7 +19,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ReportRepository reportRepository;
 
-    public Result<TaskDtoRead> findById(Integer id){
+    public Result<TaskDtoRead> findById(Integer id) {
         try {
             Optional<Task> task = taskRepository.findById(id);
             if (task.isEmpty())
@@ -34,7 +32,7 @@ public class TaskService {
         }
     }
 
-    public Result<List<TaskDtoRead>> findByEmployeeId(Integer id){
+    public Result<List<TaskDtoRead>> findByEmployeeId(Integer id) {
         try {
             List<Task> tasks = taskRepository.findByEmployeeId(id);
             if (tasks.isEmpty())
@@ -47,7 +45,7 @@ public class TaskService {
         }
     }
 
-    public Result<List<TaskDtoRead>> findByStatus(TaskStatus status){
+    public Result<List<TaskDtoRead>> findByStatus(TaskStatus status) {
         try {
             List<Task> tasks = taskRepository.findByStatus(status);
             if (tasks.isEmpty())
@@ -60,7 +58,7 @@ public class TaskService {
         }
     }
 
-    public Result<List<ReportDtoRead>> findReportsByTaskId(Integer id){
+    public Result<List<ReportDtoRead>> findReportsByTaskId(Integer id) {
         try {
             List<Report> reports = reportRepository.findByTaskId(id);
             if (reports.isEmpty())
@@ -73,8 +71,8 @@ public class TaskService {
         }
     }
 
-    public Result<TaskDtoRead> create(Task task){
-        try{
+    public Result<TaskDtoRead> create(Task task) {
+        try {
             task.setStatus(TaskStatus.NotStarted);
             Task savedTask = taskRepository.saveAndFlush(task);
             return Result.ok(savedTask.mapToDto());

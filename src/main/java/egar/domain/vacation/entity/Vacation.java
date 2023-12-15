@@ -2,7 +2,6 @@ package egar.domain.vacation.entity;
 
 import egar.domain.employee.entity.Employee;
 import egar.domain.vacation.dto.VacationDtoRead;
-import egar.domain.work_hours.dto.WorkHoursDtoRead;
 import egar.enums.VacationStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -34,7 +33,7 @@ public class Vacation {
     @Enumerated(EnumType.STRING)
     private VacationStatus status;
 
-    public VacationDtoRead mapToDto(){
+    public VacationDtoRead mapToDto() {
         return new VacationDtoRead(
                 this.id,
                 this.timeStart,

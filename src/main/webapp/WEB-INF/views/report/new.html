@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>name Report</title>
+    <meta charset="UTF-8">
+    <title>name Report</title>
 </head>
 <body>
 <form th:action="@{/report/}" th:object="${report}" th:method="post">
 
-  <label for="name">name </label>
-  <input type="text" th:field="*{name}" id="name"/>
-  <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Err</div>
-  <br/>
+    <label for="name">name </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Err</div>
+    <br/>
 
-  <label for="description">description </label>
-  <input type="text" th:field="*{description}" id="description"/>
-  <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Err</div>
-  <br/>
+    <label for="description">description </label>
+    <input type="text" th:field="*{description}" id="description"/>
+    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Err</div>
+    <br/>
 
-  <label for="dateFiled">dateFiled </label>
-  <input type="text" th:field="*{dateFiled}" id="dateFiled"/>
-  <div th:if="${#fields.hasErrors('dateFiled')}" th:errors="*{dateFiled}">Err</div>
-  <br/>
+    <label for="dateFiled">dateFiled </label>
+    <input type="text" th:field="*{dateFiled}" id="dateFiled"/>
+    <div th:if="${#fields.hasErrors('dateFiled')}" th:errors="*{dateFiled}">Err</div>
+    <br/>
 
-  <label for="task.id">Task </label>
-  <input type="number" th:field="*{task.id}" id="task.id"/>
-  <div th:if="${#fields.hasErrors('task.id')}" th:errors="*{task.id}">Err</div>
-  <br/>
+    <label for="task.id">Task </label>
+    <input type="number" th:field="*{task.id}" id="task.id"/>
+    <div th:if="${#fields.hasErrors('task.id')}" th:errors="*{task.id}">Err</div>
+    <br/>
 
-  <br/>
+    <br/>
 
-  <input type="submit" value="Create"/>
+    <input type="submit" value="Create"/>
 
 </form>
 

@@ -40,7 +40,7 @@ public class Document {
         this.employee = employee;
     }
 
-    public DocumentDtoRead mapToDto(){
+    public DocumentDtoRead mapToDto() {
         return new DocumentDtoRead(
                 this.id,
                 this.name,

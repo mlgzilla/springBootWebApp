@@ -1,7 +1,7 @@
 package egar.service;
 
-import egar.domain.vacation.entity.Vacation;
 import egar.domain.vacation.dto.VacationDtoRead;
+import egar.domain.vacation.entity.Vacation;
 import egar.enums.VacationStatus;
 import egar.repository.VacationRepository;
 import egar.utils.Result;
@@ -46,16 +46,16 @@ public class VacationService {
         }
     }
 
-    public Result<List<VacationDtoRead>> findByEmployeeIdAndStatus(Integer id, VacationStatus status) {
+    public Result<List<VacationDtoRead>> findByStatus(VacationStatus status) {
         try {
-            List<Vacation> vacations = vacationRepository.findByEmployeeIdAndStatus(id, status);
+            List<Vacation> vacations = vacationRepository.findByStatus(status);
             if (vacations.isEmpty())
-                return Result.error("Vacations by employee and status were not found", "404");
+                return Result.error("Vacations by status were not found", "404");
             else
                 return Result.ok(vacations.stream().map(Vacation::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Error finding vacation by employee and status", "500");
+            return Result.error("Error finding vacation by status", "500");
         }
     }
 
@@ -79,6 +79,23 @@ public class VacationService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error creating vacation", "500");
+        }
+    }
+
+    public Result<String> update(Integer id, VacationDtoRead vacationDto) {
+        try {
+            Optional<Vacation> vacationRead = vacationRepository.findById(id);
+            if (vacationRead.isEmpty())
+                return Result.error("Vacation was not found", "404");
+            Vacation vacation = vacationRead.get();
+            vacation.setTimeStart(vacationDto.getTimeStart());
+            vacation.setTimeFinish(vacationDto.getTimeFinish());
+            vacation.setDescription(vacationDto.getDescription());
+            vacationRepository.saveAndFlush(vacation);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update vacation", "500");
         }
     }
 
