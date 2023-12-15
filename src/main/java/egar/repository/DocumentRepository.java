@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface DocumentRepository extends BaseRepository<Document, Integer> {
 
+    @Query("select d from Document d where d.employee.id = :id")
+    List<Document> findByEmployeeId(Integer id);
+
     @Query("select d from Document d where ?1 is null or lower(d.name) like ?1")
     List<Document> findByName(String name);
 

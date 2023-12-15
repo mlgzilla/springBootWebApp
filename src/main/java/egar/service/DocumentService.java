@@ -42,6 +42,19 @@ public class DocumentService {
         }
     }
 
+    public Result<List<DocumentDtoRead>> findByEmployeeId(Integer id) {
+        try {
+            List<Document> documents = documentRepository.findByEmployeeId(id);
+            if (documents.isEmpty())
+                return Result.error("Documents by employee were not found", "404");
+            else
+                return Result.ok(documents.stream().map(Document::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding documents by employee", "500");
+        }
+    }
+
     public Result<List<DocumentDtoRead>> findByName(String name) {
         try {
             List<Document> document = documentRepository.findByName(name + '%');
@@ -81,7 +94,7 @@ public class DocumentService {
         }
     }
 
-    public Result<String> upload(MultipartFile file) {
+    public Result<String> upload(MultipartFile file, Integer id) {
         String[] split = file.getOriginalFilename().split("\\.");
         String ext = split[split.length - 1];
         String newPath = uploadFolder + "/" + UUID.randomUUID() + "." + ext;
@@ -91,7 +104,7 @@ public class DocumentService {
             employee.setId(1);
             outputStream.write(file.getBytes());
             Document document = new Document(
-                    0,
+                    id,
                     file.getOriginalFilename(),
                     1,
                     newPath,

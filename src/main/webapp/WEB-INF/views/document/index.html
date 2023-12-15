@@ -13,6 +13,13 @@
 <br>
 
 <form th:action="@{/document/submit}" th:method="post">
+    <input th:name="employeeId" type="number" th:object="${employeeId}" id="employeeIdInput"/>
+    <input type="submit" value="Поиск по id загрузившего"/>
+</form>
+
+<br>
+
+<form th:action="@{/document/submit}" th:method="post">
     <input th:name="string" type="text" th:object="${string}" id="stringInput"/>
     <input type="submit" value="Поиск по имени"/>
 </form>

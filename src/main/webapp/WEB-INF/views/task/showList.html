@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="task: ${taskList}">
-    <p><b>id: </b><span th:text="${task.id}"></span></p>
+    <p><a th:href="@{/task/findById/{id}(id=${task.id})}"><b>id: </b><span th:text="${task.id}"></span></a></p>
     <p><b>имя: </b><span th:text="${task.name}"></span></p>
     <p><b>описание: </b><span th:text="${task.description}"></span></p>
     <p><b>дата сдачи: </b><span th:text="${task.dueTime}"></span></p>

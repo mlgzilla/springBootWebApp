@@ -23,6 +23,11 @@ import java.util.List;
 public class DocumentController {
     private final DocumentService documentService;
 
+    @GetMapping("/")
+    public String getHome() {
+        return "document/index";
+    }
+
     @GetMapping("/{id}")
     public void download(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         Result<DocumentDtoRead> documentRead = documentService.findById(id);
@@ -53,6 +58,17 @@ public class DocumentController {
         } else
             model.addAttribute("document", document.getObject());
         return "document/show";
+    }
+
+    @GetMapping("/findByEmployeeId/{id}")
+    public String findByEmployeeId(@PathVariable Integer id, Model model) {
+        Result<List<DocumentDtoRead>> documentList = documentService.findByEmployeeId(id);
+        if (documentList.isError()) {
+            model.addAttribute("message", documentList.getMessage());
+            return documentList.getCode();
+        } else
+            model.addAttribute("documentList", documentList.getObject());
+        return "document/showList";
     }
 
     @GetMapping("/findByName/{name}")
@@ -88,8 +104,9 @@ public class DocumentController {
         return "document/showList";
     }
 
-    @GetMapping("/upload")
-    public String getNew() {
+    @GetMapping("/upload/{id}")
+    public String getNew(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("id", id);
         return "document/upload";
     }
 
@@ -106,14 +123,9 @@ public class DocumentController {
         return "document/update";
     }
 
-    @GetMapping("/")
-    public String getHome(Model model) {
-        return "document/index";
-    }
-
     @PostMapping("/")
-    public String create(@ModelAttribute("file") MultipartFile file, Model model) {
-        Result<String> upload = documentService.upload(file);
+    public String create(@ModelAttribute("file") MultipartFile file, @ModelAttribute("id") Integer id, Model model) {
+        Result<String> upload = documentService.upload(file, id);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
@@ -125,6 +137,7 @@ public class DocumentController {
     public String inputSubmit(
             @RequestParam(required = false, name = "string") String string,
             @RequestParam(required = false, name = "number") Integer number,
+            @RequestParam(required = false, name = "employeeId") Integer employeeId,
             @RequestParam(required = false, name = "dateBefore") LocalDateTime dateBefore,
             @RequestParam(required = false, name = "dateAfter") LocalDateTime dateAfter
     ) {
@@ -132,6 +145,8 @@ public class DocumentController {
             return "redirect:/document/findByName/" + string;
         if (number != null)
             return "redirect:/document/findById/" + number;
+        if (employeeId != null)
+            return "redirect:/document/findByEmployeeId/" + employeeId;
         if (dateBefore != null)
             return "redirect:/document/findByCreationDateBefore/" + dateBefore;
         if (dateAfter != null)

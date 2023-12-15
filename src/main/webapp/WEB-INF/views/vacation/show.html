@@ -12,6 +12,12 @@
 <p><b>комментарий: </b><span th:text="${vacation.description}"></span></p>
 <p><b>статус: </b><span th:text="${vacation.status}"></span></p>
 
+<p><a th:href="@{/vacation/update/{id}(id=${vacation.id})}">Изменить данные</a></p>
+<br>
+<form th:action="@{/vacation/{id}(id=${vacation.id})}" th:method="delete">
+    <input type="submit" value="Удалить запись"/>
+</form>
+
 </body>
 
 </html>

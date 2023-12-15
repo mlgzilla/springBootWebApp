@@ -11,6 +11,12 @@
 <p><b>id работника: </b><span th:text="${workHours.employeeId}"></span></p>
 <p><b>комментарий: </b><span th:text="${workHours.comment}"></span></p>
 
+<p><a th:href="@{/workHours/update/{id}(id=${workHours.id})}">Изменить данные</a></p>
+<br>
+<form th:action="@{/workHours/{id}(id=${workHours.id})}" th:method="delete">
+    <input type="submit" value="Удалить запись"/>
+</form>
+
 </body>
 
 </html>

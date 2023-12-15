@@ -6,6 +6,7 @@
 </head>
 <body>
 <form th:method="POST" th:action="@{/document/}" enctype="multipart/form-data">
+    <input type="hidden" th:name="id" th:value="${id}">
     <input type="file" name="file" accept=".doc, .docx, .pdf"/>
     <p><input type="submit" value="Отправить"/></p>
 </form>
