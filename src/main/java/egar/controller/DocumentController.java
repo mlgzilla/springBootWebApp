@@ -130,7 +130,7 @@ public class DocumentController {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "redirect:/document/findById/" + id;
+            return "redirect:/employee/" + id;
     }
 
     @PostMapping("/submit")

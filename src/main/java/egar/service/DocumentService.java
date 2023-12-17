@@ -101,10 +101,10 @@ public class DocumentService {
         File outputFile = new File(newPath);
         try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
             Employee employee = new Employee();
-            employee.setId(1);
+            employee.setId(id);
             outputStream.write(file.getBytes());
             Document document = new Document(
-                    id,
+                    1,
                     file.getOriginalFilename(),
                     1,
                     newPath,
