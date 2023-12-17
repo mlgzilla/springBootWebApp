@@ -1,7 +1,7 @@
 package egar.service;
 
-import egar.domain.vacation.entity.Vacation;
 import egar.domain.vacation.dto.VacationDtoRead;
+import egar.domain.vacation.entity.Vacation;
 import egar.enums.VacationStatus;
 import egar.repository.VacationRepository;
 import egar.utils.Result;

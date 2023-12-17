@@ -6,7 +6,8 @@
 </head>
 <body>
 <div th:each="document: ${documentList}">
-    <p><a th:href="@{/document/findById/{id}(id=${document.id})}"><b>id: </b><span th:text="${document.id}"></span></a></p>
+    <p><a th:href="@{/document/findById/{id}(id=${document.id})}"><b>id: </b><span th:text="${document.id}"></span></a>
+    </p>
     <p><b>имя: </b><span th:text="${document.name}"></span></p>
     <p><b>дата загрузки: </b><span th:text="${document.creationDate}"></span></p>
     <p><b>id загрузившего: </b><span th:text="${document.employeeId}"></span></p>

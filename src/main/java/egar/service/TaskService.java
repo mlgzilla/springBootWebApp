@@ -5,7 +5,6 @@ import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
 import egar.enums.TaskStatus;
-import egar.enums.VacationStatus;
 import egar.repository.ReportRepository;
 import egar.repository.TaskRepository;
 import egar.utils.Result;
