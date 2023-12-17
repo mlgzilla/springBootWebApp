@@ -116,7 +116,7 @@ public class TaskController {
             return savedTask.getCode();
         } else {
             model.addAttribute("message", "Task create ok");
-            return "200";
+            return "redirect:/task/" + savedTask.getObject().getId();
         }
     }
 
@@ -142,13 +142,23 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public String update(@ModelAttribute("task") TaskDtoRead task, @PathVariable("id") Integer id, Model model) {
+    public String update(@PathVariable("id") Integer id, @ModelAttribute("task") TaskDtoRead task, Model model) {
         Result<String> upload = taskService.update(id, task);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "200";
+            return "redirect:/task/" + id;
+    }
+
+    @GetMapping("/updateStatus/{id}/{status}")
+    public String updateStatus(@PathVariable("id") Integer id, @PathVariable("status") TaskStatus taskStatus, Model model) {
+        Result<String> upload = taskService.updateStatus(id, taskStatus);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "redirect:/task/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -159,7 +169,7 @@ public class TaskController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "200";
+            return "redirect:/task/";
         }
     }
 }

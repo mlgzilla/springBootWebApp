@@ -130,7 +130,7 @@ public class DocumentController {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "200";
+            return "redirect:/document/findById/" + id;
     }
 
     @PostMapping("/submit")
@@ -162,7 +162,7 @@ public class DocumentController {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "200";
+            return "redirect:/document/findById/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -172,7 +172,7 @@ public class DocumentController {
             model.addAttribute("message", delete.getMessage());
             return delete.getCode();
         } else
-            return "200";
+            return "redirect:/document/";
     }
 
 }

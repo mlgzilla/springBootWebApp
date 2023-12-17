@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="employee: ${employeeList}">
-    <p><a th:href="@{/employee/findById/{id}(id=${employee.id})}"><b>id: </b><span th:text="${employee.id}"></span></a></p>
+    <p><a th:href="@{/employee/{id}(id=${employee.id})}"><b>id: </b><span th:text="${employee.id}"></span></a></p>
     <p><b>имя: </b><span th:text="${employee.firstName}"></span></p>
     <p><b>отчество: </b><span th:text="${employee.middleName}"></span></p>
     <p><b>фамилия: </b><span th:text="${employee.secondName}"></span></p>

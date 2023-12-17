@@ -23,6 +23,23 @@
 </div>
 </p>
 
+<br>
+
+<form th:if="${task.status == T(egar.enums.TaskStatus).NotStarted}"
+      th:action="@{/task/updateStatus/{id}/Pending(id=${task.id})}" th:method="get">
+    <input type="submit" value="Открыть задачу"/>
+</form>
+<form th:if="${task.status == T(egar.enums.TaskStatus).Pending}"
+      th:action="@{/task/updateStatus/{id}/Complete(id=${task.id})}" th:method="get">
+    <input type="submit" value="Закрыть задачу"/>
+</form>
+<form th:if="${task.status == T(egar.enums.TaskStatus).Complete}"
+      th:action="@{/task/updateStatus/{id}/Pending(id=${task.id})}" th:method="get">
+    <input type="submit" value="Повторно открыть задачу"/>
+</form>
+
+<br>
+
 <p><a th:href="@{/task/update/{id}(id=${task.id})}">Изменить данные</a></p>
 <br>
 <form th:action="@{/task/{id}(id=${task.id})}" th:method="delete">

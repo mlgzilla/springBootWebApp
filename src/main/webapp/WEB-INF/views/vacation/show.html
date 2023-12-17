@@ -12,6 +12,27 @@
 <p><b>комментарий: </b><span th:text="${vacation.description}"></span></p>
 <p><b>статус: </b><span th:text="${vacation.status}"></span></p>
 
+<br>
+
+<form th:if="${vacation.status == T(egar.enums.VacationStatus).NotStarted}"
+      th:action="@{/vacation/updateStatus/{id}/OnGoing(id=${task.id})}" th:object="${vacation}"
+      th:method="get">
+    <input type="submit" value="Открыть задачу"/>
+</form>
+<form th:if="${vacation.status == T(egar.enums.VacationStatus).OnGoing}"
+      th:action="@{/vacation/updateStatus/{id}/Finished(id=${task.id})}" th:object="${vacation}"
+      th:method="get">
+    <input type="submit" value="Закрыть задачу"/>
+</form>
+<form th:if="${vacation.status == T(egar.enums.VacationStatus).Finished}"
+      th:action="@{/vacation/updateStatus/{id}/OnGoing(id=${task.id})}" th:object="${vacation}"
+      th:method="get">
+    <input type="submit" value="Повторно открыть задачу"/>
+</form>
+
+<br>
+
+
 <p><a th:href="@{/vacation/update/{id}(id=${vacation.id})}">Изменить данные</a></p>
 <br>
 <form th:action="@{/vacation/{id}(id=${vacation.id})}" th:method="delete">

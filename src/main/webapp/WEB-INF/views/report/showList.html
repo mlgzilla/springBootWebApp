@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="report: ${reportList}">
-    <p><a th:href="@{/report/findById/{id}(id=${report.id})}"><b>id: </b><span th:text="${report.id}"></span></a></p>
+    <p><a th:href="@{/report/{id}(id=${report.id})}"><b>id: </b><span th:text="${report.id}"></span></a></p>
     <p><b>имя: </b><span th:text="${report.name}"></span></p>
     <p><b>описание: </b><span th:text="${report.description}"></span></p>
     <p><b>дата: </b><span th:text="${report.dateFiled}"></span></p>

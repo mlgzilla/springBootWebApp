@@ -5,6 +5,7 @@ import egar.domain.report.entity.Report;
 import egar.domain.task.dto.TaskDtoRead;
 import egar.domain.task.entity.Task;
 import egar.enums.TaskStatus;
+import egar.enums.VacationStatus;
 import egar.repository.ReportRepository;
 import egar.repository.TaskRepository;
 import egar.utils.Result;
@@ -90,6 +91,21 @@ public class TaskService {
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
             task.setDueTime(taskDto.getDueTime());
+            taskRepository.saveAndFlush(task);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update task", "500");
+        }
+    }
+
+    public Result<String> updateStatus(Integer id, TaskStatus taskStatus) {
+        try {
+            Optional<Task> taskRead = taskRepository.findById(id);
+            if (taskRead.isEmpty())
+                return Result.error("Task was not found", "404");
+            Task task = taskRead.get();
+            task.setStatus(taskStatus);
             taskRepository.saveAndFlush(task);
             return Result.ok("Update ok");
         } catch (Exception e) {

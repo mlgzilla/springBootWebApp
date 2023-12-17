@@ -110,7 +110,7 @@ public class EmployeeController {
             return savedEmployee.getCode();
         } else {
             model.addAttribute("message", "Employee create ok");
-            return "200";
+            return "redirect:/employee/" + savedEmployee.getObject().getId();
         }
     }
 
@@ -143,7 +143,7 @@ public class EmployeeController {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "200";
+            return "redirect:/employee/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -154,7 +154,7 @@ public class EmployeeController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "200";
+            return "redirect:/employee/";
         }
     }
 }

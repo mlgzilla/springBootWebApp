@@ -1,7 +1,7 @@
 package egar.service;
 
-import egar.domain.vacation.dto.VacationDtoRead;
 import egar.domain.vacation.entity.Vacation;
+import egar.domain.vacation.dto.VacationDtoRead;
 import egar.enums.VacationStatus;
 import egar.repository.VacationRepository;
 import egar.utils.Result;
@@ -82,15 +82,30 @@ public class VacationService {
         }
     }
 
-    public Result<String> update(Integer id, VacationDtoRead vacationDto) {
+    public Result<String> update(VacationDtoRead vacationDto) {
         try {
-            Optional<Vacation> vacationRead = vacationRepository.findById(id);
+            Optional<Vacation> vacationRead = vacationRepository.findById(vacationDto.getId());
             if (vacationRead.isEmpty())
                 return Result.error("Vacation was not found", "404");
             Vacation vacation = vacationRead.get();
             vacation.setTimeStart(vacationDto.getTimeStart());
             vacation.setTimeFinish(vacationDto.getTimeFinish());
             vacation.setDescription(vacationDto.getDescription());
+            vacationRepository.saveAndFlush(vacation);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update vacation", "500");
+        }
+    }
+
+    public Result<String> updateStatus(Integer id, VacationStatus vacationStatus) {
+        try {
+            Optional<Vacation> vacationRead = vacationRepository.findById(id);
+            if (vacationRead.isEmpty())
+                return Result.error("Vacation was not found", "404");
+            Vacation vacation = vacationRead.get();
+            vacation.setStatus(vacationStatus);
             vacationRepository.saveAndFlush(vacation);
             return Result.ok("Update ok");
         } catch (Exception e) {

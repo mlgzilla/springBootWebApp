@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="vacation: ${vacationList}">
-    <p><a th:href="@{/vacation/findById/{id}(id=${vacation.id})}"><b>id: </b><span th:text="${vacation.id}"></span></a></p>
+    <p><a th:href="@{/vacation/{id}(id=${vacation.id})}"><b>id: </b><span th:text="${vacation.id}"></span></a></p>
     <p><b>время начала: </b><span th:text="${vacation.timeStart}"></span></p>
     <p><b>время конца: </b><span th:text="${vacation.timeFinish}"></span></p>
     <p><b>id работника: </b><span th:text="${vacation.employeeId}"></span></p>

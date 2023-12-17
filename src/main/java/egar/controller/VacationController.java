@@ -98,10 +98,8 @@ public class VacationController {
         if (savedVacation.isError()) {
             model.addAttribute("message", savedVacation.getMessage());
             return savedVacation.getCode();
-        } else {
-            model.addAttribute("message", "Vacation create ok");
-            return "200";
-        }
+        } else
+            return "redirect:/vacation/" + savedVacation.getObject().getId();
     }
 
     @PostMapping("/submit")
@@ -121,13 +119,23 @@ public class VacationController {
     }
 
     @PutMapping("/{id}")
-    public String update(@ModelAttribute("vacation") VacationDtoRead vacation, @PathVariable("id") Integer id, Model model) {
-        Result<String> upload = vacationService.update(id, vacation);
+    public String update(@PathVariable("id") Integer id, @ModelAttribute("vacation") VacationDtoRead vacation, Model model) {
+        Result<String> upload = vacationService.update(vacation);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "200";
+            return "redirect:/vacation/" + id;
+    }
+
+    @GetMapping("/updateStatus/{id}/{status}")
+    public String updateStatus(@PathVariable("id") Integer id, @PathVariable("status") VacationStatus vacationStatus, Model model) {
+        Result<String> upload = vacationService.updateStatus(id, vacationStatus);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "redirect:/vacation/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -138,7 +146,7 @@ public class VacationController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "200";
+            return "redirect:/vacation/";
         }
     }
 }

@@ -15,7 +15,13 @@
 
 <p><a th:href="@{/document/upload/{id}(id=${employee.id})}">Загрузить файл</a></p>
 
-<p><a th:href="@{/employee/update/{id}(id=${employee.id})}">Изменить данные</a></p>
+<p><a th:href="@{/task/findByEmployeeId/{id}(id=${employee.id})}">Найти все задачи</a></p>
+
+<p><a th:href="@{/workHours/findByEmployeeId/{id}(id=${employee.id})}">Найти все записи о часах работы</a></p>
+
+<p><a th:href="@{/vacation/findByEmployeeId/{id}(id=${employee.id})}">Найти все отпуска</a></p>
+
+<p><a th:href="@{/employee/findByEmployeeId/{id}(id=${employee.id})}">Изменить данные</a></p>
 <br>
 <form th:action="@{/employee/{id}(id=${employee.id})}" th:method="delete">
     <input type="submit" value="Удалить запись"/>
