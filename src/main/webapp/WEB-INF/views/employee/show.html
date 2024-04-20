@@ -5,25 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-<p><b>id: </b><span th:text="${employee.id}"></span></p>
-<p><b>имя: </b><span th:text="${employee.firstName}"></span></p>
-<p><b>отчество: </b><span th:text="${employee.middleName}"></span></p>
-<p><b>фамилия: </b><span th:text="${employee.secondName}"></span></p>
-<p><b>номер телефона: </b><span th:text="${employee.phoneNumber}"></span></p>
-<p><b>номер карты: </b><span th:text="${employee.cardNumber}"></span></p>
-<p><b>тип занятости: </b><span th:text="${employee.contractType}"></span></p>
+<p><b>id: </b><span th:text="${user.id}"></span></p>
+<p><b>имя: </b><span th:text="${user.firstName}"></span></p>
+<p><b>отчество: </b><span th:text="${user.middleName}"></span></p>
+<p><b>фамилия: </b><span th:text="${user.secondName}"></span></p>
+<p><b>номер телефона: </b><span th:text="${user.phoneNumber}"></span></p>
+<p><b>номер карты: </b><span th:text="${user.cardNumber}"></span></p>
+<p><b>тип занятости: </b><span th:text="${user.contractType}"></span></p>
 
-<p><a th:href="@{/document/upload/{id}(id=${employee.id})}">Загрузить файл</a></p>
+<p><a th:href="@{/attachment/upload/{id}(id=${user.id})}">Загрузить файл</a></p>
 
-<p><a th:href="@{/task/findByEmployeeId/{id}(id=${employee.id})}">Найти все задачи</a></p>
+<p><a th:href="@{/task/findByEmployeeId/{id}(id=${user.id})}">Найти все задачи</a></p>
 
-<p><a th:href="@{/workHours/findByEmployeeId/{id}(id=${employee.id})}">Найти все записи о часах работы</a></p>
+<p><a th:href="@{/workTime/findByEmployeeId/{id}(id=${user.id})}">Найти все записи о часах работы</a></p>
 
-<p><a th:href="@{/vacation/findByEmployeeId/{id}(id=${employee.id})}">Найти все отпуска</a></p>
+<p><a th:href="@{/vacation/findByEmployeeId/{id}(id=${user.id})}">Найти все отпуска</a></p>
 
-<p><a th:href="@{/employee/findByEmployeeId/{id}(id=${employee.id})}">Изменить данные</a></p>
+<p><a th:href="@{/user/findByEmployeeId/{id}(id=${user.id})}">Изменить данные</a></p>
 <br>
-<form th:action="@{/employee/{id}(id=${employee.id})}" th:method="delete">
+<form th:action="@{/user/{id}(id=${user.id})}" th:method="delete">
     <input type="submit" value="Удалить запись"/>
 </form>
 

@@ -25,15 +25,15 @@
 
 <br>
 
-<form th:if="${task.status == T(egar.enums.TaskStatus).NotStarted}"
+<form th:if="${task.status == T(task_tracker.enums.TaskStatus).NotStarted}"
       th:action="@{/task/updateStatus/{id}/Pending(id=${task.id})}" th:method="get">
     <input type="submit" value="Открыть задачу"/>
 </form>
-<form th:if="${task.status == T(egar.enums.TaskStatus).Pending}"
+<form th:if="${task.status == T(task_tracker.enums.TaskStatus).Pending}"
       th:action="@{/task/updateStatus/{id}/Complete(id=${task.id})}" th:method="get">
     <input type="submit" value="Закрыть задачу"/>
 </form>
-<form th:if="${task.status == T(egar.enums.TaskStatus).Complete}"
+<form th:if="${task.status == T(task_tracker.enums.TaskStatus).Complete}"
       th:action="@{/task/updateStatus/{id}/Pending(id=${task.id})}" th:method="get">
     <input type="submit" value="Повторно открыть задачу"/>
 </form>

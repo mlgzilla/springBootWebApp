@@ -5,15 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-<p><b>id: </b><span th:text="${workHours.id}"></span></p>
-<p><b>время начала: </b><span th:text="${workHours.timeStart}"></span></p>
-<p><b>время конца: </b><span th:text="${workHours.timeFinish}"></span></p>
-<p><b>id работника: </b><span th:text="${workHours.employeeId}"></span></p>
-<p><b>комментарий: </b><span th:text="${workHours.comment}"></span></p>
+<p><b>id: </b><span th:text="${workTime.id}"></span></p>
+<p><b>время начала: </b><span th:text="${workTime.timeStart}"></span></p>
+<p><b>время конца: </b><span th:text="${workTime.timeFinish}"></span></p>
+<p><b>id работника: </b><span th:text="${workTime.employeeId}"></span></p>
+<p><b>комментарий: </b><span th:text="${workTime.comment}"></span></p>
 
-<p><a th:href="@{/workHours/update/{id}(id=${workHours.id})}">Изменить данные</a></p>
+<p><a th:href="@{/workTime/update/{id}(id=${workTime.id})}">Изменить данные</a></p>
 <br>
-<form th:action="@{/workHours/{id}(id=${workHours.id})}" th:method="delete">
+<form th:action="@{/workTime/{id}(id=${workTime.id})}" th:method="delete">
     <input type="submit" value="Удалить запись"/>
 </form>
 

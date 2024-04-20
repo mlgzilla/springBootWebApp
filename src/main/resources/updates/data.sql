@@ -1,4 +1,4 @@
-INSERT INTO public.employee (first_name, middle_name, second_name, phone_number, card_number, contract_type)
+INSERT INTO public.user (first_name, middle_name, second_name, phone_number, card_number, contract_type)
 VALUES ('Jack', 'Idk', 'Nicholsen', '112', 888, 'Temporary'),
        ('John', 'None', 'Doe', '911', 777, 'Temporary'),
        ('Ryan', 'Kozlik', 'Gosling', '777', 666, 'PartTime'),
@@ -58,7 +58,7 @@ VALUES ('2023-12-01 09:00:23', '2023-12-01 17:00:23', 0, 'хорошо пора�
        ('2023-12-01 09:00:23', '2023-12-01 17:00:23', 8, 'хорошо поработал'),
        ('2023-12-01 09:00:23', '2023-12-01 17:00:23', 9, 'отлично поработал');
 
-INSERT INTO public."document" (name, page_count, "path", creation_date, employee_id)
+INSERT INTO public."attachment" (name, page_count, "path", creation_date, employee_id)
 VALUES ('Чек_ФН-9961440300858869_ФД-75004.pdf', 1, 'D:/java/3afcb302-b0a8-48bf-9df7-a397b38d5ac3.pdf',
         '2023-12-01 17:43:48.616925', 0),
        ('laba4.docx', 1, 'D:/java/644a7eeb-dcef-4e33-b2ad-1b6de5691eba.docx', '2023-12-15 23:43:57.873106', 2),

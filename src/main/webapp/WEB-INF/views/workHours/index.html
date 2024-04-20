@@ -5,14 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/workHours/submit}" th:method="post">
+<form th:action="@{/workTime/submit}" th:method="post">
     <input th:name="id" type="number" th:object="${id}" id="idInput"/>
     <input type="submit" value="Поиск по id"/>
 </form>
 
 <br>
 
-<form th:action="@{/workHours/submit}" th:method="post">
+<form th:action="@{/workTime/submit}" th:method="post">
     <input th:name="employeeId" type="number" th:object="${employeeId}" id="employeeIdInput"/>
     <input type="submit" value="Поиск по id работника"/>
 
@@ -35,7 +35,7 @@
 
 <br>
 
-<form th:action="@{/workHours/new}" th:method="get">
+<form th:action="@{/workTime/new}" th:method="get">
     <input type="submit" value="Добавить запись о времени работы"/>
 </form>
 

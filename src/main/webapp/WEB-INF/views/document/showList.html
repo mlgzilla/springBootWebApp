@@ -5,13 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-<div th:each="document: ${documentList}">
-    <p><a th:href="@{/document/findById/{id}(id=${document.id})}"><b>id: </b><span th:text="${document.id}"></span></a>
+<div th:each="attachment: ${documentList}">
+    <p><a th:href="@{/attachment/findById/{id}(id=${attachment.id})}"><b>id: </b><span th:text="${attachment.id}"></span></a>
     </p>
-    <p><b>имя: </b><span th:text="${document.name}"></span></p>
-    <p><b>дата загрузки: </b><span th:text="${document.creationDate}"></span></p>
-    <p><b>id загрузившего: </b><span th:text="${document.employeeId}"></span></p>
-    <p><a th:href="@{/document/{id}(id=${document.id})}">скачать</a></p>
+    <p><b>имя: </b><span th:text="${attachment.name}"></span></p>
+    <p><b>дата загрузки: </b><span th:text="${attachment.creationDate}"></span></p>
+    <p><b>id загрузившего: </b><span th:text="${attachment.employeeId}"></span></p>
+    <p><a th:href="@{/attachment/{id}(id=${attachment.id})}">скачать</a></p>
     <p>---------------------------------------------------------------</p>
 </div>
 </body>

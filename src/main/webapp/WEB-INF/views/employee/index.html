@@ -5,35 +5,35 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/employee/submit}" th:method="post">
+<form th:action="@{/user/submit}" th:method="post">
     <input th:name="id" type="number" th:object="${id}" id="idInput"/>
     <input type="submit" value="Поиск по id"/>
 </form>
 
 <br>
 
-<form th:action="@{/employee/submit}" th:method="post">
+<form th:action="@{/user/submit}" th:method="post">
     <input th:name="firstName" type="text" th:object="${firstName}" id="firstNameInput"/>
     <input type="submit" value="Поиск по имени"/>
 </form>
 
 <br>
 
-<form th:action="@{/employee/submit}" th:method="post">
+<form th:action="@{/user/submit}" th:method="post">
     <input th:name="secondName" type="text" th:object="${secondName}" id="secondNameInput"/>
     <input type="submit" value="Поиск по фамилии"/>
 </form>
 
 <br>
 
-<form th:action="@{/employee/submit}" th:method="post">
+<form th:action="@{/user/submit}" th:method="post">
     <input th:name="middleName" type="text" th:object="${middleName}" id="middleNameInput"/>
     <input type="submit" value="Поиск по отчеству"/>
 </form>
 
 <br>
 
-<form th:action="@{/employee/submit}" th:method="post">
+<form th:action="@{/user/submit}" th:method="post">
     <select th:name="contractType" id="contractTypeInput">
         <option value="">Выберите тип контракта</option>
         <option th:each="types : ${types}" th:value="${types}" th:text="${types}"></option>
@@ -43,7 +43,7 @@
 
 <br>
 
-<form th:action="@{/employee/new}" th:method="get">
+<form th:action="@{/user/new}" th:method="get">
     <input type="submit" value="Добавить работника"/>
 </form>
 

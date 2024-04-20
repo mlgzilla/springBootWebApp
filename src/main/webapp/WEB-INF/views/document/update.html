@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/document/{id}(id=${document.getId()})}" th:object="${document}" th:method="put">
+<form th:action="@{/attachment/{id}(id=${attachment.getId()})}" th:object="${attachment}" th:method="put">
 
     <label for="name">Новое имя файла </label>
     <input type="text" th:field="*{name}" id="name"/>

@@ -14,17 +14,17 @@
 
 <br>
 
-<form th:if="${vacation.status == T(egar.enums.VacationStatus).NotStarted}"
+<form th:if="${vacation.status == T(task_tracker.enums.VacationStatus).NotStarted}"
       th:action="@{/vacation/updateStatus/{id}/OnGoing(id=${task.id})}" th:object="${vacation}"
       th:method="get">
     <input type="submit" value="Открыть задачу"/>
 </form>
-<form th:if="${vacation.status == T(egar.enums.VacationStatus).OnGoing}"
+<form th:if="${vacation.status == T(task_tracker.enums.VacationStatus).OnGoing}"
       th:action="@{/vacation/updateStatus/{id}/Finished(id=${task.id})}" th:object="${vacation}"
       th:method="get">
     <input type="submit" value="Закрыть задачу"/>
 </form>
-<form th:if="${vacation.status == T(egar.enums.VacationStatus).Finished}"
+<form th:if="${vacation.status == T(task_tracker.enums.VacationStatus).Finished}"
       th:action="@{/vacation/updateStatus/{id}/OnGoing(id=${task.id})}" th:object="${vacation}"
       th:method="get">
     <input type="submit" value="Повторно открыть задачу"/>

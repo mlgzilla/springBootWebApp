@@ -5,7 +5,7 @@
     <title>timeStart Report</title>
 </head>
 <body>
-<form th:action="@{/workHours/}" th:object="${workHours}" th:method="post">
+<form th:action="@{/workTime/}" th:object="${workTime}" th:method="post">
 
     <label for="timeStart">timeStart </label>
     <input type="date" th:field="*{timeStart}" id="timeStart"/>
@@ -17,9 +17,9 @@
     <div th:if="${#fields.hasErrors('timeFinish')}" th:errors="*{timeFinish}">Err</div>
     <br/>
 
-    <label for="employee.id">employee </label>
-    <input type="number" th:field="*{employee.id}" id="employee.id"/>
-    <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
+    <label for="user.id">user </label>
+    <input type="number" th:field="*{user.id}" id="user.id"/>
+    <div th:if="${#fields.hasErrors('user.id')}" th:errors="*{user.id}">Err</div>
     <br/>
 
     <label for="comment">comment </label>

@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/workHours/{id}(id=${workHours.getId()})}" th:object="${workHours}" th:method="put">
+<form th:action="@{/workTime/{id}(id=${workTime.getId()})}" th:object="${workTime}" th:method="put">
 
     <label for="timeStart">Новое описание отчета </label>
     <input type="date" th:field="*{timeStart}" id="timeStart"/>

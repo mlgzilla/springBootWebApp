@@ -5,15 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-<p><b>id: </b><span th:text="${document.id}"></span></p>
-<p><b>имя: </b><span th:text="${document.name}"></span></p>
-<p><b>дата загрузки: </b><span th:text="${document.creationDate}"></span></p>
-<p><b>id загрузившего: </b><span th:text="${document.employeeId}"></span></p>
-<p><a th:href="@{/document/{id}(id=${document.id})}">Скачать</a></p>
+<p><b>id: </b><span th:text="${attachment.id}"></span></p>
+<p><b>имя: </b><span th:text="${attachment.name}"></span></p>
+<p><b>дата загрузки: </b><span th:text="${attachment.creationDate}"></span></p>
+<p><b>id загрузившего: </b><span th:text="${attachment.employeeId}"></span></p>
+<p><a th:href="@{/attachment/{id}(id=${attachment.id})}">Скачать</a></p>
 <br>
-<p><a th:href="@{/document/update/{id}(id=${document.id})}">Изменить данные</a></p>
+<p><a th:href="@{/attachment/update/{id}(id=${attachment.id})}">Изменить данные</a></p>
 <br>
-<form th:action="@{/document/{id}(id=${document.id})}" th:method="delete">
+<form th:action="@{/attachment/{id}(id=${attachment.id})}" th:method="delete">
     <input type="submit" value="Удалить запись"/>
 </form>
 </body>

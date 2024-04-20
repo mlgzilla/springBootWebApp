@@ -1,4 +1,4 @@
-CREATE TABLE public."document"
+CREATE TABLE public."attachment"
 (
     id            serial4   NOT NULL,
     name          varchar   NOT NULL,
@@ -7,10 +7,10 @@ CREATE TABLE public."document"
     creation_date timestamp NOT NULL,
     employee_id   int4      NOT NULL,
     CONSTRAINT document_pk PRIMARY KEY (id),
-    CONSTRAINT document_fk FOREIGN KEY (employee_id) REFERENCES public.employee (id)
+    CONSTRAINT document_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
 );
 
-CREATE TABLE public.employee
+CREATE TABLE public.user
 (
     id            serial4 NOT NULL,
     first_name    varchar NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE public.task
     assignee    int4    NOT NULL,
     status      varchar NOT NULL,
     CONSTRAINT task_pk PRIMARY KEY (id),
-    CONSTRAINT task_fk FOREIGN KEY (assignee) REFERENCES public.employee (id)
+    CONSTRAINT task_fk FOREIGN KEY (assignee) REFERENCES public.user (id)
 );
 
 CREATE TABLE public.vacation
@@ -54,7 +54,7 @@ CREATE TABLE public.vacation
     description varchar NULL,
     status      varchar   NOT NULL,
     CONSTRAINT vacation_pk PRIMARY KEY (id),
-    CONSTRAINT vacation_fk FOREIGN KEY (employee_id) REFERENCES public.employee (id)
+    CONSTRAINT vacation_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
 );
 
 CREATE TABLE public.work_hours
@@ -65,5 +65,5 @@ CREATE TABLE public.work_hours
     employee_id int4      NOT NULL,
     "comment"   varchar NULL,
     CONSTRAINT work_hours_pk PRIMARY KEY (id),
-    CONSTRAINT work_hours_fk FOREIGN KEY (employee_id) REFERENCES public.employee (id)
+    CONSTRAINT work_hours_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
 );

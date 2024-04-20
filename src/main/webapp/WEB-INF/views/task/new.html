@@ -22,9 +22,9 @@
     <div th:if="${#fields.hasErrors('dueTime')}" th:errors="*{dueTime}">Err</div>
     <br/>
 
-    <label for="employee.id">Assignee </label>
-    <input type="number" th:field="*{employee.id}" id="employee.id"/>
-    <div th:if="${#fields.hasErrors('employee.id')}" th:errors="*{employee.id}">Err</div>
+    <label for="user.id">Assignee </label>
+    <input type="number" th:field="*{user.id}" id="user.id"/>
+    <div th:if="${#fields.hasErrors('user.id')}" th:errors="*{user.id}">Err</div>
     <br/>
 
     <!--  <select id="status" th:field="*{status}">-->

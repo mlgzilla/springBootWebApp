@@ -1,0 +1,42 @@
+package task_tracker.dto;
+
+import lombok.Data;
+import task_tracker.domain.Project;
+import task_tracker.enums.Priority;
+import task_tracker.enums.TaskStatus;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
+public class TaskDto {
+    private UUID id;
+
+    private String name;
+
+    private String description;
+
+    private UUID employeeId;
+
+    private TaskStatus status;
+
+    private LocalDateTime dateCreated;
+
+    private LocalDateTime deadline;
+
+    private Project project;
+
+    private Priority priority;
+
+    public TaskDto(UUID id, String name, String description, UUID employeeId, TaskStatus status, LocalDateTime dateCreated, LocalDateTime deadline, Project project, Priority priority) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.employeeId = employeeId;
+        this.status = status;
+        this.dateCreated = dateCreated;
+        this.deadline = deadline;
+        this.project = project;
+        this.priority = priority;
+    }
+}
