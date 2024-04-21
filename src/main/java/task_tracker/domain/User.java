@@ -22,8 +22,8 @@ public class User implements Serializable {
 
     private String surename;
 
-    @OneToOne
-    @JoinColumn(name = "role", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "role", referencedColumnName = "id", foreignKey = @ForeignKey(name = "users_fk2"))
     private Role role;
 
     @Column(name = "login")

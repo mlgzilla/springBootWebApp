@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import task_tracker.dto.ProjectDto;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -17,6 +18,9 @@ public class Project {
     private UUID id;
 
     private String name;
+
+    @OneToMany(mappedBy = "project")
+    Set<Task> tasks;
 
     public ProjectDto mapToDto() {
         return new ProjectDto(

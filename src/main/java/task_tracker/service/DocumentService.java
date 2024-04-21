@@ -3,7 +3,7 @@ package task_tracker.service;
 import task_tracker.domain.Attachment;
 import task_tracker.dto.AttachmentDto;
 import task_tracker.domain.User;
-import task_tracker.repository.DocumentRepository;
+import task_tracker.repository.AttachmentRepository;
 import task_tracker.utils.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
-    private final DocumentRepository documentRepository;
+    private final AttachmentRepository attachmentRepository;
     private final String uploadFolder;
 
-    public DocumentService(DocumentRepository documentRepository, @Value("${uploadFolder}") String uploadFolder) {
-        this.documentRepository = documentRepository;
+    public DocumentService(AttachmentRepository attachmentRepository, @Value("${uploadFolder}") String uploadFolder) {
+        this.attachmentRepository = attachmentRepository;
         this.uploadFolder = uploadFolder;
     }
 
     public Result<AttachmentDto> findById(Integer id) {
         try {
-            Optional<Attachment> document = documentRepository.findById(id);
+            Optional<Attachment> document = attachmentRepository.findById(id);
             if (document.isEmpty())
                 return Result.error("Document was not found", "404");
             else
@@ -44,7 +44,7 @@ public class DocumentService {
 
     public Result<List<AttachmentDto>> findByEmployeeId(Integer id) {
         try {
-            List<Attachment> attachments = documentRepository.findByEmployeeId(id);
+            List<Attachment> attachments = attachmentRepository.findByUserId(id);
             if (attachments.isEmpty())
                 return Result.error("Documents by employee were not found", "404");
             else
@@ -57,7 +57,7 @@ public class DocumentService {
 
     public Result<List<AttachmentDto>> findByName(String name) {
         try {
-            List<Attachment> attachment = documentRepository.findByName(name + '%');
+            List<Attachment> attachment = attachmentRepository.findByName(name + '%');
             if (attachment.isEmpty())
                 return Result.error("Documents by name were not found", "404");
             else
@@ -70,7 +70,7 @@ public class DocumentService {
 
     public Result<List<AttachmentDto>> findByCreationDateBefore(LocalDateTime date) {
         try {
-            List<Attachment> attachment = documentRepository.findByCreationDateBefore(date);
+            List<Attachment> attachment = attachmentRepository.findByCreationDateBefore(date);
             if (attachment.isEmpty())
                 return Result.error("Documents by name were not found", "404");
             else
@@ -83,7 +83,7 @@ public class DocumentService {
 
     public Result<List<AttachmentDto>> findByCreationDateAfter(LocalDateTime date) {
         try {
-            List<Attachment> attachment = documentRepository.findByCreationDateAfter(date);
+            List<Attachment> attachment = attachmentRepository.findByCreationDateAfter(date);
             if (attachment.isEmpty())
                 return Result.error("Documents by name were not found", "404");
             else
@@ -110,7 +110,7 @@ public class DocumentService {
                     newPath,
                     LocalDateTime.now(),
                     user);
-            documentRepository.saveAndFlush(attachment);
+            attachmentRepository.saveAndFlush(attachment);
             outputStream.close();
             return Result.ok(newPath);
         } catch (IOException e) {
@@ -132,12 +132,12 @@ public class DocumentService {
 
     public Result<String> update(Integer id, AttachmentDto attachmentDto) {
         try {
-            Optional<Attachment> documentRead = documentRepository.findById(id);
+            Optional<Attachment> documentRead = attachmentRepository.findById(id);
             if (documentRead.isEmpty())
                 return Result.error("Document was not found", "404");
             Attachment attachment = documentRead.get();
             attachment.setName(attachmentDto.getName());
-            documentRepository.saveAndFlush(attachment);
+            attachmentRepository.saveAndFlush(attachment);
             return Result.ok("Update ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -147,7 +147,7 @@ public class DocumentService {
 
     public Result<String> delete(Integer id) {
         try {
-            documentRepository.deleteById(id);
+            attachmentRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());

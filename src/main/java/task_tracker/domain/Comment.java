@@ -20,13 +20,13 @@ public class Comment {
     private String contents;
 
     @ManyToOne()
-    @JoinColumn(name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
+    @JoinColumn(name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "news_fk"))
     private User user;
 
     private LocalDateTime date;
 
     @ManyToOne()
-    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
+    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "comment_fk"))
     private Task task;
 
     public CommentDto mapToDto() {

@@ -13,23 +13,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-    private final EmployeeRepository employeeRepository;
-    private final DocumentRepository documentRepository;
+    private final UserRepository userRepository;
+    private final AttachmentRepository attachmentRepository;
     private final TaskRepository taskRepository;
     private final VacationRepository vacationRepository;
-    private final WorkHoursRepository workHoursRepository;
+    private final WorkTimeRepository workTimeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, DocumentRepository documentRepository, TaskRepository taskRepository, VacationRepository vacationRepository, WorkHoursRepository workHoursRepository) {
-        this.employeeRepository = employeeRepository;
-        this.documentRepository = documentRepository;
+    public EmployeeService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, VacationRepository vacationRepository, WorkTimeRepository workTimeRepository) {
+        this.userRepository = userRepository;
+        this.attachmentRepository = attachmentRepository;
         this.taskRepository = taskRepository;
         this.vacationRepository = vacationRepository;
-        this.workHoursRepository = workHoursRepository;
+        this.workTimeRepository = workTimeRepository;
     }
 
     public Result<UserDto> findById(Integer id) {
         try {
-            Optional<User> employee = employeeRepository.findById(id);
+            Optional<User> employee = userRepository.findById(id);
             if (employee.isEmpty())
                 return Result.error("Employee was not found", "404");
             else
@@ -42,7 +42,7 @@ public class EmployeeService {
 
     public Result<List<UserDto>> findByFirstName(String firstName) {
         try {
-            List<User> users = employeeRepository.findByFirstName(firstName + '%');
+            List<User> users = userRepository.findByFirstName(firstName + '%');
             if (users.isEmpty())
                 return Result.error("Employees by first name were not found", "404");
             else
@@ -55,7 +55,7 @@ public class EmployeeService {
 
     public Result<List<UserDto>> findByMiddleName(String middleName) {
         try {
-            List<User> users = employeeRepository.findByMiddleName(middleName + '%');
+            List<User> users = userRepository.findByMiddleName(middleName + '%');
             if (users.isEmpty())
                 return Result.error("Employees by middle name were not found", "404");
             else
@@ -68,7 +68,7 @@ public class EmployeeService {
 
     public Result<List<UserDto>> findBySecondName(String secondName) {
         try {
-            List<User> users = employeeRepository.findBySecondName(secondName + '%');
+            List<User> users = userRepository.findBySecondName(secondName + '%');
             if (users.isEmpty())
                 return Result.error("Employees by second name were not found", "404");
             else
@@ -81,7 +81,7 @@ public class EmployeeService {
 
     public Result<List<UserDto>> findByContractType(ContractType contractType) {
         try {
-            List<User> users = employeeRepository.findByContractType(contractType);
+            List<User> users = userRepository.findByContractType(contractType);
             if (users.isEmpty())
                 return Result.error("Employees by contract type were not found", "404");
             else
@@ -94,7 +94,7 @@ public class EmployeeService {
 
     public Result<UserDto> create(User user) {
         try {
-            User savedUser = employeeRepository.saveAndFlush(user);
+            User savedUser = userRepository.saveAndFlush(user);
             return Result.ok(savedUser.mapToDto());
         } catch (Exception e) {
             return Result.error("Error creating Employee", "500");
@@ -103,7 +103,7 @@ public class EmployeeService {
 
     public Result<String> update(Integer id, UserDto employeeDto) {
         try {
-            Optional<User> employeeRead = employeeRepository.findById(id);
+            Optional<User> employeeRead = userRepository.findById(id);
             if (employeeRead.isEmpty())
                 return Result.error("Employee was not found", "404");
             User user = employeeRead.get();
@@ -112,7 +112,7 @@ public class EmployeeService {
             user.setCardNumber(employeeDto.getCardNumber());
             user.setPhoneNumber(employeeDto.getPhoneNumber());
             user.setContractType(employeeDto.getContractType());
-            employeeRepository.saveAndFlush(user);
+            userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -122,11 +122,11 @@ public class EmployeeService {
 
     public Result<String> delete(Integer id) {
         try {
-            documentRepository.deleteAllByEmployeeId(id);
+            attachmentRepository.deleteAllByUserId(id);
             taskRepository.deleteAllByEmployeeId(id);
             vacationRepository.deleteAllByEmployeeId(id);
-            workHoursRepository.deleteAllByEmployeeId(id);
-            employeeRepository.deleteById(id);
+            workTimeRepository.deleteAllByEmployeeId(id);
+            userRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
             return Result.error("Failed to delete employee", "500");

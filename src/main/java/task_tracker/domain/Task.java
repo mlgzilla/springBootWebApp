@@ -26,7 +26,7 @@ public class Task implements Serializable {
     private String description;
 
     @ManyToOne()
-    @JoinColumn(name = "assignee", referencedColumnName = "id", foreignKey = @ForeignKey(name = "task_fk"))
+    @JoinColumn(name = "assignee", referencedColumnName = "id", foreignKey = @ForeignKey(name = "tasks_fk"))
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -37,8 +37,8 @@ public class Task implements Serializable {
 
     private LocalDateTime deadline;
 
-    @OneToOne
-    @JoinColumn(name = "project", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "project", referencedColumnName = "id", foreignKey = @ForeignKey(name = "tasks_fk2"))
     private Project project;
 
     @Enumerated(EnumType.STRING)

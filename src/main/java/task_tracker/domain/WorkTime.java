@@ -25,7 +25,7 @@ public class WorkTime implements Serializable {
     private LocalDateTime timeFinish;
 
     @ManyToOne()
-    @JoinColumn(name = "user", referencedColumnName = "id", foreignKey = @ForeignKey(name = "work_hours_fk"))
+    @JoinColumn(name = "user", referencedColumnName = "id", foreignKey = @ForeignKey(name = "work_time_fk"))
     private User user;
 
     private String comment;

@@ -3,8 +3,7 @@ package task_tracker.service;
 import task_tracker.dto.WorkTimeDto;
 import task_tracker.domain.WorkTime;
 import task_tracker.enums.VacationStatus;
-import task_tracker.repository.VacationRepository;
-import task_tracker.repository.WorkHoursRepository;
+import task_tracker.repository.WorkTimeRepository;
 import task_tracker.utils.Result;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +14,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class WorkHoursService {
-    private final WorkHoursRepository workHoursRepository;
+    private final WorkTimeRepository workTimeRepository;
     private final VacationRepository vacationRepository;
 
-    public WorkHoursService(WorkHoursRepository workHoursRepository, VacationRepository vacationRepository) {
-        this.workHoursRepository = workHoursRepository;
+    public WorkHoursService(WorkTimeRepository workTimeRepository, VacationRepository vacationRepository) {
+        this.workTimeRepository = workTimeRepository;
         this.vacationRepository = vacationRepository;
     }
 
     public Result<WorkTimeDto> findById(Integer id) {
         try {
-            Optional<WorkTime> workHours = workHoursRepository.findById(id);
+            Optional<WorkTime> workHours = workTimeRepository.findById(id);
             if (workHours.isEmpty())
                 return Result.error("WorkHours was not found", "404");
             else
@@ -38,7 +37,7 @@ public class WorkHoursService {
 
     public Result<List<WorkTimeDto>> findByEmployeeId(Integer id) {
         try {
-            List<WorkTime> workHours = workHoursRepository.findByEmployeeId(id);
+            List<WorkTime> workHours = workTimeRepository.findByEmployeeId(id);
             if (workHours.isEmpty())
                 return Result.error("WorkHours by Employee id were not found", "404");
             else
@@ -51,7 +50,7 @@ public class WorkHoursService {
 
     public Result<List<WorkTimeDto>> findByEmployeeIdInRange(Integer id, LocalDateTime timeStart, LocalDateTime timeFinish) {
         try {
-            List<WorkTime> workHours = workHoursRepository.findByEmployeeIdInRange(id, timeStart, timeFinish);
+            List<WorkTime> workHours = workTimeRepository.findByEmployeeIdInRange(id, timeStart, timeFinish);
             if (workHours.isEmpty())
                 return Result.error("WorkHours by Employee id in range were not found", "404");
             else
@@ -66,7 +65,7 @@ public class WorkHoursService {
         try {
             if (vacationRepository.findByEmployeeIdAndStatusInRange(workTime.getUser().getId(), VacationStatus.OnGoing, workTime.getTimeStart(), workTime.getTimeFinish()).isEmpty())
                 return Result.error("Cant create work hours due to ongoing vacation", "500"); //TODO 403?
-            WorkTime savedWorkTime = workHoursRepository.saveAndFlush(workTime);
+            WorkTime savedWorkTime = workTimeRepository.saveAndFlush(workTime);
             return Result.ok(savedWorkTime.mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -76,14 +75,14 @@ public class WorkHoursService {
 
     public Result<String> update(Integer id, WorkTimeDto workHoursDto) {
         try {
-            Optional<WorkTime> workHoursRead = workHoursRepository.findById(id);
+            Optional<WorkTime> workHoursRead = workTimeRepository.findById(id);
             if (workHoursRead.isEmpty())
                 return Result.error("WorkHours was not found", "404");
             WorkTime workTime = workHoursRead.get();
             workTime.setTimeStart(workHoursDto.getTimeStart());
             workTime.setTimeFinish(workHoursDto.getTimeFinish());
             workTime.setComment(workHoursDto.getComment());
-            workHoursRepository.saveAndFlush(workTime);
+            workTimeRepository.saveAndFlush(workTime);
             return Result.ok("Update ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -93,7 +92,7 @@ public class WorkHoursService {
 
     public Result<String> delete(Integer id) {
         try {
-            workHoursRepository.deleteById(id);
+            workTimeRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());

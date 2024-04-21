@@ -24,14 +24,14 @@ public class Attachment {
     private Integer size;
 
     @ManyToOne()
-    @JoinColumn(name = "uploader", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
+    @JoinColumn(name = "uploader", referencedColumnName = "id", foreignKey = @ForeignKey(name = "files_fk"))
     private User user;
 
     @Column(name = "date_uploaded")
     private LocalDateTime dateUploaded;
 
     @ManyToOne()
-    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
+    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "files_fk2"))
     private Task task;
 
     public AttachmentDto mapToDto() {

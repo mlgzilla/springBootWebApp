@@ -23,7 +23,7 @@ public class Report implements Serializable {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "task", referencedColumnName = "id", foreignKey = @ForeignKey(name = "report_fk_1"))
+    @JoinColumn(name = "task", referencedColumnName = "id", foreignKey = @ForeignKey(name = "reports_fk"))
     private Task task;
 
     @Column(name = "date_filed")

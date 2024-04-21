@@ -21,8 +21,8 @@ public class ContactInfo {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "document_fk"))
+    @OneToOne()
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "contact_info_fk"))
     private User user;
 
     private String email;
