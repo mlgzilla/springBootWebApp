@@ -45,7 +45,7 @@ public class Task implements Serializable {
     private Priority priority;
 
     @OneToMany(mappedBy = "task")
-    private Set<Report> reports;
+    private Set<Comment> comments;
 
     public TaskDto mapToDto() {
         return new TaskDto(
@@ -57,7 +57,8 @@ public class Task implements Serializable {
                 this.dateCreated,
                 this.deadline,
                 this.project,
-                this.priority
+                this.priority,
+                this.comments
         );
     }
 }

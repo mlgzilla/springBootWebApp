@@ -6,8 +6,8 @@ CREATE TABLE public."attachment"
     "path"        varchar   NOT NULL,
     creation_date timestamp NOT NULL,
     employee_id   int4      NOT NULL,
-    CONSTRAINT document_pk PRIMARY KEY (id),
-    CONSTRAINT document_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
+    CONSTRAINT attachment_pk PRIMARY KEY (id),
+    CONSTRAINT attachment_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
 );
 
 CREATE TABLE public.user

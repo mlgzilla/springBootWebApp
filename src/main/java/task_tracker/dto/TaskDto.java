@@ -1,11 +1,13 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import task_tracker.domain.Comment;
 import task_tracker.domain.Project;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -28,7 +30,9 @@ public class TaskDto {
 
     private Priority priority;
 
-    public TaskDto(UUID id, String name, String description, UUID employeeId, TaskStatus status, LocalDateTime dateCreated, LocalDateTime deadline, Project project, Priority priority) {
+    private Set<Comment> comments;
+
+    public TaskDto(UUID id, String name, String description, UUID employeeId, TaskStatus status, LocalDateTime dateCreated, LocalDateTime deadline, Project project, Priority priority, Set<Comment> comments) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -38,5 +42,6 @@ public class TaskDto {
         this.deadline = deadline;
         this.project = project;
         this.priority = priority;
+        this.comments = comments;
     }
 }

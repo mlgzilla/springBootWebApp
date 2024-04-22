@@ -22,6 +22,10 @@ public class Project {
     @OneToMany(mappedBy = "project")
     Set<Task> tasks;
 
+    @Transient
+    @ManyToMany(mappedBy = "projects")
+    Set<User> users;
+
     public ProjectDto mapToDto() {
         return new ProjectDto(
                 this.id,

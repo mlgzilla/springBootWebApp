@@ -1,33 +1,35 @@
 package task_tracker.service;
 
-import task_tracker.dto.UserDto;
-import task_tracker.domain.User;
-import task_tracker.enums.ContractType;
-import task_tracker.repository.*;
-import task_tracker.utils.Result;
 import org.springframework.stereotype.Service;
+import task_tracker.domain.User;
+import task_tracker.dto.UserDto;
+import task_tracker.enums.ContractType;
+import task_tracker.repository.AttachmentRepository;
+import task_tracker.repository.TaskRepository;
+import task_tracker.repository.UserRepository;
+import task_tracker.repository.WorkTimeRepository;
+import task_tracker.utils.Result;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeService {
+public class UserService {
     private final UserRepository userRepository;
     private final AttachmentRepository attachmentRepository;
     private final TaskRepository taskRepository;
-    private final VacationRepository vacationRepository;
     private final WorkTimeRepository workTimeRepository;
 
-    public EmployeeService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, VacationRepository vacationRepository, WorkTimeRepository workTimeRepository) {
+    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository) {
         this.userRepository = userRepository;
         this.attachmentRepository = attachmentRepository;
         this.taskRepository = taskRepository;
-        this.vacationRepository = vacationRepository;
         this.workTimeRepository = workTimeRepository;
     }
 
-    public Result<UserDto> findById(Integer id) {
+    public Result<UserDto> findById(UUID id) {
         try {
             Optional<User> employee = userRepository.findById(id);
             if (employee.isEmpty())
@@ -40,9 +42,9 @@ public class EmployeeService {
 
     }
 
-    public Result<List<UserDto>> findByFirstName(String firstName) {
+    public Result<List<UserDto>> findByName(String firstName) {
         try {
-            List<User> users = userRepository.findByFirstName(firstName + '%');
+            List<User> users = userRepository.findByName(firstName + '%');
             if (users.isEmpty())
                 return Result.error("Employees by first name were not found", "404");
             else
@@ -53,9 +55,9 @@ public class EmployeeService {
         }
     }
 
-    public Result<List<UserDto>> findByMiddleName(String middleName) {
+    public Result<List<UserDto>> findBySurename(String middleName) {
         try {
-            List<User> users = userRepository.findByMiddleName(middleName + '%');
+            List<User> users = userRepository.findBySurename(middleName + '%');
             if (users.isEmpty())
                 return Result.error("Employees by middle name were not found", "404");
             else
@@ -101,7 +103,7 @@ public class EmployeeService {
         }
     }
 
-    public Result<String> update(Integer id, UserDto employeeDto) {
+    public Result<String> update(UUID id, UserDto employeeDto) {
         try {
             Optional<User> employeeRead = userRepository.findById(id);
             if (employeeRead.isEmpty())
@@ -120,10 +122,10 @@ public class EmployeeService {
         }
     }
 
-    public Result<String> delete(Integer id) {
+    public Result<String> delete(UUID id) {
         try {
             attachmentRepository.deleteAllByUserId(id);
-            taskRepository.deleteAllByEmployeeId(id);
+            taskRepository.deleteAllByUserId(id);
             vacationRepository.deleteAllByEmployeeId(id);
             workTimeRepository.deleteAllByEmployeeId(id);
             userRepository.deleteById(id);

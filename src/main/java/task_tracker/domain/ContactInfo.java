@@ -22,7 +22,7 @@ public class ContactInfo {
     private String phoneNumber;
 
     @OneToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "contact_info_fk"))
+    @JoinColumn(name = "user", referencedColumnName = "id", foreignKey = @ForeignKey(name = "contact_info_fk"))
     private User user;
 
     private String email;

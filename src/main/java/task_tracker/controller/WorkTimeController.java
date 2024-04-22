@@ -1,27 +1,28 @@
 package task_tracker.controller;
 
-import task_tracker.dto.WorkTimeDto;
-import task_tracker.domain.WorkTime;
-import task_tracker.service.WorkHoursService;
-import task_tracker.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import task_tracker.domain.WorkTime;
+import task_tracker.dto.WorkTimeDto;
+import task_tracker.service.WorkTimeService;
+import task_tracker.utils.Result;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/workHours")
-public class WorkHoursController {
-    private final WorkHoursService workHoursService;
+public class WorkTimeController {
+    private final WorkTimeService workTimeService;
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") Integer id, Model model) {
-        Result<WorkTimeDto> workHoursRead = workHoursService.findById(id);
+    public String findById(@PathVariable("id") UUID id, Model model) {
+        Result<WorkTimeDto> workHoursRead = workTimeService.findById(id);
         if (workHoursRead.isError()) {
             model.addAttribute("message", workHoursRead.getMessage());
             return workHoursRead.getCode();
@@ -31,8 +32,8 @@ public class WorkHoursController {
     }
 
     @GetMapping("/findByEmployeeId/{id}")
-    public String findByEmployeeId(@PathVariable Integer id, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workHoursService.findByEmployeeId(id);
+    public String findByEmployeeId(@PathVariable UUID id, Model model) {
+        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByEmployeeId(id);
         if (workHoursList.isError()) {
             model.addAttribute("message", workHoursList.getMessage());
             return workHoursList.getCode();
@@ -42,8 +43,8 @@ public class WorkHoursController {
     }
 
     @GetMapping("/findByEmployeeIdInRange/{id}/{timeStart}/{timeFinish}")
-    public String findByEmployeeIdInRange(@PathVariable Integer id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workHoursService.findByEmployeeIdInRange(id, timeStart, timeFinish);
+    public String findByEmployeeIdInRange(@PathVariable UUID id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
+        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByEmployeeIdInRange(id, timeStart, timeFinish);
         if (workHoursList.isError()) {
             model.addAttribute("message", workHoursList.getMessage());
             return workHoursList.getCode();
@@ -59,8 +60,8 @@ public class WorkHoursController {
     }
 
     @GetMapping("/update/{id}")
-    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
-        Result<WorkTimeDto> workHoursRead = workHoursService.findById(id);
+    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
+        Result<WorkTimeDto> workHoursRead = workTimeService.findById(id);
         if (workHoursRead.isError()) {
             model.addAttribute("message", workHoursRead.getMessage());
             return workHoursRead.getCode();
@@ -80,7 +81,7 @@ public class WorkHoursController {
             model.addAttribute("message", "Error in filled fields");
             return "400";
         }
-        Result<WorkTimeDto> savedWorkHours = workHoursService.create(workTime);
+        Result<WorkTimeDto> savedWorkHours = workTimeService.create(workTime);
         if (savedWorkHours.isError()) {
             model.addAttribute("message", savedWorkHours.getMessage());
             return savedWorkHours.getCode();
@@ -90,8 +91,8 @@ public class WorkHoursController {
 
     @PostMapping("/submit")
     public String inputSubmit(
-            @RequestParam(required = false, name = "id") Integer id,
-            @RequestParam(required = false, name = "employeeId") Integer employeeId,
+            @RequestParam(required = false, name = "id") UUID id,
+            @RequestParam(required = false, name = "employeeId") UUID employeeId,
             @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
             @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
             @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
@@ -108,8 +109,8 @@ public class WorkHoursController {
     }
 
     @PutMapping("/{id}")
-    public String update(@ModelAttribute("workHours") WorkTimeDto workHours, @PathVariable("id") Integer id, Model model) {
-        Result<String> upload = workHoursService.update(id, workHours);
+    public String update(@ModelAttribute("workHours") WorkTimeDto workHours, @PathVariable("id") UUID id, Model model) {
+        Result<String> upload = workTimeService.update(id, workHours);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
@@ -118,8 +119,8 @@ public class WorkHoursController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id, Model model) {
-        Result<String> delete = workHoursService.delete(id);
+    public String delete(@PathVariable("id") UUID id, Model model) {
+        Result<String> delete = workTimeService.delete(id);
         if (delete.isError()) {
             model.addAttribute("message", delete.getMessage());
             return delete.getCode();

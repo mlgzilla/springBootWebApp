@@ -1,18 +1,18 @@
 package task_tracker.controller;
 
-import task_tracker.dto.ReportDto;
-import task_tracker.dto.TaskDto;
-import task_tracker.domain.Task;
-import task_tracker.enums.TaskStatus;
-import task_tracker.service.TaskService;
-import task_tracker.utils.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import task_tracker.domain.Task;
+import task_tracker.dto.TaskDto;
+import task_tracker.enums.Priority;
+import task_tracker.enums.TaskStatus;
+import task_tracker.service.TaskService;
+import task_tracker.utils.Result;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/task")
@@ -24,7 +24,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") Integer id, Model model) {
+    public String findById(@PathVariable("id") UUID id, Model model) {
         Result<TaskDto> taskRead = taskService.findById(id);
         if (taskRead.isError()) {
             model.addAttribute("message", taskRead.getMessage());
@@ -34,9 +34,9 @@ public class TaskController {
         return "task/show";
     }
 
-    @GetMapping("/findByEmployeeId/{id}")
-    public String findByEmployeeId(@PathVariable Integer id, Model model) {
-        Result<List<TaskDto>> taskList = taskService.findByEmployeeId(id);
+    @GetMapping("/findByUserId/{id}")
+    public String findByUserId(@PathVariable UUID id, Model model) {
+        Result<List<TaskDto>> taskList = taskService.findByUserId(id);
         if (taskList.isError()) {
             model.addAttribute("message", taskList.getMessage());
             return taskList.getCode();
@@ -56,40 +56,27 @@ public class TaskController {
         return "task/showList";
     }
 
-    @GetMapping("/findWithReportsById/{id}")
-    public String findWithReportsById(@PathVariable Integer id, Model model) {
-        Result<TaskDto> taskRead = taskService.findById(id);
-        if (taskRead.isError()) {
-            model.addAttribute("message", taskRead.getMessage());
-            return taskRead.getCode();
-        } else {
-            TaskDto task = taskRead.getObject();
-            Result<List<ReportDto>> reports = taskService.findReportsByTaskId(id);
-            if (reports.isError()) {
-                if (reports.getCode().equals("404")) {
-                    model.addAttribute("task", task);
-                    return "task/show";
-                } else {
-                    model.addAttribute("message", reports.getMessage());
-                    return reports.getCode();
-                }
-            } else {
-                task.setReports(reports.getObject().stream().collect(Collectors.toSet()));
-                model.addAttribute("task", task);
-                return "task/show";
-            }
-        }
+    @GetMapping("/findByPriority/{priority}")
+    public String findByPriority(@PathVariable Priority priority, Model model) {
+        Result<List<TaskDto>> taskList = taskService.findByPriority(priority);
+        if (taskList.isError()) {
+            model.addAttribute("message", taskList.getMessage());
+            return taskList.getCode();
+        } else
+            model.addAttribute("taskList", taskList.getObject());
+        return "task/showList";
     }
 
     @GetMapping("/new")
     public String getNew(Model model) {
         model.addAttribute(new Task());
         model.addAttribute("taskStatus", TaskStatus.values());
+        model.addAttribute("priority", Priority.values());
         return "task/new";
     }
 
     @GetMapping("/update/{id}")
-    public String getUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
         Result<TaskDto> taskRead = taskService.findById(id);
         if (taskRead.isError()) {
             model.addAttribute("message", taskRead.getMessage());
@@ -122,14 +109,14 @@ public class TaskController {
 
     @PostMapping("/submit")
     public String inputSubmit(
-            @RequestParam(required = false, name = "id") Integer id,
-            @RequestParam(required = false, name = "employeeId") Integer employeeId,
+            @RequestParam(required = false, name = "id") UUID id,
+            @RequestParam(required = false, name = "employeeId") UUID employeeId,
             @RequestParam(required = false, name = "status") String status,
-            @RequestParam(required = false, name = "includeReports") boolean includeReports
+            @RequestParam(required = false, name = "includeComments") boolean includeComments
     ) {
         if (id != null) {
-            if (includeReports)
-                return "redirect:/task/findWithReportsById/" + id;
+            if (includeComments)
+                return "redirect:/task/findWithCommentsById/" + id;
             else
                 return "redirect:/task/" + id;
         }
@@ -142,7 +129,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") Integer id, @ModelAttribute("task") TaskDto task, Model model) {
+    public String update(@PathVariable("id") UUID id, @ModelAttribute("task") TaskDto task, Model model) {
         Result<String> upload = taskService.update(id, task);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
@@ -152,7 +139,7 @@ public class TaskController {
     }
 
     @GetMapping("/updateStatus/{id}/{status}")
-    public String updateStatus(@PathVariable("id") Integer id, @PathVariable("status") TaskStatus taskStatus, Model model) {
+    public String updateStatus(@PathVariable("id") UUID id, @PathVariable("status") TaskStatus taskStatus, Model model) {
         Result<String> upload = taskService.updateStatus(id, taskStatus);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
@@ -161,8 +148,18 @@ public class TaskController {
             return "redirect:/task/" + id;
     }
 
+    @GetMapping("/updatePriority/{id}/{priority}")
+    public String updatePriority(@PathVariable("id") UUID id, @PathVariable("priority") Priority priority, Model model) {
+        Result<String> upload = taskService.updatePriority(id, priority);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "redirect:/task/" + id;
+    }
+
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id, Model model) {
+    public String delete(@PathVariable("id") UUID id, Model model) {
         Result<String> delete = taskService.delete(id);
         if (delete.isError()) {
             model.addAttribute("message", delete.getMessage());

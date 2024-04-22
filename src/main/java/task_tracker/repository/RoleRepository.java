@@ -1,7 +1,6 @@
 package task_tracker.repository;
 
 import org.springframework.stereotype.Repository;
-import task_tracker.domain.Project;
 import task_tracker.domain.Role;
 
 import java.util.UUID;

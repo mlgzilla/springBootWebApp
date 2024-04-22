@@ -1,25 +1,27 @@
 package task_tracker.service;
 
-import task_tracker.dto.ReportDto;
-import task_tracker.domain.Report;
-import task_tracker.dto.TaskDto;
+import org.springframework.stereotype.Service;
 import task_tracker.domain.Task;
+import task_tracker.dto.TaskDto;
+import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
-import task_tracker.repository.ReportRepository;
+import task_tracker.repository.AttachmentRepository;
+import task_tracker.repository.CommentRepository;
 import task_tracker.repository.TaskRepository;
 import task_tracker.utils.Result;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final ReportRepository reportRepository;
+    private final CommentRepository commentRepository;
+    private final AttachmentRepository attachmentRepository;
 
-    public Result<TaskDto> findById(Integer id) {
+    public Result<TaskDto> findById(UUID id) {
         try {
             Optional<Task> task = taskRepository.findById(id);
             if (task.isEmpty())
@@ -32,9 +34,9 @@ public class TaskService {
         }
     }
 
-    public Result<List<TaskDto>> findByEmployeeId(Integer id) {
+    public Result<List<TaskDto>> findByUserId(UUID id) {
         try {
-            List<Task> tasks = taskRepository.findByEmployeeId(id);
+            List<Task> tasks = taskRepository.findByUserId(id);
             if (tasks.isEmpty())
                 return Result.error("Tasks by employee were not found", "404");
             else
@@ -58,16 +60,16 @@ public class TaskService {
         }
     }
 
-    public Result<List<ReportDto>> findReportsByTaskId(Integer id) {
+    public Result<List<TaskDto>> findByPriority(Priority priority) {
         try {
-            List<Report> reports = reportRepository.findByTaskId(id);
-            if (reports.isEmpty())
-                return Result.error("Reports by Task were not found", "404");
+            List<Task> tasks = taskRepository.findByPriority(priority);
+            if (tasks.isEmpty())
+                return Result.error("Tasks by priority were not found", "404");
             else
-                return Result.ok(reports.stream().map(Report::mapToDto).collect(Collectors.toList()));
+                return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Error finding Reports by Task", "500");
+            return Result.error("Error finding status by employee", "500");
         }
     }
 
@@ -81,7 +83,7 @@ public class TaskService {
         }
     }
 
-    public Result<String> update(Integer id, TaskDto taskDto) {
+    public Result<String> update(UUID id, TaskDto taskDto) {
         try {
             Optional<Task> taskRead = taskRepository.findById(id);
             if (taskRead.isEmpty())
@@ -89,7 +91,7 @@ public class TaskService {
             Task task = taskRead.get();
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
-            task.setDueTime(taskDto.getDueTime());
+            task.setDeadline(taskDto.getDeadline());
             taskRepository.saveAndFlush(task);
             return Result.ok("Update ok");
         } catch (Exception e) {
@@ -98,7 +100,7 @@ public class TaskService {
         }
     }
 
-    public Result<String> updateStatus(Integer id, TaskStatus taskStatus) {
+    public Result<String> updateStatus(UUID id, TaskStatus taskStatus) {
         try {
             Optional<Task> taskRead = taskRepository.findById(id);
             if (taskRead.isEmpty())
@@ -113,18 +115,35 @@ public class TaskService {
         }
     }
 
-    public Result<String> delete(Integer id) {
+    public Result<String> updatePriority(UUID id, Priority priority) {
         try {
-            reportRepository.deleteAllByTaskId(id);
+            Optional<Task> taskRead = taskRepository.findById(id);
+            if (taskRead.isEmpty())
+                return Result.error("Task was not found", "404");
+            Task task = taskRead.get();
+            task.setPriority(priority);
+            taskRepository.saveAndFlush(task);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update task", "500");
+        }
+    }
+
+    public Result<String> delete(UUID id) {
+        try {
             taskRepository.deleteById(id);
+            commentRepository.deleteAllByTaskId(id);
+            attachmentRepository.deleteAllByTaskId(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
             return Result.error("Failed to delete task", "500");
         }
     }
 
-    public TaskService(TaskRepository taskRepository, ReportRepository reportRepository) {
+    public TaskService(TaskRepository taskRepository, CommentRepository commentRepository, AttachmentRepository attachmentRepository) {
         this.taskRepository = taskRepository;
-        this.reportRepository = reportRepository;
+        this.commentRepository = commentRepository;
+        this.attachmentRepository = attachmentRepository;
     }
 }

@@ -1,10 +1,8 @@
 package task_tracker.repository;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import task_tracker.domain.Project;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository

@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import task_tracker.dto.RoleDto;
 
 import javax.persistence.*;
@@ -12,14 +13,14 @@ import java.util.UUID;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @ManyToMany(mappedBy = "role")
     Set<User> users;
 
     public RoleDto mapToDto() {
@@ -27,5 +28,10 @@ public class Role {
                 this.id,
                 this.name
         );
+    }
+
+    @Override
+    public String getAuthority() {
+        return getName();
     }
 }

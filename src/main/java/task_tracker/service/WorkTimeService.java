@@ -1,28 +1,27 @@
 package task_tracker.service;
 
-import task_tracker.dto.WorkTimeDto;
+import org.springframework.stereotype.Service;
 import task_tracker.domain.WorkTime;
-import task_tracker.enums.VacationStatus;
+import task_tracker.dto.WorkTimeDto;
 import task_tracker.repository.WorkTimeRepository;
 import task_tracker.utils.Result;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class WorkHoursService {
+public class WorkTimeService {
     private final WorkTimeRepository workTimeRepository;
-    private final VacationRepository vacationRepository;
 
-    public WorkHoursService(WorkTimeRepository workTimeRepository, VacationRepository vacationRepository) {
+    public WorkTimeService(WorkTimeRepository workTimeRepository, VacationRepository vacationRepository) {
         this.workTimeRepository = workTimeRepository;
         this.vacationRepository = vacationRepository;
     }
 
-    public Result<WorkTimeDto> findById(Integer id) {
+    public Result<WorkTimeDto> findById(UUID id) {
         try {
             Optional<WorkTime> workHours = workTimeRepository.findById(id);
             if (workHours.isEmpty())
@@ -35,7 +34,7 @@ public class WorkHoursService {
         }
     }
 
-    public Result<List<WorkTimeDto>> findByEmployeeId(Integer id) {
+    public Result<List<WorkTimeDto>> findByEmployeeId(UUID id) {
         try {
             List<WorkTime> workHours = workTimeRepository.findByEmployeeId(id);
             if (workHours.isEmpty())
@@ -48,7 +47,7 @@ public class WorkHoursService {
         }
     }
 
-    public Result<List<WorkTimeDto>> findByEmployeeIdInRange(Integer id, LocalDateTime timeStart, LocalDateTime timeFinish) {
+    public Result<List<WorkTimeDto>> findByEmployeeIdInRange(UUID id, LocalDateTime timeStart, LocalDateTime timeFinish) {
         try {
             List<WorkTime> workHours = workTimeRepository.findByEmployeeIdInRange(id, timeStart, timeFinish);
             if (workHours.isEmpty())
@@ -73,7 +72,7 @@ public class WorkHoursService {
         }
     }
 
-    public Result<String> update(Integer id, WorkTimeDto workHoursDto) {
+    public Result<String> update(UUID id, WorkTimeDto workHoursDto) {
         try {
             Optional<WorkTime> workHoursRead = workTimeRepository.findById(id);
             if (workHoursRead.isEmpty())
@@ -90,7 +89,7 @@ public class WorkHoursService {
         }
     }
 
-    public Result<String> delete(Integer id) {
+    public Result<String> delete(UUID id) {
         try {
             workTimeRepository.deleteById(id);
             return Result.ok("Delete ok");

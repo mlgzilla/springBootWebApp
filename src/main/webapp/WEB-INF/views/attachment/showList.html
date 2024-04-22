@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div th:each="attachment: ${documentList}">
+<div th:each="attachment: ${attachmentList}">
     <p><a th:href="@{/attachment/findById/{id}(id=${attachment.id})}"><b>id: </b><span th:text="${attachment.id}"></span></a>
     </p>
     <p><b>имя: </b><span th:text="${attachment.name}"></span></p>

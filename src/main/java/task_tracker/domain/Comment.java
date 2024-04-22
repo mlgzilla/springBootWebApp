@@ -26,7 +26,7 @@ public class Comment {
     private LocalDateTime date;
 
     @ManyToOne()
-    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "comment_fk"))
+    @JoinColumn(name = "task", referencedColumnName = "id", foreignKey = @ForeignKey(name = "comment_fk"))
     private Task task;
 
     public CommentDto mapToDto() {

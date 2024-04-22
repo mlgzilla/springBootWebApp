@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import task_tracker.dto.AttachmentDto;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "attachments")
 @Data
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class Attachment {
     @Id
@@ -31,7 +33,7 @@ public class Attachment {
     private LocalDateTime dateUploaded;
 
     @ManyToOne()
-    @JoinColumn(name = "task_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "files_fk2"))
+    @JoinColumn(name = "task", referencedColumnName = "id", foreignKey = @ForeignKey(name = "files_fk2"))
     private Task task;
 
     public AttachmentDto mapToDto() {
