@@ -12,11 +12,11 @@ import java.util.UUID;
 public interface WorkTimeRepository extends BaseRepository<WorkTime, UUID> {
 
     @Query("select w from WorkTime w where w.user.id = :id")
-    List<WorkTime> findByEmployeeId(UUID id);
+    List<WorkTime> findByUserId(UUID id);
 
     @Query("select w from WorkTime w where w.user.id = :id and (w.timeStart >= cast(:timeStart as timestamp) or w.timeFinish <= cast(:timeFinish as timestamp))")
-    List<WorkTime> findByEmployeeIdInRange(UUID id, LocalDateTime timeStart, LocalDateTime timeFinish);
+    List<WorkTime> findByUserIdInRange(UUID id, LocalDateTime timeStart, LocalDateTime timeFinish);
 
     @Query("select w from WorkTime w where w.user.id = ?1")
-    void deleteAllByEmployeeId(UUID id);
+    void deleteAllByUserId(UUID id);
 }

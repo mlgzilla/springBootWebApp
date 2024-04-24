@@ -16,76 +16,73 @@ import java.util.stream.Collectors;
 public class WorkTimeService {
     private final WorkTimeRepository workTimeRepository;
 
-    public WorkTimeService(WorkTimeRepository workTimeRepository, VacationRepository vacationRepository) {
+    public WorkTimeService(WorkTimeRepository workTimeRepository) {
         this.workTimeRepository = workTimeRepository;
-        this.vacationRepository = vacationRepository;
     }
 
     public Result<WorkTimeDto> findById(UUID id) {
         try {
-            Optional<WorkTime> workHours = workTimeRepository.findById(id);
-            if (workHours.isEmpty())
-                return Result.error("WorkHours was not found", "404");
+            Optional<WorkTime> workTime = workTimeRepository.findById(id);
+            if (workTime.isEmpty())
+                return Result.error("WorkTime was not found", "404");
             else
-                return Result.ok(workHours.get().mapToDto());
+                return Result.ok(workTime.get().mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Error finding work hours", "500");
+            return Result.error("Error finding work time", "500");
         }
     }
 
-    public Result<List<WorkTimeDto>> findByEmployeeId(UUID id) {
+    public Result<List<WorkTimeDto>> findByUserId(UUID id) {
         try {
-            List<WorkTime> workHours = workTimeRepository.findByEmployeeId(id);
-            if (workHours.isEmpty())
-                return Result.error("WorkHours by Employee id were not found", "404");
+            List<WorkTime> workTime = workTimeRepository.findByUserId(id);
+            if (workTime.isEmpty())
+                return Result.error("WorkTime by User id were not found", "404");
             else
-                return Result.ok(workHours.stream().map(WorkTime::mapToDto).collect(Collectors.toList()));
+                return Result.ok(workTime.stream().map(WorkTime::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Error finding WorkHours by Employee id", "500");
+            return Result.error("Error finding WorkTime by User id", "500");
         }
     }
 
-    public Result<List<WorkTimeDto>> findByEmployeeIdInRange(UUID id, LocalDateTime timeStart, LocalDateTime timeFinish) {
+    public Result<List<WorkTimeDto>> findByUserIdInRange(UUID id, LocalDateTime timeStart, LocalDateTime timeFinish) {
         try {
-            List<WorkTime> workHours = workTimeRepository.findByEmployeeIdInRange(id, timeStart, timeFinish);
-            if (workHours.isEmpty())
-                return Result.error("WorkHours by Employee id in range were not found", "404");
+            List<WorkTime> workTime = workTimeRepository.findByUserIdInRange(id, timeStart, timeFinish);
+            if (workTime.isEmpty())
+                return Result.error("WorkTime by User id in range were not found", "404");
             else
-                return Result.ok(workHours.stream().map(WorkTime::mapToDto).collect(Collectors.toList()));
+                return Result.ok(workTime.stream().map(WorkTime::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Error finding WorkHours by Employee id in range", "500");
+            return Result.error("Error finding WorkTime by User id in range", "500");
         }
     }
 
     public Result<WorkTimeDto> create(WorkTime workTime) {
         try {
-            if (vacationRepository.findByEmployeeIdAndStatusInRange(workTime.getUser().getId(), VacationStatus.OnGoing, workTime.getTimeStart(), workTime.getTimeFinish()).isEmpty())
-                return Result.error("Cant create work hours due to ongoing vacation", "500"); //TODO 403?
             WorkTime savedWorkTime = workTimeRepository.saveAndFlush(workTime);
             return Result.ok(savedWorkTime.mapToDto());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Failed to create work hours", "500");
+            return Result.error("Failed to create work time", "500");
         }
     }
 
-    public Result<String> update(UUID id, WorkTimeDto workHoursDto) {
+    public Result<String> update(UUID id, WorkTimeDto workTimeDto) {
         try {
-            Optional<WorkTime> workHoursRead = workTimeRepository.findById(id);
-            if (workHoursRead.isEmpty())
-                return Result.error("WorkHours was not found", "404");
-            WorkTime workTime = workHoursRead.get();
-            workTime.setTimeStart(workHoursDto.getTimeStart());
-            workTime.setTimeFinish(workHoursDto.getTimeFinish());
-            workTime.setComment(workHoursDto.getComment());
+            Optional<WorkTime> workTimeRead = workTimeRepository.findById(id);
+            if (workTimeRead.isEmpty())
+                return Result.error("WorkTime was not found", "404");
+            WorkTime workTime = workTimeRead.get();
+            workTime.setTimeStart(workTimeDto.getTimeStart());
+            workTime.setTimeFinish(workTimeDto.getTimeFinish());
+            workTime.setComment(workTimeDto.getComment());
             workTimeRepository.saveAndFlush(workTime);
             return Result.ok("Update ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Failed to update workHours", "500");
+            return Result.error("Failed to update workTime", "500");
         }
     }
 
@@ -95,7 +92,7 @@ public class WorkTimeService {
             return Result.ok("Delete ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Result.error("Failed to delete work hours", "500");
+            return Result.error("Failed to delete work time", "500");
         }
     }
 }

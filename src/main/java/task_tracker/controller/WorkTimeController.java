@@ -31,9 +31,9 @@ public class WorkTimeController {
         return "workHours/show";
     }
 
-    @GetMapping("/findByEmployeeId/{id}")
-    public String findByEmployeeId(@PathVariable UUID id, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByEmployeeId(id);
+    @GetMapping("/findByUserId/{id}")
+    public String findByUserId(@PathVariable UUID id, Model model) {
+        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByUserId(id);
         if (workHoursList.isError()) {
             model.addAttribute("message", workHoursList.getMessage());
             return workHoursList.getCode();
@@ -42,9 +42,9 @@ public class WorkTimeController {
         return "workHours/showList";
     }
 
-    @GetMapping("/findByEmployeeIdInRange/{id}/{timeStart}/{timeFinish}")
-    public String findByEmployeeIdInRange(@PathVariable UUID id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByEmployeeIdInRange(id, timeStart, timeFinish);
+    @GetMapping("/findByUserIdInRange/{id}/{timeStart}/{timeFinish}")
+    public String findByUserIdInRange(@PathVariable UUID id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
+        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByUserIdInRange(id, timeStart, timeFinish);
         if (workHoursList.isError()) {
             model.addAttribute("message", workHoursList.getMessage());
             return workHoursList.getCode();
@@ -101,9 +101,9 @@ public class WorkTimeController {
             return "redirect:/workHours/" + id;
         if (employeeId != null) {
             if (inDateRange)
-                return "redirect:/workHours/findByEmployeeIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
+                return "redirect:/workHours/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
             else
-                return "redirect:/workHours/findByEmployeeId/" + employeeId;
+                return "redirect:/workHours/findByUserId/" + employeeId;
         }
         return "redirect:/workHours/";
     }

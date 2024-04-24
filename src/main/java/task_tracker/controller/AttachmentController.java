@@ -67,7 +67,7 @@ public class AttachmentController {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "redirect:/employee/"; //TODO
+            return "redirect:/user/"; //TODO
     }
 
     @DeleteMapping("/{id}")
