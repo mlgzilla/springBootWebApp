@@ -1,6 +1,7 @@
 package task_tracker.service;
 
 import org.springframework.stereotype.Service;
+import task_tracker.domain.Project;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
 import task_tracker.repository.*;
@@ -8,6 +9,7 @@ import task_tracker.utils.Result;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,13 +20,15 @@ public class UserService {
     private final TaskRepository taskRepository;
     private final WorkTimeRepository workTimeRepository;
     private final ContactInfoRepository contactInfoRepository;
+    private final ProjectRepository projectRepository;
 
-    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository) {
+    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository, ProjectRepository projectRepository) {
         this.userRepository = userRepository;
         this.attachmentRepository = attachmentRepository;
         this.taskRepository = taskRepository;
         this.workTimeRepository = workTimeRepository;
         this.contactInfoRepository = contactInfoRepository;
+        this.projectRepository = projectRepository;
     }
 
     public Result<UserDto> findById(UUID id) {
@@ -40,12 +44,12 @@ public class UserService {
     }
 
     public Boolean userExists(String login){
-        return !userRepository.findByLogin(login).isEmpty();
+        return userRepository.findByLogin(login).isPresent();
     }
 
-    public Result<List<UserDto>> findByName(String firstName) {
+    public Result<List<UserDto>> findByName(String name) {
         try {
-            List<User> users = userRepository.findByName(firstName + '%');
+            List<User> users = userRepository.findByName(name + '%');
             if (users.isEmpty())
                 return Result.error("Users by first name were not found", "404");
             else
@@ -56,9 +60,9 @@ public class UserService {
         }
     }
 
-    public Result<List<UserDto>> findBySurename(String middleName) {
+    public Result<List<UserDto>> findBySurename(String surename) {
         try {
-            List<User> users = userRepository.findBySurename(middleName + '%');
+            List<User> users = userRepository.findBySurename(surename + '%');
             if (users.isEmpty())
                 return Result.error("Users by middle name were not found", "404");
             else
@@ -86,7 +90,48 @@ public class UserService {
             User user = userRead.get();
             user.setName(userDto.getName());
             user.setSurename(userDto.getSurename());
-            user.setProjects(userDto.getProjects());
+            userRepository.saveAndFlush(user);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update user", "500");
+        }
+    }
+
+    public Result<String> addToProject(UUID id, UUID projectId) {
+        try {
+            Optional<User> userRead = userRepository.findById(id);
+            if (userRead.isEmpty())
+                return Result.error("User was not found", "404");
+            User user = userRead.get();
+            Optional<Project> projectRead = projectRepository.findById(id);
+            if (projectRead.isEmpty())
+                return Result.error("User was not found", "404");
+            Project project = projectRead.get();
+            Set<Project> userProjects = user.getProjects();
+            userProjects.add(project);
+            user.setProjects(userProjects);
+            userRepository.saveAndFlush(user);
+            return Result.ok("Update ok");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Failed to update user", "500");
+        }
+    }
+
+    public Result<String> addRole(UUID id, UUID roleId) {
+        try {
+            Optional<User> userRead = userRepository.findById(id);
+            if (userRead.isEmpty())
+                return Result.error("User was not found", "404");
+            User user = userRead.get();
+            Optional<Project> projectRead = projectRepository.findById(id);
+            if (projectRead.isEmpty())
+                return Result.error("User was not found", "404");
+            Project project = projectRead.get();
+            Set<Project> userProjects = user.getProjects();
+            userProjects.add(project);
+            user.setProjects(userProjects);
             userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {

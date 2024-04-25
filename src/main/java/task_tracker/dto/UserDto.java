@@ -16,9 +16,9 @@ public class UserDto {
     private Set<Role> roles;
     private String login;
     private String password;
-    private List<Project> projects;
+    private Set<Project> projects;
 
-    public UserDto(UUID id, String name, String surename, Set<Role> roles, String login, String password, List<Project> projects) {
+    public UserDto(UUID id, String name, String surename, Set<Role> roles, String login, String password, Set<Project> projects) {
         this.id = id;
         this.name = name;
         this.surename = surename;

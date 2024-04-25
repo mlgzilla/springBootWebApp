@@ -15,6 +15,19 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
 
+    public Result<CommentDto> findById(UUID id) {
+        try {
+            Optional<Comment> comment = commentRepository.findById(id);
+            if (comment.isEmpty())
+                return Result.error("Comments by task id were not found", "404");
+            else
+                return Result.ok(comment.get().mapToDto());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Comments by task id", "500");
+        }
+    }
+
     public Result<List<CommentDto>> findByTaskId(UUID id) {
         try {
             List<Comment> comments = commentRepository.findByTaskId(id);

@@ -9,7 +9,6 @@ import task_tracker.dto.UserDto;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,15 +26,15 @@ public class User implements Serializable, UserDetails {
     private String surename;
 
     @ManyToMany
-    @JoinColumn(name = "role", referencedColumnName = "id", foreignKey = @ForeignKey(name = "users_fk2"))
-    private Set<Role> role;
+    @JoinColumn(name = "roles", referencedColumnName = "id", foreignKey = @ForeignKey(name = "users_fk2"))
+    private Set<Role> roles;
 
     private String login;
 
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Project> projects;
+    Set<Project> projects;
 
     @OneToMany(mappedBy = "assignee")
     private Set<Task> tasks;
@@ -57,7 +56,7 @@ public class User implements Serializable, UserDetails {
                 this.id,
                 this.name,
                 this.surename,
-                this.role,
+                this.roles,
                 this.login,
                 this.password,
                 this.projects
@@ -66,7 +65,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRole();
+        return getRoles();
     }
 
     @Override

@@ -16,77 +16,77 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/workHours")
+@RequestMapping("/workTime")
 public class WorkTimeController {
     private final WorkTimeService workTimeService;
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") UUID id, Model model) {
-        Result<WorkTimeDto> workHoursRead = workTimeService.findById(id);
-        if (workHoursRead.isError()) {
-            model.addAttribute("message", workHoursRead.getMessage());
-            return workHoursRead.getCode();
+        Result<WorkTimeDto> workTimeRead = workTimeService.findById(id);
+        if (workTimeRead.isError()) {
+            model.addAttribute("message", workTimeRead.getMessage());
+            return workTimeRead.getCode();
         } else
-            model.addAttribute("workHours", workHoursRead.getObject());
-        return "workHours/show";
+            model.addAttribute("workTime", workTimeRead.getObject());
+        return "workTime/show";
     }
 
     @GetMapping("/findByUserId/{id}")
     public String findByUserId(@PathVariable UUID id, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByUserId(id);
-        if (workHoursList.isError()) {
-            model.addAttribute("message", workHoursList.getMessage());
-            return workHoursList.getCode();
+        Result<List<WorkTimeDto>> workTimeList = workTimeService.findByUserId(id);
+        if (workTimeList.isError()) {
+            model.addAttribute("message", workTimeList.getMessage());
+            return workTimeList.getCode();
         } else
-            model.addAttribute("workHoursList", workHoursList.getObject());
-        return "workHours/showList";
+            model.addAttribute("workTimeList", workTimeList.getObject());
+        return "workTime/showList";
     }
 
     @GetMapping("/findByUserIdInRange/{id}/{timeStart}/{timeFinish}")
     public String findByUserIdInRange(@PathVariable UUID id, @PathVariable LocalDateTime timeStart, @PathVariable LocalDateTime timeFinish, Model model) {
-        Result<List<WorkTimeDto>> workHoursList = workTimeService.findByUserIdInRange(id, timeStart, timeFinish);
-        if (workHoursList.isError()) {
-            model.addAttribute("message", workHoursList.getMessage());
-            return workHoursList.getCode();
+        Result<List<WorkTimeDto>> workTimeList = workTimeService.findByUserIdInRange(id, timeStart, timeFinish);
+        if (workTimeList.isError()) {
+            model.addAttribute("message", workTimeList.getMessage());
+            return workTimeList.getCode();
         } else
-            model.addAttribute("workHoursList", workHoursList.getObject());
-        return "workHours/showList";
+            model.addAttribute("workTimeList", workTimeList.getObject());
+        return "workTime/showList";
     }
 
     @GetMapping("/new")
     public String getNew(Model model) {
         model.addAttribute(new WorkTime());
-        return "workHours/new";
+        return "workTime/new";
     }
 
     @GetMapping("/update/{id}")
     public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
-        Result<WorkTimeDto> workHoursRead = workTimeService.findById(id);
-        if (workHoursRead.isError()) {
-            model.addAttribute("message", workHoursRead.getMessage());
-            return workHoursRead.getCode();
+        Result<WorkTimeDto> workTimeRead = workTimeService.findById(id);
+        if (workTimeRead.isError()) {
+            model.addAttribute("message", workTimeRead.getMessage());
+            return workTimeRead.getCode();
         }
-        model.addAttribute("workHours", workHoursRead.getObject());
-        return "workHours/update";
+        model.addAttribute("workTime", workTimeRead.getObject());
+        return "workTime/update";
     }
 
     @GetMapping("/")
     public String getHome() {
-        return "workHours/index";
+        return "workTime/index";
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("workHours") WorkTime workTime, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute("workTime") WorkTime workTime, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "Error in filled fields");
             return "400";
         }
-        Result<WorkTimeDto> savedWorkHours = workTimeService.create(workTime);
-        if (savedWorkHours.isError()) {
-            model.addAttribute("message", savedWorkHours.getMessage());
-            return savedWorkHours.getCode();
+        Result<WorkTimeDto> savedWorkTime = workTimeService.create(workTime);
+        if (savedWorkTime.isError()) {
+            model.addAttribute("message", savedWorkTime.getMessage());
+            return savedWorkTime.getCode();
         } else
-            return "redirect:/workHours/" + savedWorkHours.getObject().getId();
+            return "redirect:/workTime/" + savedWorkTime.getObject().getId();
     }
 
     @PostMapping("/submit")
@@ -98,24 +98,24 @@ public class WorkTimeController {
             @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
     ) {
         if (id != null)
-            return "redirect:/workHours/" + id;
+            return "redirect:/workTime/" + id;
         if (employeeId != null) {
             if (inDateRange)
-                return "redirect:/workHours/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
+                return "redirect:/workTime/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
             else
-                return "redirect:/workHours/findByUserId/" + employeeId;
+                return "redirect:/workTime/findByUserId/" + employeeId;
         }
-        return "redirect:/workHours/";
+        return "redirect:/workTime/";
     }
 
     @PutMapping("/{id}")
-    public String update(@ModelAttribute("workHours") WorkTimeDto workHours, @PathVariable("id") UUID id, Model model) {
-        Result<String> upload = workTimeService.update(id, workHours);
+    public String update(@ModelAttribute("workTime") WorkTimeDto workTime, @PathVariable("id") UUID id, Model model) {
+        Result<String> upload = workTimeService.update(id, workTime);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "redirect:/workHours/" + id;
+            return "redirect:/workTime/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -126,7 +126,7 @@ public class WorkTimeController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "redirect:/workHours/";
+            return "redirect:/workTime/";
         }
     }
 }
