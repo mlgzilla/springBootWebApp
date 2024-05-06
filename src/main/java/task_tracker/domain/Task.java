@@ -44,6 +44,7 @@ public class Task implements Serializable {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @Transient
     @OneToMany(mappedBy = "task")
     private Set<Comment> comments;
 

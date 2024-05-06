@@ -3,12 +3,14 @@ package task_tracker.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import task_tracker.dto.UserDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,18 +27,19 @@ public class User implements Serializable, UserDetails {
 
     private String surename;
 
-    @ManyToMany
-    @JoinColumn(name = "roles", referencedColumnName = "id", foreignKey = @ForeignKey(name = "users_fk2"))
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role", referencedColumnName = "id", foreignKey = @ForeignKey(name = "users_fk"))
+    private Role role;
 
     private String login;
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Transient
+    @ManyToMany(mappedBy = "users")
     Set<Project> projects;
 
-    @OneToMany(mappedBy = "assignee")
+    @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
 
     @OneToMany(mappedBy = "user")
@@ -45,10 +48,10 @@ public class User implements Serializable, UserDetails {
     @OneToOne(mappedBy = "user")
     private ContactInfo contactInfos;
 
-    @OneToMany(mappedBy = "uploader")
+    @OneToMany(mappedBy = "user")
     private Set<Attachment> attachments;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
     public UserDto mapToDto() {
@@ -56,7 +59,7 @@ public class User implements Serializable, UserDetails {
                 this.id,
                 this.name,
                 this.surename,
-                this.roles,
+                this.role,
                 this.login,
                 this.password,
                 this.projects
@@ -65,12 +68,17 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return Collections.singleton(new SimpleGrantedAuthority(getRole().getAuthority()));
     }
 
     @Override
     public String getUsername() {
-        return getLogin();
+        return login;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override

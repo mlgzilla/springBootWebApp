@@ -1,5 +1,6 @@
 package task_tracker.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/task")
+@PreAuthorize("hasAuthority('ROLE_USER') || hasAuthority('ROLE_ADMIN')")
 public class TaskController {
     private final TaskService taskService;
 

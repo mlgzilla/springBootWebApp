@@ -22,14 +22,14 @@ public class Project {
     @OneToMany(mappedBy = "project")
     Set<Task> tasks;
 
-    @Transient
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<User> users;
 
     public ProjectDto mapToDto() {
         return new ProjectDto(
                 this.id,
-                this.name
+                this.name,
+                this.users
         );
     }
 }

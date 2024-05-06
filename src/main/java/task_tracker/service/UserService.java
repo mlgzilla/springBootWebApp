@@ -2,6 +2,8 @@ package task_tracker.service;
 
 import org.springframework.stereotype.Service;
 import task_tracker.domain.Project;
+import task_tracker.domain.Role;
+import task_tracker.domain.Task;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
 import task_tracker.repository.*;
@@ -21,14 +23,16 @@ public class UserService {
     private final WorkTimeRepository workTimeRepository;
     private final ContactInfoRepository contactInfoRepository;
     private final ProjectRepository projectRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository, ProjectRepository projectRepository) {
+    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository, ProjectRepository projectRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.attachmentRepository = attachmentRepository;
         this.taskRepository = taskRepository;
         this.workTimeRepository = workTimeRepository;
         this.contactInfoRepository = contactInfoRepository;
         this.projectRepository = projectRepository;
+        this.roleRepository = roleRepository;
     }
 
     public Result<UserDto> findById(UUID id) {
@@ -98,40 +102,34 @@ public class UserService {
         }
     }
 
-    public Result<String> addToProject(UUID id, UUID projectId) {
-        try {
-            Optional<User> userRead = userRepository.findById(id);
-            if (userRead.isEmpty())
-                return Result.error("User was not found", "404");
-            User user = userRead.get();
-            Optional<Project> projectRead = projectRepository.findById(id);
-            if (projectRead.isEmpty())
-                return Result.error("User was not found", "404");
-            Project project = projectRead.get();
-            Set<Project> userProjects = user.getProjects();
-            userProjects.add(project);
-            user.setProjects(userProjects);
-            userRepository.saveAndFlush(user);
-            return Result.ok("Update ok");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Failed to update user", "500");
-        }
-    }
+//    public Result<String> addRole(UUID id, UUID roleId) {
+//        try {
+//            Optional<User> userRead = userRepository.findById(id);
+//            if (userRead.isEmpty())
+//                return Result.error("User was not found", "404");
+//            Optional<Role> roleRead = roleRepository.findById(roleId);
+//            if (roleRead.isEmpty())
+//                return Result.error("Role was not found", "404");
+//            User user = userRead.get();
+//            Role role = roleRead.get();
+//            Role userRoles = user.getRole();
+//            userRoles.add(role);
+//            user.setRoles(userRoles);
+//            userRepository.saveAndFlush(user);
+//            return Result.ok("Update ok");
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return Result.error("Failed to update user", "500");
+//        }
+//    }
 
-    public Result<String> addRole(UUID id, UUID roleId) {
+    public Result<String> updatePassword(UUID id, String newPassword) {
         try {
             Optional<User> userRead = userRepository.findById(id);
             if (userRead.isEmpty())
                 return Result.error("User was not found", "404");
             User user = userRead.get();
-            Optional<Project> projectRead = projectRepository.findById(id);
-            if (projectRead.isEmpty())
-                return Result.error("User was not found", "404");
-            Project project = projectRead.get();
-            Set<Project> userProjects = user.getProjects();
-            userProjects.add(project);
-            user.setProjects(userProjects);
+            user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {

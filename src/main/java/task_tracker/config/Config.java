@@ -16,7 +16,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @EnableJpaRepositories("task_tracker.repository")
-@EntityScan("egar.domain")
+@EntityScan("task_tracker.domain")
 public class Config implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;

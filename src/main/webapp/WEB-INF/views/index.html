@@ -5,12 +5,20 @@
     <title>Title</title>
 </head>
 <body>
+<!--<header th:insert="blocks/header :: headerLogout">-->
+<!--</header>-->
+<form th:action="@{/user/}" method="get">
+    <input type="submit" value="Раб"/>
+</form>
 <p><a th:href="@{/attachment/}">Документы</a></p>
 <p><a th:href="@{/user/}">Работники</a></p>
 <p><a th:href="@{/task/}">Задачи</a></p>
 <p><a th:href="@{/report/}">Отчеты</a></p>
 <p><a th:href="@{/workTime/}">Рабочие часы</a></p>
 <p><a th:href="@{/vacation/}">Отпуск</a></p>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Выход"/>
+</form>
 
 </body>
 </html>

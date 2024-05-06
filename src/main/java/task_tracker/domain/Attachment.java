@@ -2,7 +2,6 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import task_tracker.dto.AttachmentDto;
 
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "attachments")
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class Attachment {
     @Id
@@ -46,5 +44,15 @@ public class Attachment {
                 this.dateUploaded,
                 this.task.getId()
         );
+    }
+
+    public Attachment(UUID id, String name, String path, Integer size, User user, LocalDateTime dateUploaded, Task task) {
+        this.id = id;
+        this.name = name;
+        this.path = path;
+        this.size = size;
+        this.user = user;
+        this.dateUploaded = dateUploaded;
+        this.task = task;
     }
 }

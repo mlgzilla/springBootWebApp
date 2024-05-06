@@ -1,5 +1,6 @@
 package task_tracker.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import task_tracker.domain.WorkTime;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface WorkTimeRepository extends BaseRepository<WorkTime, UUID> {
+public interface WorkTimeRepository extends JpaRepository<WorkTime, UUID> {
 
     @Query("select w from WorkTime w where w.user.id = :id")
     List<WorkTime> findByUserId(UUID id);

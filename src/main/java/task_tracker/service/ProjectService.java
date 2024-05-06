@@ -2,10 +2,10 @@ package task_tracker.service;
 
 import org.springframework.stereotype.Service;
 import task_tracker.domain.Project;
-import task_tracker.domain.Task;
+import task_tracker.domain.User;
 import task_tracker.dto.ProjectDto;
 import task_tracker.repository.ProjectRepository;
-import task_tracker.repository.TaskRepository;
+import task_tracker.repository.UserRepository;
 import task_tracker.utils.Result;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     public Result<ProjectDto> findById(UUID id) {
         try {
@@ -54,19 +54,19 @@ public class ProjectService {
         }
     }
 
-    public Result<String> addTask(UUID id, UUID taskId) {
+    public Result<String> addUser(UUID id, UUID userId) {
         try {
             Optional<Project> projectRead = projectRepository.findById(id);
             if (projectRead.isEmpty())
                 return Result.error("Project was not found", "404");
-            Optional<Task> taskRead = taskRepository.findById(taskId);
-            if (taskRead.isEmpty())
-                return Result.error("Task was not found", "404");
+            Optional<User> userRead = userRepository.findById(userId);
+            if (userRead.isEmpty())
+                return Result.error("User was not found", "404");
             Project project = projectRead.get();
-            Task task = taskRead.get();
-            Set<Task> projectTasks = project.getTasks();
-            projectTasks.add(task);
-            project.setTasks(projectTasks);
+            User user = userRead.get();
+            Set<User> projectUsers = project.getUsers();
+            projectUsers.add(user);
+            project.setUsers(projectUsers);
             projectRepository.saveAndFlush(project);
             return Result.ok("Update ok");
         } catch (Exception e) {
@@ -84,8 +84,8 @@ public class ProjectService {
         }
     }
 
-    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
-        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 }

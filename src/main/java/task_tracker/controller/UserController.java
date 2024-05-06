@@ -128,6 +128,26 @@ public class UserController {
             return "redirect:/user/" + id;
     }
 
+//    @PutMapping("/updateRoles/{id}")
+//    public String updateRoles(@ModelAttribute("roleId") UUID roleId, @PathVariable("id") UUID id, Model model) {
+//        Result<String> upload = userService.addRole(id, roleId);
+//        if (upload.isError()) {
+//            model.addAttribute("message", upload.getMessage());
+//            return upload.getCode();
+//        } else
+//            return "redirect:/project/" + id;
+//    }
+
+    @PutMapping("/updatePassword/{id}")
+    public String updatePassword(@ModelAttribute("roleId") String newPassword, @PathVariable("id") UUID id, Model model) {
+        Result<String> upload = userService.updatePassword(id, newPassword);
+        if (upload.isError()) {
+            model.addAttribute("message", upload.getMessage());
+            return upload.getCode();
+        } else
+            return "redirect:/project/" + id;
+    }
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id, Model model) {
         Result<String> delete = userService.delete(id);
