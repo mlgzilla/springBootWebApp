@@ -50,7 +50,7 @@ public class HomeController {
 //    }
 
     @PostMapping("/logout")
-    public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response){
+    public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response,
                 authentication);
         return "redirect:/";

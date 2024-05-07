@@ -47,7 +47,7 @@ public class UserService {
         }
     }
 
-    public Boolean userExists(String login){
+    public Boolean userExists(String login) {
         return userRepository.findByLogin(login).isPresent();
     }
 
