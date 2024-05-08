@@ -64,8 +64,8 @@ public class ProjectService {
                 return Result.error("User was not found", "404");
             Project project = projectRead.get();
             User user = userRead.get();
-            Set<User> projectUsers = project.getUsers();
-            projectUsers.add(user);
+            Set<UUID> projectUsers = project.getUsers();
+            projectUsers.add(user.getId());
             project.setUsers(projectUsers);
             projectRepository.saveAndFlush(project);
             return Result.ok("Update ok");

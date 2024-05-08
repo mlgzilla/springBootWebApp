@@ -9,6 +9,7 @@ import task_tracker.dto.UserDto;
 import task_tracker.repository.*;
 import task_tracker.utils.Result;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,6 +39,18 @@ public class UserService {
     public Result<UserDto> findById(UUID id) {
         try {
             Optional<User> user = userRepository.findById(id);
+            if (user.isEmpty())
+                return Result.error("User was not found", "404");
+            else
+                return Result.ok(user.get().mapToDto());
+        } catch (Exception e) {
+            return Result.error("Error finding user", "500");
+        }
+    }
+
+    public Result<UserDto> findByPrincipal(Principal principal) {
+        try {
+            Optional<User> user = userRepository.findByLogin(principal.getName());
             if (user.isEmpty())
                 return Result.error("User was not found", "404");
             else

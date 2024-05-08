@@ -12,9 +12,9 @@ public class ProjectDto {
 
     private String name;
 
-    private Set<User> users;
+    private Set<UUID> users;
 
-    public ProjectDto(UUID id, String name, Set<User> users) {
+    public ProjectDto(UUID id, String name, Set<UUID> users) {
         this.id = id;
         this.name = name;
         this.users = users;

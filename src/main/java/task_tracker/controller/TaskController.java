@@ -7,11 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Task;
 import task_tracker.dto.TaskDto;
+import task_tracker.dto.UserDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
 import task_tracker.service.TaskService;
+import task_tracker.service.UserService;
 import task_tracker.utils.Result;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,21 +23,23 @@ import java.util.UUID;
 @PreAuthorize("hasAuthority('ROLE_USER') || hasAuthority('ROLE_ADMIN')")
 public class TaskController {
     private final TaskService taskService;
+    private final UserService userService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, UserService userService) {
         this.taskService = taskService;
+        this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public String findById(@PathVariable("id") UUID id, Model model) {
-        Result<TaskDto> taskRead = taskService.findById(id);
-        if (taskRead.isError()) {
-            model.addAttribute("message", taskRead.getMessage());
-            return taskRead.getCode();
-        } else
-            model.addAttribute("task", taskRead.getObject());
-        return "task/show";
-    }
+//    @GetMapping("/{id}")
+//    public String findById(@PathVariable("id") UUID id, Model model) {
+//        Result<TaskDto> taskRead = taskService.findById(id);
+//        if (taskRead.isError()) {
+//            model.addAttribute("message", taskRead.getMessage());
+//            return taskRead.getCode();
+//        } else
+//            model.addAttribute("task", taskRead.getObject());
+//        return "task/show";
+//    }
 
     @GetMapping("/findByUserId/{id}")
     public String findByUserId(@PathVariable UUID id, Model model) {
@@ -88,8 +93,24 @@ public class TaskController {
         return "task/update";
     }
 
-    @GetMapping("/")
-    public String getHome() {
+    @GetMapping("/{id}")
+    public String getTask(@PathVariable("id") UUID taskId, Principal principal, Model model) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        } else {
+            UserDto userDto = userRead.getObject();
+            Result<TaskDto> taskRead = taskService.findById(taskId);
+            if (taskRead.isError()) {
+                model.addAttribute("message", taskRead.getMessage());
+                return taskRead.getCode();
+            } else {
+                model.addAttribute("userName", userDto.getName());
+                TaskDto taskDto = taskRead.getObject();
+                model.addAttribute("task", taskDto);
+            }
+        }
         return "task/index";
     }
 

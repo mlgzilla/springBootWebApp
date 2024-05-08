@@ -35,10 +35,6 @@ public class User implements Serializable, UserDetails {
 
     private String password;
 
-    @Transient
-    @ManyToMany(mappedBy = "users")
-    Set<Project> projects;
-
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
 
@@ -61,8 +57,7 @@ public class User implements Serializable, UserDetails {
                 this.surename,
                 this.role,
                 this.login,
-                this.password,
-                this.projects
+                this.password
         );
     }
 

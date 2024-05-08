@@ -1,7 +1,10 @@
 package task_tracker.domain;
 
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import task_tracker.dto.ProjectDto;
 
 import javax.persistence.*;
@@ -12,6 +15,7 @@ import java.util.UUID;
 @Table(name = "projects")
 @Data
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +26,9 @@ public class Project {
     @OneToMany(mappedBy = "project")
     Set<Task> tasks;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    Set<User> users;
+    @Type(type = "jsonb")
+    @Column(name = "users", columnDefinition = "jsonb")
+    Set<UUID> users;
 
     public ProjectDto mapToDto() {
         return new ProjectDto(
