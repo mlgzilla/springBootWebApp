@@ -6,10 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Task;
+import task_tracker.dto.ProjectDto;
 import task_tracker.dto.TaskDto;
 import task_tracker.dto.UserDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
+import task_tracker.service.ProjectService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
@@ -24,22 +26,13 @@ import java.util.UUID;
 public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
+    private final ProjectService projectService;
 
-    public TaskController(TaskService taskService, UserService userService) {
+    public TaskController(TaskService taskService, UserService userService, ProjectService projectService) {
         this.taskService = taskService;
         this.userService = userService;
+        this.projectService = projectService;
     }
-
-//    @GetMapping("/{id}")
-//    public String findById(@PathVariable("id") UUID id, Model model) {
-//        Result<TaskDto> taskRead = taskService.findById(id);
-//        if (taskRead.isError()) {
-//            model.addAttribute("message", taskRead.getMessage());
-//            return taskRead.getCode();
-//        } else
-//            model.addAttribute("task", taskRead.getObject());
-//        return "task/show";
-//    }
 
     @GetMapping("/findByUserId/{id}")
     public String findByUserId(@PathVariable UUID id, Model model) {
@@ -99,18 +92,26 @@ public class TaskController {
         if (userRead.isError()) {
             model.addAttribute("message", userRead.getMessage());
             return userRead.getCode();
-        } else {
-            UserDto userDto = userRead.getObject();
-            Result<TaskDto> taskRead = taskService.findById(taskId);
-            if (taskRead.isError()) {
-                model.addAttribute("message", taskRead.getMessage());
-                return taskRead.getCode();
-            } else {
-                model.addAttribute("userName", userDto.getName());
-                TaskDto taskDto = taskRead.getObject();
-                model.addAttribute("task", taskDto);
-            }
         }
+        UserDto userDto = userRead.getObject();
+        Result<TaskDto> taskRead = taskService.findById(taskId);
+        if (taskRead.isError()) {
+            model.addAttribute("message", taskRead.getMessage());
+            return taskRead.getCode();
+        }
+
+        TaskDto taskDto = taskRead.getObject();
+        if (taskDto.getProjectId() != null) {
+            Result<ProjectDto> projectRead = projectService.findById(taskDto.getProjectId());
+            if (projectRead.isError()) {
+                model.addAttribute("message", projectRead.getMessage());
+                return projectRead.getCode();
+            }
+            ProjectDto projectDto = projectRead.getObject();
+            model.addAttribute("projectName", projectDto.getName());
+        }
+        model.addAttribute("task", taskDto);
+        model.addAttribute("userName", userDto.getName());
         return "task/index";
     }
 

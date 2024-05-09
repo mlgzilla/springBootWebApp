@@ -1,7 +1,10 @@
 package task_tracker.domain;
 
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +21,7 @@ import java.util.UUID;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,10 @@ public class User implements Serializable, UserDetails {
     private String login;
 
     private String password;
+
+    @Type(type = "jsonb")
+    @Column(name = "projects", columnDefinition = "jsonb")
+    Set<UUID> projects;
 
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
@@ -57,7 +65,8 @@ public class User implements Serializable, UserDetails {
                 this.surename,
                 this.role,
                 this.login,
-                this.password
+                this.password,
+                this.projects
         );
     }
 

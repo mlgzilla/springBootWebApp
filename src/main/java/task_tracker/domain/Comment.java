@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import task_tracker.dto.CommentDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "comments")
 @Data
 @NoArgsConstructor
-public class Comment {
+public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;

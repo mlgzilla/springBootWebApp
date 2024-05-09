@@ -26,13 +26,13 @@ public class TaskDto {
 
     private LocalDateTime deadline;
 
-    private Project project;
+    private UUID projectId;
 
     private Priority priority;
 
     private Set<Comment> comments;
 
-    public TaskDto(UUID id, String name, String description, UUID employeeId, TaskStatus status, LocalDateTime dateCreated, LocalDateTime deadline, Project project, Priority priority, Set<Comment> comments) {
+    public TaskDto(UUID id, String name, String description, UUID employeeId, TaskStatus status, LocalDateTime dateCreated, LocalDateTime deadline, UUID project, Priority priority, Set<Comment> comments) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,7 +40,7 @@ public class TaskDto {
         this.status = status;
         this.dateCreated = dateCreated;
         this.deadline = deadline;
-        this.project = project;
+        this.projectId = project;
         this.priority = priority;
         this.comments = comments;
     }

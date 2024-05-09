@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import task_tracker.dto.ContactInfoDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "contact_info")
 @Data
 @NoArgsConstructor
-public class ContactInfo {
+public class ContactInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;

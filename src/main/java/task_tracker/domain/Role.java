@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import task_tracker.dto.RoleDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;

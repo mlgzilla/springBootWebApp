@@ -1,9 +1,6 @@
 package task_tracker.service;
 
 import org.springframework.stereotype.Service;
-import task_tracker.domain.Project;
-import task_tracker.domain.Role;
-import task_tracker.domain.Task;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
 import task_tracker.repository.*;
@@ -12,7 +9,6 @@ import task_tracker.utils.Result;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

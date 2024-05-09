@@ -1,7 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
-import task_tracker.domain.User;
+import task_tracker.domain.Task;
 
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +14,12 @@ public class ProjectDto {
 
     private Set<UUID> users;
 
-    public ProjectDto(UUID id, String name, Set<UUID> users) {
+    private Set<UUID> tasks;
+
+    public ProjectDto(UUID id, String name, Set<UUID> users, Set<UUID> tasks) {
         this.id = id;
         this.name = name;
         this.users = users;
+        this.tasks = tasks;
     }
 }

@@ -7,27 +7,51 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Project;
 import task_tracker.dto.ProjectDto;
+import task_tracker.dto.TaskDto;
+import task_tracker.dto.UserDto;
 import task_tracker.service.ProjectService;
+import task_tracker.service.TaskService;
+import task_tracker.service.UserService;
 import task_tracker.utils.Result;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/project")
 public class ProjectController {
     private final ProjectService projectService;
+    private final UserService userService;
+    private final TaskService taskService;
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") UUID id, Model model) {
-        Result<ProjectDto> projectRead = projectService.findById(id);
-        if (projectRead.isError()) {
-            model.addAttribute("message", projectRead.getMessage());
-            return projectRead.getCode();
-        } else
-            model.addAttribute("project", projectRead.getObject());
-        return "project/show";
+    public String getProject(@PathVariable("id") UUID projectId, Principal principal, Model model) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        } else {
+            UserDto userDto = userRead.getObject();
+            Result<ProjectDto> projectRead = projectService.findById(projectId);
+            if (projectRead.isError()) {
+                model.addAttribute("message", projectRead.getMessage());
+                return projectRead.getCode();
+            } else {
+                model.addAttribute("userName", userDto.getName());
+                ProjectDto projectDto = projectRead.getObject();
+                Set<TaskDto> tasks = projectDto.getTasks()
+                        .stream()
+                        .map(id -> taskService.findById(id).getObject())
+                        .collect(Collectors.toSet());
+                model.addAttribute("tasks", tasks);
+            }
+        }
+        return "index";
     }
 
     @GetMapping("/new")
@@ -48,7 +72,20 @@ public class ProjectController {
     }
 
     @GetMapping("/")
-    public String getHome() {
+    public String getHome(Principal principal, Model model) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        } else {
+            UserDto userDto = userRead.getObject();
+            Set<UUID> projects = userDto.getProjects();
+            List<ProjectDto> projectList = projects.stream()
+                    .map(id -> projectService.findById(id).getObject())
+                    .toList();
+            model.addAttribute("userName", userDto.getName());
+            model.addAttribute("projectList", projectList);
+        }
         return "project/index";
     }
 

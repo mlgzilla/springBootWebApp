@@ -14,14 +14,14 @@
                 <a class="nav-link" th:href="@{/}">Задачи</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/project/}">Проекты</a>
+                <a class="nav-link" href="#">Проекты</a>
             </li>
         </ul>
     </div>
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:text="${userName}"></a>
+                <a class="nav-link" href="#" th:text="${userName}">Username</a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-danger" th:href="@{/logout}">Выход</a>
@@ -29,13 +29,14 @@
         </ul>
     </div>
 </nav>
+
 <div class="row row-cols-1 row-cols-md-4 mx-4 my-4">
-    <div class="col mb-4" th:each="task: ${tasks}">
-        <a th:href="@{/task/{id}(id=${task.id})}" class="text-decoration-none">
-            <div class="card text-white bg-dark">
+    <div class="col mb-4" th:each="project: ${projectList}">
+        <a th:href="@{/project/{id}(id=${project.id})}" class="text-decoration-none">
+            <div class="card border-dark">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${task.name}">Card title</h5>
-                    <p class="card-text" th:text="${task.description}">Content</p>
+                    <h5 class="card-title" th:text="${project.name}">Card title</h5>
+<!--                    <p class="card-text" th:text="${project.description}">Content</p>-->
                 </div>
             </div>
         </a>

@@ -8,6 +8,7 @@ import org.hibernate.annotations.TypeDef;
 import task_tracker.dto.ProjectDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,15 +17,16 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class Project {
+public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     private String name;
 
-    @OneToMany(mappedBy = "project")
-    Set<Task> tasks;
+    @Type(type = "jsonb")
+    @Column(name = "tasks", columnDefinition = "jsonb")
+    Set<UUID> tasks;
 
     @Type(type = "jsonb")
     @Column(name = "users", columnDefinition = "jsonb")
@@ -34,7 +36,8 @@ public class Project {
         return new ProjectDto(
                 this.id,
                 this.name,
-                this.users
+                this.users,
+                this.tasks
         );
     }
 }

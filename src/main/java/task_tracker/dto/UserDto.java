@@ -16,13 +16,15 @@ public class UserDto {
     private Role role;
     private String login;
     private String password;
+    private Set<UUID> projects;
 
-    public UserDto(UUID id, String name, String surename, Role role, String login, String password) {
+    public UserDto(UUID id, String name, String surename, Role role, String login, String password, Set<UUID> projects) {
         this.id = id;
         this.name = name;
         this.surename = surename;
         this.role = role;
         this.login = login;
         this.password = password;
+        this.projects = projects;
     }
 }

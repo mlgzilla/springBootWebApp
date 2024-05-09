@@ -37,9 +37,8 @@ public class Task implements Serializable {
 
     private LocalDateTime deadline;
 
-    @ManyToOne
-    @JoinColumn(name = "project", referencedColumnName = "id", foreignKey = @ForeignKey(name = "tasks_fk2"))
-    private Project project;
+    @Column(name = "project_id")
+    private UUID projectId;
 
     @Enumerated(EnumType.STRING)
     private Priority priority;
@@ -57,7 +56,7 @@ public class Task implements Serializable {
                 this.status,
                 this.dateCreated,
                 this.deadline,
-                this.project,
+                this.projectId,
                 this.priority,
                 this.comments
         );
