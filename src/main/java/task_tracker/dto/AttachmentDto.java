@@ -1,6 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class AttachmentDto {
 
     private UserDto user;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateUploaded;
 
     private TaskDto task;

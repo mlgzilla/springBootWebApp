@@ -70,7 +70,14 @@ public class TaskController {
     }
 
     @GetMapping("/new")
-    public String getNew(Model model) {
+    public String getNew(Model model, Principal principal) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
         model.addAttribute(new Task());
         model.addAttribute("taskStatus", TaskStatus.values());
         model.addAttribute("priority", Priority.values());
@@ -78,13 +85,22 @@ public class TaskController {
     }
 
     @GetMapping("/update/{id}")
-    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
+    public String getUpdateForm(@PathVariable("id") UUID id, Model model, Principal principal) {
         Result<TaskDto> taskRead = taskService.findById(id);
         if (taskRead.isError()) {
             model.addAttribute("message", taskRead.getMessage());
             return taskRead.getCode();
         }
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("task", taskRead.getObject());
+        model.addAttribute("taskStatus", TaskStatus.values());
+        model.addAttribute("priorities", Priority.values());
         return "task/update";
     }
 
@@ -129,6 +145,7 @@ public class TaskController {
         model.addAttribute("userDto", userDto);
         model.addAttribute("newComment", new Comment());
         model.addAttribute("newAttachment", new Attachment());
+        model.addAttribute("priorities", Priority.values());
         return "task/index";
     }
 
@@ -207,7 +224,7 @@ public class TaskController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "redirect:/task/";
+            return "redirect:/";
         }
     }
 }

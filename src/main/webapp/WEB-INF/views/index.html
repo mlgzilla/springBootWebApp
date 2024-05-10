@@ -29,6 +29,8 @@
         </ul>
     </div>
 </nav>
+<p th:if="${projectName!=null}" class="h1 mx-4 my-4" th:text="${projectName}">Project name</p>
+<p th:if="${projectName==null}" class="h1 mx-4 my-4">Ваши задачи</p>
 <div class="row row-cols-1 row-cols-md-4 mx-4 my-4">
     <div class="col mb-4" th:each="task: ${tasks}">
         <a th:href="@{/task/{id}(id=${task.id})}" class="text-decoration-none">

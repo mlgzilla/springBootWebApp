@@ -49,6 +49,7 @@ public class ProjectController {
                         .map(id -> taskService.findById(id).getObject())
                         .collect(Collectors.toSet());
                 model.addAttribute("tasks", tasks);
+                model.addAttribute("projectName", projectDto.getName());
             }
         }
         return "index";

@@ -1,6 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
 
@@ -19,8 +20,10 @@ public class TaskDto {
 
     private TaskStatus status;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateCreated;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
     private UUID projectId;

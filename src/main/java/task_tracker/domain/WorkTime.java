@@ -3,6 +3,7 @@ package task_tracker.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import task_tracker.dto.WorkTimeDto;
 
 import javax.persistence.*;
@@ -21,9 +22,11 @@ public class WorkTime implements Serializable {
     private UUID id;
 
     @Column(name = "time_start")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeStart;
 
     @Column(name = "time_finish")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeFinish;
 
     @ManyToOne()

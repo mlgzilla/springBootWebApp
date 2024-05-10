@@ -3,6 +3,7 @@ package task_tracker.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import task_tracker.dto.AttachmentDto;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Attachment implements Serializable {
     private User user;
 
     @Column(name = "date_uploaded")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateUploaded;
 
     @ManyToOne()

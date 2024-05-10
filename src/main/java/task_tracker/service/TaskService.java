@@ -91,6 +91,8 @@ public class TaskService {
             Task task = taskRead.get();
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
+            task.setPriority(taskDto.getPriority());
+            task.setStatus(taskDto.getStatus());
             task.setDeadline(taskDto.getDeadline());
             taskRepository.saveAndFlush(task);
             return Result.ok("Update ok");

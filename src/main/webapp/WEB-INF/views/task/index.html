@@ -33,10 +33,18 @@
 <div class="mx-5 my-5">
     <p class="h1" th:text="${taskDto.name}">Task name</p>
     <p class="h5" th:text="${taskDto.description}">Task description</p>
-    <p class="" th:text="${taskDto.status}">Task status</p>
+    <p class="">
+        <span th:text="${taskDto.status}"> Task status</span>
+    </p>
+    <p class="">
+        <span th:text="${taskDto.priority}"> Task priority</span>
+    </p>
     <p class="" th:text="${taskDto.dateCreated}">Task dateCreated</p>
     <p class="" th:if="${taskDto.deadline!=null}" th:text="${taskDto.deadline}">Task deadline</p>
-    <p class="" th:if="${taskDto.projectId!=null}" th:text="${projectName}">Task project</p>
+    <p class="" th:if="${taskDto.projectId!=null}"><a th:href="@{/project/{id}(id=${taskDto.projectId})}"
+                                                      class="text-decoration-none" th:text="${projectName}"></a></p>
+    <a class="" th:href="@{/task/update/{id}(id=${taskDto.id})}"><button class="btn btn-primary">Изменить данные</button> </a>
+    <br>
     <br>
     <p class="h4">Comments:</p>
     <div th:if="${comments!=null}" th:each="comment: ${comments}">

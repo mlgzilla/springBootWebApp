@@ -1,6 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,8 +10,10 @@ import java.util.UUID;
 public class WorkTimeDto {
     private UUID id;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeStart;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeFinish;
 
     private UUID employeeId;

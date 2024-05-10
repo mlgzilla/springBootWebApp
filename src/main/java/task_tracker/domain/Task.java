@@ -3,6 +3,7 @@ package task_tracker.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import task_tracker.dto.TaskDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
@@ -34,8 +35,10 @@ public class Task implements Serializable {
     private TaskStatus status;
 
     @Column(name = "date_created")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateCreated;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
     @Column(name = "project_id")
