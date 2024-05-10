@@ -15,19 +15,19 @@ public class AttachmentDto {
 
     private Integer size;
 
-    private UUID userId;
+    private UserDto user;
 
     private LocalDateTime dateUploaded;
 
-    private UUID taskId;
+    private TaskDto task;
 
-    public AttachmentDto(UUID id, String name, String path, Integer size, UUID userId, LocalDateTime dateUploaded, UUID taskId) {
+    public AttachmentDto(UUID id, String name, String path, Integer size, UserDto user, LocalDateTime dateUploaded, TaskDto task) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.size = size;
-        this.userId = userId;
+        this.user = user;
         this.dateUploaded = dateUploaded;
-        this.taskId = taskId;
+        this.task = task;
     }
 }

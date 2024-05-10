@@ -59,12 +59,14 @@ public class CommentController {
             model.addAttribute("message", "Error in filled fields");
             return "400";
         }
+        comment.setId(UUID.randomUUID());
+        comment.setDate(LocalDateTime.now());
         Result<CommentDto> savedComment = commentService.create(comment);
         if (savedComment.isError()) {
             model.addAttribute("message", savedComment.getMessage());
             return savedComment.getCode();
         } else
-            return "redirect:/comment/" + savedComment.getObject().getId();
+            return "redirect:/task/" + savedComment.getObject().getTaskId();
     }
 
     @PostMapping("/submit")

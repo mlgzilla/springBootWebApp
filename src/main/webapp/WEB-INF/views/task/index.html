@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:text="${userName}">Username</a>
+                <a class="nav-link" href="#" th:text="${userDto.name}">Username</a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-danger" th:href="@{/logout}">Выход</a>
@@ -31,20 +31,25 @@
 </nav>
 
 <div class="mx-5 my-5">
-    <p class="h1" th:text="${task.name}">Task name</p>
-    <p class="h5" th:text="${task.description}">Task description</p>
-    <p class="" th:text="${task.status}">Task status</p>
-    <p class="" th:text="${task.dateCreated}">Task dateCreated</p>
-    <p class="" th:if="${task.deadline!=null}" th:text="${task.deadline}">Task deadline</p>
-    <p class="" th:if="${task.projectId!=null}" th:text="${projectName}">Task project</p>
+    <p class="h1" th:text="${taskDto.name}">Task name</p>
+    <p class="h5" th:text="${taskDto.description}">Task description</p>
+    <p class="" th:text="${taskDto.status}">Task status</p>
+    <p class="" th:text="${taskDto.dateCreated}">Task dateCreated</p>
+    <p class="" th:if="${taskDto.deadline!=null}" th:text="${taskDto.deadline}">Task deadline</p>
+    <p class="" th:if="${taskDto.projectId!=null}" th:text="${projectName}">Task project</p>
     <br>
     <p class="h4">Comments:</p>
-    <div th:if="${task.comments!=null}" th:each="comment: ${task.comments}">
-        <p class="" th:text="${comment.getUser().getName()} ${comment.getUser().getSurename()}">Task comments</p>
+    <div th:if="${comments!=null}" th:each="comment: ${comments}">
+        <p class=""> <span th:text="${comment.author.name} "></span> <span th:text="${comment.author.surename}"></span></p>
         <p class="" th:text="${comment.getContents()}">Task comments</p>
         <p class="" th:text="${comment.getDate()}">Task comments</p>
     </div>
 </div>
-
+<form th:action="@{/comment/}" th:object="${newComment}" th:method="post" class="mx-5 my-5">
+    <input type="text" th:field="*{contents}" class="form-control" id="contents"/>
+    <input type="hidden" th:value="${userDto.id}" class="form-control" id="user.id" name="user.id"/>
+    <input type="hidden" th:value="${taskDto.id}" class="form-control" id="task.id" name="task.id"/>
+    <input type="submit" class="btn btn-primary" value="Отправить"/>
+</form>
 </body>
 </html>

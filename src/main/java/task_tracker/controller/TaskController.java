@@ -5,12 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import task_tracker.domain.Comment;
 import task_tracker.domain.Task;
+import task_tracker.dto.CommentDto;
 import task_tracker.dto.ProjectDto;
 import task_tracker.dto.TaskDto;
 import task_tracker.dto.UserDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
+import task_tracker.service.CommentService;
 import task_tracker.service.ProjectService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
@@ -27,11 +30,13 @@ public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
     private final ProjectService projectService;
+    private final CommentService commentService;
 
-    public TaskController(TaskService taskService, UserService userService, ProjectService projectService) {
+    public TaskController(TaskService taskService, UserService userService, ProjectService projectService, CommentService commentService) {
         this.taskService = taskService;
         this.userService = userService;
         this.projectService = projectService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/findByUserId/{id}")
@@ -110,8 +115,18 @@ public class TaskController {
             ProjectDto projectDto = projectRead.getObject();
             model.addAttribute("projectName", projectDto.getName());
         }
-        model.addAttribute("task", taskDto);
-        model.addAttribute("userName", userDto.getName());
+
+        Result<List<CommentDto>> taskComments = commentService.findByTaskId(taskId);
+        if (taskComments.isError()) {
+            model.addAttribute("message", taskComments.getMessage());
+            return taskComments.getCode();
+        }
+        List<CommentDto> comments = taskComments.getObject();
+
+        model.addAttribute("taskDto", taskDto);
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("comments", comments);
+        model.addAttribute("newComment", new Comment());
         return "task/index";
     }
 

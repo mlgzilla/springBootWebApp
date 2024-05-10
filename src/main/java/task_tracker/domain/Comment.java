@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import task_tracker.dto.CommentDto;
 
 import javax.persistence.*;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Comment implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid-hibernate-generator")
+    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     private String contents;
@@ -34,7 +36,7 @@ public class Comment implements Serializable {
         return new CommentDto(
                 this.id,
                 this.contents,
-                this.user.getId(),
+                this.user.mapToDto(),
                 this.date,
                 this.task.getId()
         );

@@ -3,6 +3,7 @@ package task_tracker.domain;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import task_tracker.dto.ProjectDto;
@@ -19,7 +20,8 @@ import java.util.UUID;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Project implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid-hibernate-generator")
+    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     private String name;

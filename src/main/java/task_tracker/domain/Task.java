@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import task_tracker.dto.TaskDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
@@ -9,7 +10,6 @@ import task_tracker.enums.TaskStatus;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +18,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Task implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid-hibernate-generator")
+    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     private String name;
@@ -43,22 +44,17 @@ public class Task implements Serializable {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
-    @Transient
-    @OneToMany(mappedBy = "task")
-    private Set<Comment> comments;
-
     public TaskDto mapToDto() {
         return new TaskDto(
                 this.id,
                 this.name,
                 this.description,
-                this.user.getId(),
+                this.user.mapToDto(),
                 this.status,
                 this.dateCreated,
                 this.deadline,
                 this.projectId,
-                this.priority,
-                this.comments
+                this.priority
         );
     }
 }

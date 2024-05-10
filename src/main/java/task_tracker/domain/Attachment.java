@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import task_tracker.dto.AttachmentDto;
 
 import javax.persistence.*;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Attachment implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid-hibernate-generator")
+    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     private String name;
@@ -41,9 +43,9 @@ public class Attachment implements Serializable {
                 this.name,
                 this.path,
                 this.size,
-                this.user.getId(),
+                this.user.mapToDto(),
                 this.dateUploaded,
-                this.task.getId()
+                this.task.mapToDto()
         );
     }
 

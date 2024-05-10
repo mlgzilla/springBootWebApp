@@ -12,15 +12,15 @@ public class ContactInfoDto {
 
     private String phoneNumber;
 
-    private UUID userId;
+    private UserDto user;
 
     private String email;
 
-    public ContactInfoDto(UUID id, String address, String phoneNumber, UUID userId, String email) {
+    public ContactInfoDto(UUID id, String address, String phoneNumber, UserDto user, String email) {
         this.id = id;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.userId = userId;
+        this.user = user;
         this.email = email;
     }
 }

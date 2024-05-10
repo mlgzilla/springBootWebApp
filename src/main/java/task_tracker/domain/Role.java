@@ -2,6 +2,7 @@ package task_tracker.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import task_tracker.dto.RoleDto;
 
@@ -16,7 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Role implements GrantedAuthority, Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid-hibernate-generator")
+    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     private String name;

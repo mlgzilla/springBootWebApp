@@ -1,6 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import task_tracker.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,16 +12,16 @@ public class CommentDto {
 
     private String contents;
 
-    private UUID authorId;
+    private UserDto author;
 
     private LocalDateTime date;
 
     private UUID taskId;
 
-    public CommentDto(UUID id, String contents, UUID authorId, LocalDateTime date, UUID taskId) {
+    public CommentDto(UUID id, String contents, UserDto author, LocalDateTime date, UUID taskId) {
         this.id = id;
         this.contents = contents;
-        this.authorId = authorId;
+        this.author = author;
         this.date = date;
         this.taskId = taskId;
     }

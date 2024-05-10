@@ -46,7 +46,7 @@ public class CommentService {
             Comment savedComment = commentRepository.saveAndFlush(comment);
             return Result.ok(savedComment.mapToDto());
         } catch (Exception e) {
-            return Result.error("Error creating Comment", "500");
+            return Result.error(e.getMessage() + "Error creating Comment", "500");
         }
     }
 
