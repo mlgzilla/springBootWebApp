@@ -44,16 +44,16 @@ public class AttachmentController {
         }
     }
 
-    @GetMapping("/findByTaskId/{taskId}")
-    public String findByTaskId(@PathVariable UUID taskId, Model model) {
-        Result<List<AttachmentDto>> attachmentList = attachmentService.findByTaskId(taskId);
-        if (attachmentList.isError()) {
-            model.addAttribute("message", attachmentList.getMessage());
-            return attachmentList.getCode();
-        } else
-            model.addAttribute("attachmentList", attachmentList.getObject());
-        return "attachment/showList";
-    }
+//    @GetMapping("/findByTaskId/{taskId}")
+//    public String findByTaskId(@PathVariable UUID taskId, Model model) {
+//        Result<List<AttachmentDto>> attachmentList = attachmentService.findByTaskId(taskId);
+//        if (attachmentList.isError()) {
+//            model.addAttribute("message", attachmentList.getMessage());
+//            return attachmentList.getCode();
+//        } else
+//            model.addAttribute("attachmentList", attachmentList.getObject());
+//        return "attachment/showList";
+//    }
 
     @GetMapping("/upload/{id}")
     public String getNew(@PathVariable("id") UUID id, Model model) {
@@ -62,23 +62,23 @@ public class AttachmentController {
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("file") MultipartFile file, @ModelAttribute("id") UUID userId, @ModelAttribute("id") UUID taskId, Model model) {
-        Result<String> upload = attachmentService.upload(file, userId, taskId);
+    public String create(@ModelAttribute("file") MultipartFile file, @ModelAttribute("user") UUID user, @ModelAttribute("task") UUID task, Model model) {
+        Result<String> upload = attachmentService.upload(file, user, task);
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();
         } else
-            return "redirect:/user/"; //TODO
+            return "redirect:/task/" + task;
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") UUID id, Model model) {
+    @DeleteMapping("/{id}/{taskId}")
+    public String delete(@PathVariable("id") UUID id, @PathVariable("taskId") UUID taskId, Model model) {
         Result<String> delete = attachmentService.delete(id);
         if (delete.isError()) {
             model.addAttribute("message", delete.getMessage());
             return delete.getCode();
         } else
-            return "redirect:/attachment/"; //TODO
+            return "redirect:/task/" + taskId;
     }
 
 }

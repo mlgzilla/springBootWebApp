@@ -5,18 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import task_tracker.domain.Attachment;
 import task_tracker.domain.Comment;
 import task_tracker.domain.Task;
-import task_tracker.dto.CommentDto;
-import task_tracker.dto.ProjectDto;
-import task_tracker.dto.TaskDto;
-import task_tracker.dto.UserDto;
+import task_tracker.dto.*;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
-import task_tracker.service.CommentService;
-import task_tracker.service.ProjectService;
-import task_tracker.service.TaskService;
-import task_tracker.service.UserService;
+import task_tracker.service.*;
 import task_tracker.utils.Result;
 
 import java.security.Principal;
@@ -31,12 +26,14 @@ public class TaskController {
     private final UserService userService;
     private final ProjectService projectService;
     private final CommentService commentService;
+    private final AttachmentService attachmentService;
 
-    public TaskController(TaskService taskService, UserService userService, ProjectService projectService, CommentService commentService) {
+    public TaskController(TaskService taskService, UserService userService, ProjectService projectService, CommentService commentService, AttachmentService attachmentService) {
         this.taskService = taskService;
         this.userService = userService;
         this.projectService = projectService;
         this.commentService = commentService;
+        this.attachmentService = attachmentService;
     }
 
     @GetMapping("/findByUserId/{id}")
@@ -117,16 +114,21 @@ public class TaskController {
         }
 
         Result<List<CommentDto>> taskComments = commentService.findByTaskId(taskId);
-        if (taskComments.isError()) {
-            model.addAttribute("message", taskComments.getMessage());
-            return taskComments.getCode();
+        if (taskComments.isOk()) {
+            List<CommentDto> comments = taskComments.getObject();
+            model.addAttribute("comments", comments);
         }
-        List<CommentDto> comments = taskComments.getObject();
+
+        Result<List<AttachmentDto>> attachmentRead = attachmentService.findByTaskId(taskId);
+        if (attachmentRead.isOk()) {
+            List<AttachmentDto> attachmentDto = attachmentRead.getObject();
+            model.addAttribute("attachments", attachmentDto);
+        }
 
         model.addAttribute("taskDto", taskDto);
         model.addAttribute("userDto", userDto);
-        model.addAttribute("comments", comments);
         model.addAttribute("newComment", new Comment());
+        model.addAttribute("newAttachment", new Attachment());
         return "task/index";
     }
 

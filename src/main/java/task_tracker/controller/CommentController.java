@@ -98,15 +98,15 @@ public class CommentController {
             return "redirect:/comment/" + id;
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") UUID id, Model model) {
+    @DeleteMapping("/{id}/{taskId}")
+    public String delete(@PathVariable("id") UUID id, @PathVariable("taskId") UUID taskId, Model model) {
         Result<String> delete = commentService.delete(id);
         if (delete.isError()) {
             model.addAttribute("message", delete.getMessage());
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "redirect:/comment/";
+            return "redirect:/task/" + taskId;
         }
     }
 }
