@@ -5,14 +5,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import task_tracker.domain.Attachment;
+import task_tracker.domain.Comment;
 import task_tracker.domain.User;
-import task_tracker.dto.UserDto;
+import task_tracker.dto.*;
 import task_tracker.enums.ContractType;
+import task_tracker.enums.Priority;
+import task_tracker.service.ProjectService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -22,6 +28,8 @@ public class UserController {
     private final UserService userService;
 
     private final TaskService taskService;
+
+    private final ProjectService projectService;
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") UUID id, Model model) {
@@ -75,8 +83,36 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String getHome(Model model) {
-        model.addAttribute("types", ContractType.values());
+    public String getUser(@PathVariable("id") UUID userId, Principal principal, Model model) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+
+        model.addAttribute("userDto", userDto);
+        if (userDto.getId() == userId) {
+            Set<UUID> projects = userDto.getProjects();
+            List<ProjectDto> projectList = projects.stream()
+                    .map(id -> projectService.findById(id).getObject())
+                    .toList();
+            model.addAttribute("projectList", projectList);
+            model.addAttribute("userDtoFound", userDto);
+        } else {
+            Result<UserDto> userDtoRead = userService.findById(userId);
+            if (userDtoRead.isError()) {
+                model.addAttribute("message", userDtoRead.getMessage());
+                return userDtoRead.getCode();
+            }
+            UserDto userDtoFound = userDtoRead.getObject();
+            Set<UUID> projects = userDtoFound.getProjects();
+            List<ProjectDto> projectList = projects.stream()
+                    .map(id -> projectService.findById(id).getObject())
+                    .toList();
+            model.addAttribute("projectList", projectList);
+            model.addAttribute("userDtoFound", userDtoFound);
+        }
         return "user/index";
     }
 

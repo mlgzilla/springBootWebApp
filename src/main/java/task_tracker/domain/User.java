@@ -52,7 +52,7 @@ public class User implements Serializable, UserDetails {
     private Set<WorkTime> workTimes;
 
     @OneToOne(mappedBy = "user")
-    private ContactInfo contactInfos;
+    private ContactInfo contactInfo;
 
     @OneToMany(mappedBy = "user")
     private Set<Attachment> attachments;
@@ -68,7 +68,8 @@ public class User implements Serializable, UserDetails {
                 this.role,
                 this.login,
                 this.password,
-                this.projects
+                this.projects,
+                this.contactInfo.mapToDto()
         );
     }
 

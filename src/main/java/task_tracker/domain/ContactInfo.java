@@ -35,7 +35,6 @@ public class ContactInfo implements Serializable {
                 this.id,
                 this.address,
                 this.phoneNumber,
-                this.user.mapToDto(),
                 this.email
         );
     }

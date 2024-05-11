@@ -17,8 +17,9 @@ public class UserDto {
     private String login;
     private String password;
     private Set<UUID> projects;
+    private ContactInfoDto contactInfoDto;
 
-    public UserDto(UUID id, String name, String surename, Role role, String login, String password, Set<UUID> projects) {
+    public UserDto(UUID id, String name, String surename, Role role, String login, String password, Set<UUID> projects, ContactInfoDto contactInfoDto) {
         this.id = id;
         this.name = name;
         this.surename = surename;
@@ -26,5 +27,6 @@ public class UserDto {
         this.login = login;
         this.password = password;
         this.projects = projects;
+        this.contactInfoDto = contactInfoDto;
     }
 }

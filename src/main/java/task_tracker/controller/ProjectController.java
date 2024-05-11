@@ -84,7 +84,7 @@ public class ProjectController {
             List<ProjectDto> projectList = projects.stream()
                     .map(id -> projectService.findById(id).getObject())
                     .toList();
-            model.addAttribute("userName", userDto.getName());
+            model.addAttribute("userDto", userDto);
             model.addAttribute("projectList", projectList);
         }
         return "project/index";
