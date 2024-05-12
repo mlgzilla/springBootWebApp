@@ -20,10 +20,10 @@ public class TaskDto {
 
     private TaskStatus status;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateCreated;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
     private UUID projectId;

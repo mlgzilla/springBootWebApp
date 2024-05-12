@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Attachment;
 import task_tracker.domain.Comment;
 import task_tracker.domain.Task;
+import task_tracker.domain.User;
 import task_tracker.dto.*;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
@@ -78,9 +79,29 @@ public class TaskController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
-        model.addAttribute(new Task());
+        Task task = new Task();
+        task.setPriority(Priority.Lowest);
+        model.addAttribute(task);
         model.addAttribute("taskStatus", TaskStatus.values());
-        model.addAttribute("priority", Priority.values());
+        model.addAttribute("priorities", Priority.values());
+        return "task/new";
+    }
+
+    @GetMapping("/new/project/{id}")
+    public String getNewForProject(Model model, Principal principal, @PathVariable UUID id) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
+        Task task = new Task();
+        task.setProjectId(id);
+        task.setPriority(Priority.Lowest);
+        model.addAttribute(task);
+        model.addAttribute("taskStatus", TaskStatus.values());
+        model.addAttribute("priorities", Priority.values());
         return "task/new";
     }
 
@@ -150,14 +171,25 @@ public class TaskController {
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("task") Task task, Model model) {
-        
-        Result<TaskDto> savedTask = taskService.create(task);
+    public String create(@ModelAttribute("task") Task task, Model model, Principal principal) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        User user = new User();
+        user.setId(userDto.getId());
+        task.setUser(user);
+        Result<String> savedTask = taskService.create(task);
         if (savedTask.isError()) {
             model.addAttribute("message", savedTask.getMessage());
             return savedTask.getCode();
         } else {
             model.addAttribute("message", "Task create ok");
+            if (task.getProjectId() != null) {
+                return "redirect:/project/" + task.getProjectId();
+            }
             return "redirect:/";
         }
     }

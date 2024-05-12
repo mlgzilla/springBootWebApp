@@ -22,11 +22,11 @@ public class WorkTime implements Serializable {
     private UUID id;
 
     @Column(name = "time_start")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeStart;
 
     @Column(name = "time_finish")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeFinish;
 
     @ManyToOne()

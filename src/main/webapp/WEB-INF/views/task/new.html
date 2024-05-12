@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:text="${userDto.name}">Username</a>
+                <a class="nav-link" th:href="@{/user/{id}(id=${userDto.id})}" th:text="${userDto.name}"></a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-danger" th:href="@{/logout}">Выход</a>
@@ -29,14 +29,14 @@
         </ul>
     </div>
 </nav>
-<form th:action="@{/task}" th:object="${task}" th:method="post">
+<form th:action="@{/task/}" th:object="${task}" th:method="post">
 
     <p class="form-control">
-        <label for="name">Имя отчета </label>
+        <label for="name">Имя задачи </label>
         <input type="text" th:field="*{name}" id="name"/>
     </p>
     <p class="form-control">
-        <label for="description">Описание отчета </label>
+        <label for="description">Описание задачи </label>
         <input type="text" th:field="*{description}" id="description"/>
     </p>
     <p class="form-control">
@@ -52,6 +52,7 @@
         <label for="deadline">Конечная дата </label>
         <input type="datetime-local" th:field="*{deadline}" id="deadline"/>
     </p>
+    <input type="hidden" th:value="*{projectId}" id="projectId" name="projectId">
     <p class="form-control">
         <input class="btn btn-success" type="submit" value="Отправить"/>
     </p>

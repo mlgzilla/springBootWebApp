@@ -15,7 +15,7 @@ public class CommentDto {
 
     private UserDto author;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
 
     private UUID taskId;

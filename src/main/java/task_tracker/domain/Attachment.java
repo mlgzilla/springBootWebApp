@@ -32,7 +32,7 @@ public class Attachment implements Serializable {
     private User user;
 
     @Column(name = "date_uploaded")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateUploaded;
 
     @ManyToOne()

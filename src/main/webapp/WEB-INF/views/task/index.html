@@ -43,7 +43,9 @@
     <p class="" th:if="${taskDto.deadline!=null}" th:text="${taskDto.deadline}">Task deadline</p>
     <p class="" th:if="${taskDto.projectId!=null}"><a th:href="@{/project/{id}(id=${taskDto.projectId})}"
                                                       class="text-decoration-none" th:text="${projectName}"></a></p>
-    <a class="" th:href="@{/task/update/{id}(id=${taskDto.id})}"><button class="btn btn-primary">Изменить данные</button> </a>
+    <a class="" th:href="@{/task/update/{id}(id=${taskDto.id})}">
+        <button class="btn btn-primary">Изменить данные</button>
+    </a>
     <br>
     <br>
     <p class="h4">Comments:</p>

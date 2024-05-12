@@ -38,7 +38,7 @@ public class ProjectService {
             User user = userRepository.findById(userId).get();
             Project savedProject = projectRepository.saveAndFlush(project);
             HashSet projects = new HashSet<>();
-            if (user.getProjects()!=null){
+            if (user.getProjects() != null) {
                 projects = ((HashSet) user.getProjects());
             }
             projects.add(savedProject.getId());

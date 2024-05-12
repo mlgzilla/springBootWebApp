@@ -101,7 +101,7 @@ public class UserController {
             UserDto userDtoFound = userDtoRead.getObject();
             Set<UUID> projects = userDtoFound.getProjects();
             List<ProjectDto> projectList = Collections.emptyList();
-            if (projects!=null) {
+            if (projects != null) {
                 projectList = projects.stream()
                         .map(id -> projectService.findById(id).getObject())
                         .toList();

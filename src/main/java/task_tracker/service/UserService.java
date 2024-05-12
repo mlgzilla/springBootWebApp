@@ -96,7 +96,7 @@ public class UserService {
             user.setRole(role);
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             User savedUser = userRepository.saveAndFlush(user);
-        return Result.ok(savedUser);
+            return Result.ok(savedUser);
         } catch (Exception e) {
             System.out.println(e);
             return Result.error("Error creating User", "500");

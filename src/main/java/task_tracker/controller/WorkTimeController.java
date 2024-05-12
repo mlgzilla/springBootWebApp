@@ -77,7 +77,7 @@ public class WorkTimeController {
 
     @PostMapping("/")
     public String create(@ModelAttribute("workTime") WorkTime workTime, Model model) {
-        
+
         Result<WorkTimeDto> savedWorkTime = workTimeService.create(workTime);
         if (savedWorkTime.isError()) {
             model.addAttribute("message", savedWorkTime.getMessage());

@@ -10,10 +10,10 @@ import java.util.UUID;
 public class WorkTimeDto {
     private UUID id;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeStart;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeFinish;
 
     private UUID employeeId;

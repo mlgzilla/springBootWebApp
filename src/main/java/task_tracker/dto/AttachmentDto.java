@@ -18,7 +18,7 @@ public class AttachmentDto {
 
     private UserDto user;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateUploaded;
 
     private TaskDto task;

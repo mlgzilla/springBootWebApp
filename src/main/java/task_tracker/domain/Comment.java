@@ -27,7 +27,7 @@ public class Comment implements Serializable {
     @JoinColumn(name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "news_fk"))
     private User user;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
 
     @ManyToOne()

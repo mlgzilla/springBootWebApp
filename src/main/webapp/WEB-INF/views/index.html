@@ -30,8 +30,11 @@
     </div>
 </nav>
 <a th:if="${project==null}" class="btn btn-primary mx-3 my-3" th:href="@{/task/new}">Создать задачу</a>
+<a th:if="${project!=null}" class="btn btn-primary mx-3 my-3" th:href="@{/task/new/project/{id}(id=${project.id})}">Создать
+    задачу в проекте</a>
 <p th:if="${project!=null}" class="h1 mx-4 my-4">Проект: <span th:text="${project.name}"></span></p>
-<a th:if="${project!=null}" class="btn btn-primary mx-3 my-3" th:href="@{/project/update/{id}(id=${project.id})}">Изменить название</a>
+<a th:if="${project!=null}" class="btn btn-primary mx-3 my-3" th:href="@{/project/update/{id}(id=${project.id})}">Изменить
+    название</a>
 <p th:if="${project==null}" class="h1 mx-4 my-4">Задачи</p>
 <div th:if="${tasks!=null}" class="row row-cols-1 row-cols-md-4 mx-4 my-4">
     <div class="col mb-4" th:each="task: ${tasks}">

@@ -55,7 +55,7 @@ public class CommentController {
 
     @PostMapping("/")
     public String create(@ModelAttribute("comment") Comment comment, Model model) {
-        
+
         comment.setId(UUID.randomUUID());
         comment.setDate(LocalDateTime.now());
         Result<CommentDto> savedComment = commentService.create(comment);

@@ -48,7 +48,7 @@ public class ProjectController {
             } else {
                 model.addAttribute("userDto", userDto);
                 ProjectDto projectDto = projectRead.getObject();
-                if (projectDto.getTasks()!=null) {
+                if (projectDto.getTasks() != null) {
                     Set<TaskDto> tasks = projectDto.getTasks()
                             .stream()
                             .map(id -> taskService.findById(id).getObject())

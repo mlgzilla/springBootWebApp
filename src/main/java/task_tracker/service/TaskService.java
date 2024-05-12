@@ -1,16 +1,19 @@
 package task_tracker.service;
 
 import org.springframework.stereotype.Service;
+import task_tracker.domain.Project;
 import task_tracker.domain.Task;
 import task_tracker.dto.TaskDto;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
 import task_tracker.repository.AttachmentRepository;
 import task_tracker.repository.CommentRepository;
+import task_tracker.repository.ProjectRepository;
 import task_tracker.repository.TaskRepository;
 import task_tracker.utils.Result;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +24,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final CommentRepository commentRepository;
     private final AttachmentRepository attachmentRepository;
+    private final ProjectRepository projectRepository;
 
     public Result<TaskDto> findById(UUID id) {
         try {
@@ -74,12 +78,22 @@ public class TaskService {
         }
     }
 
-    public Result<TaskDto> create(Task task) {
+    public Result<String> create(Task task) {
         try {
             task.setStatus(TaskStatus.NotStarted);
             task.setDateCreated(LocalDateTime.now());
             Task savedTask = taskRepository.saveAndFlush(task);
-            return Result.ok(savedTask.mapToDto());
+            if (savedTask.getProjectId() != null) {
+                Project project = projectRepository.findById(savedTask.getProjectId()).get();
+                HashSet tasks = new HashSet<>();
+                if (project.getTasks() != null) {
+                    tasks = ((HashSet) project.getTasks());
+                }
+                tasks.add(savedTask.getId());
+                project.setTasks(tasks);
+                projectRepository.saveAndFlush(project);
+            }
+            return Result.ok("OK");
         } catch (Exception e) {
             return Result.error("Failed to create task", "500");
         }
@@ -145,9 +159,10 @@ public class TaskService {
         }
     }
 
-    public TaskService(TaskRepository taskRepository, CommentRepository commentRepository, AttachmentRepository attachmentRepository) {
+    public TaskService(TaskRepository taskRepository, CommentRepository commentRepository, AttachmentRepository attachmentRepository, ProjectRepository projectRepository) {
         this.taskRepository = taskRepository;
         this.commentRepository = commentRepository;
         this.attachmentRepository = attachmentRepository;
+        this.projectRepository = projectRepository;
     }
 }
