@@ -31,10 +31,11 @@
 </nav>
 <!------------------------------------------------------------------------------------------------------>
 <div class="mx-5 my-5">
-    <p class="h1" th:text="${userDtoFound.name} ${userDtoFound.surename}">User name</p>
-    <p class="" th:text="${userDtoFound.surename}">User surename</p>
-    <p class="" th:text="${userDtoFound.login}">User login</p>
-    <p class="" th:text="${userDtoFound.password}">User password</p>
+    <p class="h1">
+        <span th:text="${userDtoFound.name}">User name</span>
+        <span th:text="${userDtoFound.surename}">User surename</span>
+    </p>
+    <p class="" >Логин: <span th:text="${userDtoFound.login}">User login</span></p>
     <p class="" th:text="${userDtoFound.contactInfoDto.address}">User address</p>
     <p class="" th:text="${userDtoFound.contactInfoDto.phoneNumber}">User phone mumber</p>
     <p class="" th:text="${userDtoFound.contactInfoDto.email}">User email</p>

@@ -51,7 +51,7 @@ public class User implements Serializable, UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<WorkTime> workTimes;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private ContactInfo contactInfo;
 
     @OneToMany(mappedBy = "user")

@@ -150,40 +150,16 @@ public class TaskController {
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("task") Task task, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Error in filled fields");
-            return "400";
-        }
+    public String create(@ModelAttribute("task") Task task, Model model) {
+        
         Result<TaskDto> savedTask = taskService.create(task);
         if (savedTask.isError()) {
             model.addAttribute("message", savedTask.getMessage());
             return savedTask.getCode();
         } else {
             model.addAttribute("message", "Task create ok");
-            return "redirect:/task/" + savedTask.getObject().getId();
+            return "redirect:/";
         }
-    }
-
-    @PostMapping("/submit")
-    public String inputSubmit(
-            @RequestParam(required = false, name = "id") UUID id,
-            @RequestParam(required = false, name = "employeeId") UUID employeeId,
-            @RequestParam(required = false, name = "status") String status,
-            @RequestParam(required = false, name = "includeComments") boolean includeComments
-    ) {
-        if (id != null) {
-            if (includeComments)
-                return "redirect:/task/findWithCommentsById/" + id;
-            else
-                return "redirect:/task/" + id;
-        }
-        if (employeeId != null)
-            return "redirect:/task/findByEmployeeId/" + employeeId;
-        if (status != null)
-            return "redirect:/task/findByStatus/" + status;
-
-        return "redirect:/task/";
     }
 
     @PutMapping("/{id}")

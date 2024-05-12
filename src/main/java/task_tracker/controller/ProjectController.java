@@ -6,9 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Project;
+import task_tracker.domain.Task;
 import task_tracker.dto.ProjectDto;
 import task_tracker.dto.TaskDto;
 import task_tracker.dto.UserDto;
+import task_tracker.enums.Priority;
+import task_tracker.enums.TaskStatus;
 import task_tracker.service.ProjectService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
@@ -16,6 +19,7 @@ import task_tracker.utils.Result;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -42,27 +46,43 @@ public class ProjectController {
                 model.addAttribute("message", projectRead.getMessage());
                 return projectRead.getCode();
             } else {
-                model.addAttribute("userName", userDto.getName());
+                model.addAttribute("userDto", userDto);
                 ProjectDto projectDto = projectRead.getObject();
-                Set<TaskDto> tasks = projectDto.getTasks()
-                        .stream()
-                        .map(id -> taskService.findById(id).getObject())
-                        .collect(Collectors.toSet());
-                model.addAttribute("tasks", tasks);
-                model.addAttribute("projectName", projectDto.getName());
+                if (projectDto.getTasks()!=null) {
+                    Set<TaskDto> tasks = projectDto.getTasks()
+                            .stream()
+                            .map(id -> taskService.findById(id).getObject())
+                            .collect(Collectors.toSet());
+                    model.addAttribute("tasks", tasks);
+                }
+                model.addAttribute("project", projectDto);
             }
         }
         return "index";
     }
 
     @GetMapping("/new")
-    public String getNew(Model model) {
+    public String getNew(Model model, Principal principal) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
         model.addAttribute(new Project());
         return "project/new";
     }
 
     @GetMapping("/update/{id}")
-    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
+    public String getUpdateForm(@PathVariable("id") UUID id, Model model, Principal principal) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
         Result<ProjectDto> projectRead = projectService.findById(id);
         if (projectRead.isError()) {
             model.addAttribute("message", projectRead.getMessage());
@@ -81,9 +101,12 @@ public class ProjectController {
         } else {
             UserDto userDto = userRead.getObject();
             Set<UUID> projects = userDto.getProjects();
-            List<ProjectDto> projectList = projects.stream()
-                    .map(id -> projectService.findById(id).getObject())
-                    .toList();
+            List<ProjectDto> projectList = Collections.emptyList();
+            if (projects != null) {
+                projectList = projects.stream()
+                        .map(id -> projectService.findById(id).getObject())
+                        .toList();
+            }
             model.addAttribute("userDto", userDto);
             model.addAttribute("projectList", projectList);
         }
@@ -91,41 +114,24 @@ public class ProjectController {
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("project") Project project, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Error in filled fields");
-            return "400";
+    public String create(@ModelAttribute("project") Project project, Model model, Principal principal) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
         }
-        Result<ProjectDto> savedProject = projectService.create(project);
+        project.setUsers(Set.of(userRead.getObject().getId()));
+        Result<ProjectDto> savedProject = projectService.create(project, userRead.getObject().getId());
         if (savedProject.isError()) {
             model.addAttribute("message", savedProject.getMessage());
             return savedProject.getCode();
         } else
-            return "redirect:/project/" + savedProject.getObject().getId();
-    }
-
-    @PostMapping("/submit")
-    public String inputSubmit(
-            @RequestParam(required = false, name = "id") UUID id,
-            @RequestParam(required = false, name = "employeeId") UUID employeeId,
-            @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
-            @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
-            @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
-    ) {
-        if (id != null)
-            return "redirect:/project/" + id;
-        if (employeeId != null) {
-            if (inDateRange)
-                return "redirect:/project/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
-            else
-                return "redirect:/project/findByUserId/" + employeeId;
-        }
-        return "redirect:/project/";
+            return "redirect:/project/";
     }
 
     @PutMapping("/{id}")
-    public String update(@ModelAttribute("name") String name, @PathVariable("id") UUID id, Model model) {
-        Result<String> upload = projectService.update(id, name);
+    public String update(@ModelAttribute("project") ProjectDto projectDto, @PathVariable("id") UUID id, Model model) {
+        Result<String> upload = projectService.update(id, projectDto.getName());
         if (upload.isError()) {
             model.addAttribute("message", upload.getMessage());
             return upload.getCode();

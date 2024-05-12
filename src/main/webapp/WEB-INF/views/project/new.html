@@ -29,28 +29,10 @@
         </ul>
     </div>
 </nav>
-<form th:action="@{/task}" th:object="${task}" th:method="post">
-
+<form th:action="@{/project/}" th:object="${project}" th:method="post">
     <p class="form-control">
-        <label for="name">Имя отчета </label>
+        <label for="name">Название проекта </label>
         <input type="text" th:field="*{name}" id="name"/>
-    </p>
-    <p class="form-control">
-        <label for="description">Описание отчета </label>
-        <input type="text" th:field="*{description}" id="description"/>
-    </p>
-    <p class="form-control">
-        <label>Приоритет задачи </label>
-        <select th:field="*{priority}" class="custom-select">
-            <option th:each="priority: ${priorities}"
-                    th:text="${priority}"
-                    th:selected="${priority==task.priority}"
-                    th:value="${priority}"></option>
-        </select>
-    </p>
-    <p class="form-control">
-        <label for="deadline">Конечная дата </label>
-        <input type="datetime-local" th:field="*{deadline}" id="deadline"/>
     </p>
     <p class="form-control">
         <input class="btn btn-success" type="submit" value="Отправить"/>

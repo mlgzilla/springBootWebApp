@@ -10,6 +10,7 @@ import task_tracker.repository.CommentRepository;
 import task_tracker.repository.TaskRepository;
 import task_tracker.utils.Result;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -76,6 +77,7 @@ public class TaskService {
     public Result<TaskDto> create(Task task) {
         try {
             task.setStatus(TaskStatus.NotStarted);
+            task.setDateCreated(LocalDateTime.now());
             Task savedTask = taskRepository.saveAndFlush(task);
             return Result.ok(savedTask.mapToDto());
         } catch (Exception e) {

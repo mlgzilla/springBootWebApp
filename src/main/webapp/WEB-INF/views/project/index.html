@@ -29,8 +29,9 @@
         </ul>
     </div>
 </nav>
+<a class="btn btn-primary mx-3 my-3" th:href="@{/project/new}">Создать проект</a>
 <p class="h1 mx-4 my-4">Ваши проекты</p>
-<div class="row row-cols-1 row-cols-md-4 mx-4 my-4">
+<div th:if="${!projectList.isEmpty()}" class="row row-cols-1 row-cols-md-4 mx-4 my-4">
     <div class="col mb-4" th:each="project: ${projectList}">
         <a th:href="@{/project/{id}(id=${project.id})}" class="text-decoration-none">
             <div class="card border-dark">

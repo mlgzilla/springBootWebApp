@@ -1,6 +1,9 @@
 package task_tracker.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import task_tracker.domain.ContactInfo;
+import task_tracker.domain.Role;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
 import task_tracker.repository.*;
@@ -86,11 +89,16 @@ public class UserService {
         }
     }
 
-    public Result<UserDto> create(User user) {
+    public Result<User> create(User user) {
         try {
+            Optional<Role> result = roleRepository.findByName("ROLE_USER");
+            Role role = result.get();
+            user.setRole(role);
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             User savedUser = userRepository.saveAndFlush(user);
-            return Result.ok(savedUser.mapToDto());
+        return Result.ok(savedUser);
         } catch (Exception e) {
+            System.out.println(e);
             return Result.error("Error creating User", "500");
         }
     }

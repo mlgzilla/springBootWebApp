@@ -11,8 +11,7 @@
     <form th:action="@{/login}" method="post" class="mt-5">
         <h1 class="h3 mb-3 fw-normal">Вход</h1>
         <div class="form-floating mt-2">
-            <input type="text" class="form-control" name="login"
-                   id="login">
+            <input type="text" id="login" name="login" class="form-control" placeholder="Login" required="" autofocus="">
             <label for="login">Логин</label>
         </div>
         <div class="form-floating mt-2">
@@ -25,11 +24,10 @@
         <button class="w-100 btn btn-lg btn-primary mt-2"
                 type="submit">Вход</button>
     </form>
-    <form th:action="@{/singup}" method="get">
+    <form th:action="@{/signup}" method="get">
         <button class="w-100 btn btn-lg btn-primary mt-2"
                 type="submit">Регистрация</button>
     </form>
-    <p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
 </main>
 </body>
 </html>

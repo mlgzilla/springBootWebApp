@@ -17,6 +17,7 @@ import task_tracker.service.UserService;
 import task_tracker.utils.Result;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -30,17 +31,6 @@ public class UserController {
     private final TaskService taskService;
 
     private final ProjectService projectService;
-
-    @GetMapping("/{id}")
-    public String findById(@PathVariable("id") UUID id, Model model) {
-        Result<UserDto> userRead = userService.findById(id);
-        if (userRead.isError()) {
-            model.addAttribute("message", userRead.getMessage());
-            return userRead.getCode();
-        } else
-            model.addAttribute("user", userRead.getObject());
-        return "user/show";
-    }
 
     @GetMapping("/findByName/{name}")
     public String findByName(@PathVariable String name, Model model) {
@@ -82,7 +72,7 @@ public class UserController {
         return "user/update";
     }
 
-    @GetMapping("/")
+    @GetMapping("/{id}")
     public String getUser(@PathVariable("id") UUID userId, Principal principal, Model model) {
         Result<UserDto> userRead = userService.findByPrincipal(principal);
         if (userRead.isError()) {
@@ -94,9 +84,12 @@ public class UserController {
         model.addAttribute("userDto", userDto);
         if (userDto.getId() == userId) {
             Set<UUID> projects = userDto.getProjects();
-            List<ProjectDto> projectList = projects.stream()
-                    .map(id -> projectService.findById(id).getObject())
-                    .toList();
+            List<ProjectDto> projectList = Collections.emptyList();
+            if (projects != null) {
+                projectList = projects.stream()
+                        .map(id -> projectService.findById(id).getObject())
+                        .toList();
+            }
             model.addAttribute("projectList", projectList);
             model.addAttribute("userDtoFound", userDto);
         } else {
@@ -107,29 +100,16 @@ public class UserController {
             }
             UserDto userDtoFound = userDtoRead.getObject();
             Set<UUID> projects = userDtoFound.getProjects();
-            List<ProjectDto> projectList = projects.stream()
-                    .map(id -> projectService.findById(id).getObject())
-                    .toList();
+            List<ProjectDto> projectList = Collections.emptyList();
+            if (projects!=null) {
+                projectList = projects.stream()
+                        .map(id -> projectService.findById(id).getObject())
+                        .toList();
+            }
             model.addAttribute("projectList", projectList);
             model.addAttribute("userDtoFound", userDtoFound);
         }
         return "user/index";
-    }
-
-    @PostMapping("/admin/")
-    public String create(@ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Error in filled fields");
-            return "400";
-        }
-        Result<UserDto> savedEmployee = userService.create(user);
-        if (savedEmployee.isError()) {
-            model.addAttribute("message", savedEmployee.getMessage());
-            return savedEmployee.getCode();
-        } else {
-            model.addAttribute("message", "Employee create ok");
-            return "redirect:/user/" + savedEmployee.getObject().getId();
-        }
     }
 
     @PostMapping("/submit")

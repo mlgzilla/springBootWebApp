@@ -76,11 +76,8 @@ public class WorkTimeController {
     }
 
     @PostMapping("/")
-    public String create(@ModelAttribute("workTime") WorkTime workTime, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Error in filled fields");
-            return "400";
-        }
+    public String create(@ModelAttribute("workTime") WorkTime workTime, Model model) {
+        
         Result<WorkTimeDto> savedWorkTime = workTimeService.create(workTime);
         if (savedWorkTime.isError()) {
             model.addAttribute("message", savedWorkTime.getMessage());

@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/user/{id}(id=${userDto.id})}" th:text="${userName}"></a>
+                <a class="nav-link" th:href="@{/user/{id}(id=${userDto.id})}" th:text="${userDto.name}"></a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-danger" th:href="@{/logout}">Выход</a>
@@ -29,9 +29,11 @@
         </ul>
     </div>
 </nav>
-<p th:if="${projectName!=null}" class="h1 mx-4 my-4" >Проект: <span th:text="${projectName}"></span></p>
-<p th:if="${projectName==null}" class="h1 mx-4 my-4">Ваши задачи</p>
-<div class="row row-cols-1 row-cols-md-4 mx-4 my-4">
+<a th:if="${project==null}" class="btn btn-primary mx-3 my-3" th:href="@{/task/new}">Создать задачу</a>
+<p th:if="${project!=null}" class="h1 mx-4 my-4">Проект: <span th:text="${project.name}"></span></p>
+<a th:if="${project!=null}" class="btn btn-primary mx-3 my-3" th:href="@{/project/update/{id}(id=${project.id})}">Изменить название</a>
+<p th:if="${project==null}" class="h1 mx-4 my-4">Задачи</p>
+<div th:if="${tasks!=null}" class="row row-cols-1 row-cols-md-4 mx-4 my-4">
     <div class="col mb-4" th:each="task: ${tasks}">
         <a th:href="@{/task/{id}(id=${task.id})}" class="text-decoration-none">
             <div class="card text-white bg-dark">
@@ -43,6 +45,10 @@
         </a>
     </div>
 </div>
-
+<form th:if="${project!=null}" th:action="@{/project/{id}(id=${project.id})}" th:method="delete">
+    <p class="form-control">
+        <input class="btn btn-danger" type="submit" value="Удалить проект"/>
+    </p>
+</form>
 </body>
 </html>

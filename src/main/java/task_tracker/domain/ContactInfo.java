@@ -24,7 +24,7 @@ public class ContactInfo implements Serializable {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne()
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user", referencedColumnName = "id", foreignKey = @ForeignKey(name = "contact_info_fk"))
     private User user;
 

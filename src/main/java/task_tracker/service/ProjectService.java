@@ -5,17 +5,20 @@ import task_tracker.domain.Project;
 import task_tracker.domain.User;
 import task_tracker.dto.ProjectDto;
 import task_tracker.repository.ProjectRepository;
+import task_tracker.repository.TaskRepository;
 import task_tracker.repository.UserRepository;
 import task_tracker.utils.Result;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.security.Principal;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
     public Result<ProjectDto> findById(UUID id) {
         try {
@@ -30,9 +33,17 @@ public class ProjectService {
         }
     }
 
-    public Result<ProjectDto> create(Project project) {
+    public Result<ProjectDto> create(Project project, UUID userId) {
         try {
+            User user = userRepository.findById(userId).get();
             Project savedProject = projectRepository.saveAndFlush(project);
+            HashSet projects = new HashSet<>();
+            if (user.getProjects()!=null){
+                projects = ((HashSet) user.getProjects());
+            }
+            projects.add(savedProject.getId());
+            user.setProjects(projects);
+            userRepository.saveAndFlush(user);
             return Result.ok(savedProject.mapToDto());
         } catch (Exception e) {
             return Result.error("Error creating Project", "500");
@@ -77,6 +88,20 @@ public class ProjectService {
 
     public Result<String> delete(UUID id) {
         try {
+            Project project = projectRepository.findById(id).get();
+            Set<UUID> tasks = project.getTasks();
+            if (!(tasks == null || tasks.isEmpty())) {
+                tasks.forEach(taskRepository::deleteById);
+            }
+            Set<UUID> users = project.getUsers();
+            if (!(users == null || users.isEmpty())) {
+                users.forEach(userId -> {
+                    User user = userRepository.findById(userId).get();
+                    Set<UUID> userProjects = user.getProjects();
+                    userProjects.remove(id);
+                    user.setProjects(userProjects);
+                });
+            }
             projectRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
@@ -84,8 +109,9 @@ public class ProjectService {
         }
     }
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 }
