@@ -9,16 +9,13 @@ import task_tracker.repository.TaskRepository;
 import task_tracker.repository.UserRepository;
 import task_tracker.utils.Result;
 
-import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
     public Result<ProjectDto> findById(UUID id) {
         try {
@@ -91,7 +88,7 @@ public class ProjectService {
             Project project = projectRepository.findById(id).get();
             Set<UUID> tasks = project.getTasks();
             if (!(tasks == null || tasks.isEmpty())) {
-                tasks.forEach(taskRepository::deleteById);
+                tasks.forEach(taskService::delete);
             }
             Set<UUID> users = project.getUsers();
             if (!(users == null || users.isEmpty())) {
@@ -109,9 +106,9 @@ public class ProjectService {
         }
     }
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TaskRepository taskRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
-        this.taskRepository = taskRepository;
+        this.taskService = taskService;
     }
 }

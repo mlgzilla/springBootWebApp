@@ -17,7 +17,7 @@ public interface AttachmentRepository extends JpaRepository<Attachment, UUID> {
     @Query("select a from Attachment a where a.user.id = ?1")
     void deleteAllByUserId(UUID id);
 
-    @Query("select a from Attachment a where a.task.id = ?1")
+    @Query("delete from Attachment a where a.task.id = ?1")
     void deleteAllByTaskId(UUID id);
 
 }

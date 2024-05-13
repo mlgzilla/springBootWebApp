@@ -14,7 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
     @Query("select c from Comment c where c.task.id = :id")
     List<Comment> findByTaskId(UUID id);
 
-    @Query("select c from Comment c where c.task.id = ?1")
+    @Query("delete from Comment c where c.task.id = ?1")
     void deleteAllByTaskId(UUID id);
 
 }

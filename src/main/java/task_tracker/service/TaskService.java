@@ -150,9 +150,21 @@ public class TaskService {
 
     public Result<String> delete(UUID id) {
         try {
-            taskRepository.deleteById(id);
+            Task task = taskRepository.findById(id).get();
+            if (task.getProjectId()!=null) {
+                Project project = projectRepository.findById(task.getProjectId()).get();
+                if (project.getTasks().size() == 1) {
+                    project.setTasks(null);
+                } else {
+                    HashSet tasks = (HashSet) project.getTasks();
+                    tasks.remove(task.getId());
+                    project.setTasks(tasks);
+                }
+                projectRepository.saveAndFlush(project);
+            }
             commentRepository.deleteAllByTaskId(id);
             attachmentRepository.deleteAllByTaskId(id);
+            taskRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
             return Result.error("Failed to delete task", "500");
