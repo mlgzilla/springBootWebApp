@@ -48,6 +48,11 @@
     </a>
     <br>
     <br>
+    <form th:action="@{/task/{id}(id=${taskDto.id})}" th:method="delete">
+        <input type="submit" class="btn btn-danger" value="Удалить задачу"/>
+    </form>
+    <br>
+    <br>
     <p class="h4">Comments:</p>
     <div th:if="${comments!=null}" th:each="comment: ${comments}">
         <div class="card border-dark mb-3" style="max-width: 20rem;">

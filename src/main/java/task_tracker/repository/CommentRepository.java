@@ -1,8 +1,10 @@
 package task_tracker.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import task_tracker.domain.Comment;
 
 import java.util.List;
@@ -14,7 +16,9 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
     @Query("select c from Comment c where c.task.id = :id")
     List<Comment> findByTaskId(UUID id);
 
-    @Query("delete from Comment c where c.task.id = ?1")
+    @Modifying
+    @Transactional
+    @Query("delete from Comment where task.id = ?1")
     void deleteAllByTaskId(UUID id);
 
 }

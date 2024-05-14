@@ -2,7 +2,6 @@ package task_tracker.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import task_tracker.domain.ContactInfo;
 import task_tracker.domain.Role;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
@@ -160,7 +159,7 @@ public class UserService {
             attachmentRepository.deleteAllByUserId(id);
             taskRepository.deleteAllByUserId(id);
             workTimeRepository.deleteAllByUserId(id);
-            contactInfoRepository.deleteByUserId(id);
+            contactInfoRepository.deleteAllByUserId(id);
             userRepository.deleteById(id);
             return Result.ok("Delete ok");
         } catch (Exception e) {
