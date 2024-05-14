@@ -57,5 +57,15 @@
         </a>
     </div>
 </div>
+<div class="mx-5 my-5">
+    <form th:if="${userDto.id==userDtoFound.id}" th:action="@{/user/{id}(id=${userDtoFound.id})}" th:method="delete">
+        <input type="submit" class="btn btn-danger" value="Удалить аккаунт"/>
+    </form>
+    <form th:if="${userDto.id!=userDtoFound.id && userDto.role.name==ROLE_ADMIN}"
+          th:action="@{/user/{id}(id=${userDto.id})}"
+          th:method="delete">
+        <input type="submit" class="btn btn-danger" value="Удалить пользователя"/>
+    </form>
+</div>
 </body>
 </html>

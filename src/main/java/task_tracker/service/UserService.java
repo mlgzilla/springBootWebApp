@@ -2,6 +2,8 @@ package task_tracker.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import task_tracker.domain.ContactInfo;
 import task_tracker.domain.Role;
 import task_tracker.domain.User;
 import task_tracker.dto.UserDto;
@@ -88,6 +90,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Result<User> create(User user) {
         try {
             Optional<Role> result = roleRepository.findByName("ROLE_USER");
@@ -95,9 +98,12 @@ public class UserService {
             user.setRole(role);
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             User savedUser = userRepository.saveAndFlush(user);
+            ContactInfo contactInfo = new ContactInfo();
+            contactInfo.setUserr(savedUser);
+            ContactInfo savedContactInfo = contactInfoRepository.saveAndFlush(contactInfo);
             return Result.ok(savedUser);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
             return Result.error("Error creating User", "500");
         }
     }
@@ -110,6 +116,7 @@ public class UserService {
             User user = userRead.get();
             user.setName(userDto.getName());
             user.setSurename(userDto.getSurename());
+            user.setLogin(userDto.getLogin());
             userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {
@@ -117,27 +124,6 @@ public class UserService {
             return Result.error("Failed to update user", "500");
         }
     }
-
-//    public Result<String> addRole(UUID id, UUID roleId) {
-//        try {
-//            Optional<User> userRead = userRepository.findById(id);
-//            if (userRead.isEmpty())
-//                return Result.error("User was not found", "404");
-//            Optional<Role> roleRead = roleRepository.findById(roleId);
-//            if (roleRead.isEmpty())
-//                return Result.error("Role was not found", "404");
-//            User user = userRead.get();
-//            Role role = roleRead.get();
-//            Role userRoles = user.getRole();
-//            userRoles.add(role);
-//            user.setRoles(userRoles);
-//            userRepository.saveAndFlush(user);
-//            return Result.ok("Update ok");
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return Result.error("Failed to update user", "500");
-//        }
-//    }
 
     public Result<String> updatePassword(UUID id, String newPassword) {
         try {

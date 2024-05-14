@@ -3,7 +3,6 @@ package task_tracker.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.WorkTime;
 import task_tracker.dto.WorkTimeDto;
@@ -84,25 +83,6 @@ public class WorkTimeController {
             return savedWorkTime.getCode();
         } else
             return "redirect:/workTime/" + savedWorkTime.getObject().getId();
-    }
-
-    @PostMapping("/submit")
-    public String inputSubmit(
-            @RequestParam(required = false, name = "id") UUID id,
-            @RequestParam(required = false, name = "employeeId") UUID employeeId,
-            @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
-            @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
-            @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
-    ) {
-        if (id != null)
-            return "redirect:/workTime/" + id;
-        if (employeeId != null) {
-            if (inDateRange)
-                return "redirect:/workTime/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
-            else
-                return "redirect:/workTime/findByUserId/" + employeeId;
-        }
-        return "redirect:/workTime/";
     }
 
     @PutMapping("/{id}")

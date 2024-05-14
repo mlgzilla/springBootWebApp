@@ -42,10 +42,7 @@ public class TaskService {
     public Result<List<TaskDto>> findByUserId(UUID id) {
         try {
             List<Task> tasks = taskRepository.findByUserId(id);
-            if (tasks.isEmpty())
-                return Result.error("Tasks by employee were not found", "404");
-            else
-                return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
+            return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding tasks by employee", "500");
@@ -151,7 +148,7 @@ public class TaskService {
     public Result<String> delete(UUID id) {
         try {
             Task task = taskRepository.findById(id).get();
-            if (task.getProjectId()!=null) {
+            if (task.getProjectId() != null) {
                 Project project = projectRepository.findById(task.getProjectId()).get();
                 if (project.getTasks().size() == 1) {
                     project.setTasks(null);

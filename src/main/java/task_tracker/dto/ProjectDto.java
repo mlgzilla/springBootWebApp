@@ -1,7 +1,6 @@
 package task_tracker.dto;
 
 import lombok.Data;
-import task_tracker.domain.Task;
 
 import java.util.Set;
 import java.util.UUID;

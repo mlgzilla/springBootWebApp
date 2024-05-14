@@ -42,13 +42,18 @@
     <p class="" th:text="${taskDto.dateCreated}">Task dateCreated</p>
     <p class="" th:if="${taskDto.deadline!=null}" th:text="${taskDto.deadline}">Task deadline</p>
     <p class="" th:if="${taskDto.projectId!=null}"><a th:href="@{/project/{id}(id=${taskDto.projectId})}"
-                                                      class="text-decoration-none" th:text="${projectName}"></a></p>
-    <a class="" th:href="@{/task/update/{id}(id=${taskDto.id})}">
+                                                      class="text-decoration-none" th:text="${project.name}"></a></p>
+    <p class=""><a th:href="@{/user/{id}(id=${taskDto.user.id})}" class="text-decoration-none">
+        <span th:text="${taskDto.user.name} "></span>
+        <span th:text="${taskDto.user.surename}"></span></a></p>
+    <a class="" th:if="${userDto.role.name==ROLE_ADMIN || userDto.id==taskDto.user.id}"
+       th:href="@{/task/update/{id}(id=${taskDto.id})}">
         <button class="btn btn-primary">Изменить данные</button>
     </a>
     <br>
     <br>
-    <form th:action="@{/task/{id}(id=${taskDto.id})}" th:method="delete">
+    <form th:if="${userDto.id==taskDto.user.id || userDto.role.name==ROLE_ADMIN}"
+          th:action="@{/task/{id}(id=${taskDto.id})}" th:method="delete">
         <input type="submit" class="btn btn-danger" value="Удалить задачу"/>
     </form>
     <br>

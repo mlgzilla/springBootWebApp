@@ -5,11 +5,13 @@ import task_tracker.domain.Project;
 import task_tracker.domain.User;
 import task_tracker.dto.ProjectDto;
 import task_tracker.repository.ProjectRepository;
-import task_tracker.repository.TaskRepository;
 import task_tracker.repository.UserRepository;
 import task_tracker.utils.Result;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ProjectService {

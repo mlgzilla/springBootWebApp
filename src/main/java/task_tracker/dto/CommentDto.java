@@ -2,7 +2,6 @@ package task_tracker.dto;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import task_tracker.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

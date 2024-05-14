@@ -13,12 +13,12 @@ import java.util.UUID;
 @Repository
 public interface ContactInfoRepository extends JpaRepository<ContactInfo, UUID> {
 
-    @Query("select ci from ContactInfo ci where ci.user.id = :id")
+    @Query("select ci from ContactInfo ci where ci.userr.id = :id")
     List<ContactInfo> findByUserId(UUID id);
 
     @Modifying
     @Transactional
-    @Query("delete from ContactInfo where user.id = ?1")
+    @Query("delete from ContactInfo where userr.id = ?1")
     void deleteAllByUserId(UUID id);
 
 }

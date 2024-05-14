@@ -3,16 +3,12 @@ package task_tracker.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import task_tracker.domain.Attachment;
-import task_tracker.domain.Comment;
 import task_tracker.domain.User;
-import task_tracker.dto.*;
+import task_tracker.dto.ProjectDto;
+import task_tracker.dto.UserDto;
 import task_tracker.enums.ContractType;
-import task_tracker.enums.Priority;
 import task_tracker.service.ProjectService;
-import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
 
@@ -27,8 +23,6 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
-    private final TaskService taskService;
 
     private final ProjectService projectService;
 
@@ -52,13 +46,6 @@ public class UserController {
         } else
             model.addAttribute("userList", userList.getObject());
         return "user/showList";
-    }
-
-    @GetMapping("/new")
-    public String getNew(Model model) {
-        model.addAttribute(new User());
-        model.addAttribute("types", ContractType.values());
-        return "user/new";
     }
 
     @GetMapping("/update/{id}")
@@ -110,28 +97,6 @@ public class UserController {
             model.addAttribute("userDtoFound", userDtoFound);
         }
         return "user/index";
-    }
-
-    @PostMapping("/submit")
-    public String inputSubmit(
-            @RequestParam(required = false, name = "id") UUID id,
-            @RequestParam(required = false, name = "firstName") String firstName,
-            @RequestParam(required = false, name = "middleName") String middleName,
-            @RequestParam(required = false, name = "secondName") String secondName,
-            @RequestParam(required = false, name = "contractType") ContractType contractType
-    ) {
-        if (id != null)
-            return "redirect:/user/" + id;
-        if (firstName != null)
-            return "redirect:/user/findByFirstName/" + firstName;
-        if (middleName != null)
-            return "redirect:/user/findByMiddleName/" + middleName;
-        if (secondName != null)
-            return "redirect:/user/findBySecondName/" + secondName;
-        if (contractType != null)
-            return "redirect:/user/findByContractType/" + contractType;
-
-        return "redirect:/user/";
     }
 
     @PutMapping("/{id}")

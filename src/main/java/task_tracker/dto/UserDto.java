@@ -1,10 +1,8 @@
 package task_tracker.dto;
 
 import lombok.Data;
-import task_tracker.domain.Project;
 import task_tracker.domain.Role;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

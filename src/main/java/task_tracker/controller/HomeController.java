@@ -1,6 +1,5 @@
 package task_tracker.controller;
 
-import com.fasterxml.jackson.core.JsonFactoryBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -10,12 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import task_tracker.domain.ContactInfo;
 import task_tracker.domain.User;
 import task_tracker.dto.TaskDto;
 import task_tracker.dto.UserDto;
 import task_tracker.repository.ContactInfoRepository;
-import task_tracker.service.ContactInfoService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
@@ -70,9 +67,6 @@ public class HomeController {
             return "signup";
         }
         Result<User> result = userService.create(user);
-        ContactInfo contactInfo = new ContactInfo();
-        contactInfo.setUser(result.getObject());
-        ContactInfo savedContactInfo = contactInfoRepository.saveAndFlush(contactInfo);
         if (result.isError()) {
             model.addAttribute("error", "Не удалось создать пользователя ");
             model.addAttribute(new User());

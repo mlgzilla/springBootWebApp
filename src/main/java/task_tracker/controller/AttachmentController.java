@@ -13,7 +13,6 @@ import task_tracker.utils.Result;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -43,17 +42,6 @@ public class AttachmentController {
             os.write(byteArray.getObject(), 0, byteArray.getObject().length);
         }
     }
-
-//    @GetMapping("/findByTaskId/{taskId}")
-//    public String findByTaskId(@PathVariable UUID taskId, Model model) {
-//        Result<List<AttachmentDto>> attachmentList = attachmentService.findByTaskId(taskId);
-//        if (attachmentList.isError()) {
-//            model.addAttribute("message", attachmentList.getMessage());
-//            return attachmentList.getCode();
-//        } else
-//            model.addAttribute("attachmentList", attachmentList.getObject());
-//        return "attachment/showList";
-//    }
 
     @GetMapping("/upload/{id}")
     public String getNew(@PathVariable("id") UUID id, Model model) {

@@ -3,7 +3,6 @@ package task_tracker.controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import task_tracker.domain.Attachment;
 import task_tracker.domain.Comment;
@@ -35,17 +34,6 @@ public class TaskController {
         this.projectService = projectService;
         this.commentService = commentService;
         this.attachmentService = attachmentService;
-    }
-
-    @GetMapping("/findByUserId/{id}")
-    public String findByUserId(@PathVariable UUID id, Model model) {
-        Result<List<TaskDto>> taskList = taskService.findByUserId(id);
-        if (taskList.isError()) {
-            model.addAttribute("message", taskList.getMessage());
-            return taskList.getCode();
-        } else
-            model.addAttribute("taskList", taskList.getObject());
-        return "task/showList";
     }
 
     @GetMapping("/findByStatus/{status}")
@@ -147,7 +135,7 @@ public class TaskController {
                 return projectRead.getCode();
             }
             ProjectDto projectDto = projectRead.getObject();
-            model.addAttribute("projectName", projectDto.getName());
+            model.addAttribute("project", projectDto);
         }
 
         Result<List<CommentDto>> taskComments = commentService.findByTaskId(taskId);
