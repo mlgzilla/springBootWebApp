@@ -7,12 +7,14 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import task_tracker.domain.User;
+import task_tracker.dto.ProjectDto;
 import task_tracker.dto.TaskDto;
 import task_tracker.dto.UserDto;
-import task_tracker.repository.ContactInfoRepository;
+import task_tracker.service.ProjectService;
 import task_tracker.service.TaskService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
@@ -28,7 +30,7 @@ public class HomeController {
 
     private final UserService userService;
     private final TaskService taskService;
-    private final ContactInfoRepository contactInfoRepository;
+    private final ProjectService projectService;
 
     @GetMapping("/")
     @PreAuthorize("hasAuthority('ROLE_USER') || hasAuthority('ROLE_ADMIN')")
@@ -47,9 +49,54 @@ public class HomeController {
                 model.addAttribute("userDto", userDto);
                 List<TaskDto> tasksDto = taskRead.getObject();
                 model.addAttribute("tasks", tasksDto);
+
+                String searchQuery = "";
+                model.addAttribute("searchQuery", searchQuery);
             }
         }
         return "index";
+    }
+
+    @PostMapping("/search")
+    @PreAuthorize("hasAuthority('ROLE_USER') || hasAuthority('ROLE_ADMIN')")
+    public String getSearch(Principal principal, Model model, @ModelAttribute("searchQuery") String query) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        Result<List<UserDto>> userNamesResult = userService.findByName(query);
+        if (userNamesResult.isError()) {
+            model.addAttribute("message", userNamesResult.getMessage());
+            return userNamesResult.getCode();
+        }
+        Result<List<UserDto>> userSurenamesResult = userService.findBySurename(query);
+        if (userSurenamesResult.isError()) {
+            model.addAttribute("message", userSurenamesResult.getMessage());
+            return userSurenamesResult.getCode();
+        }
+        Result<List<TaskDto>> tasksResult = taskService.findByName(query);
+        if (tasksResult.isError()) {
+            model.addAttribute("message", tasksResult.getMessage());
+            return tasksResult.getCode();
+        }
+        Result<List<ProjectDto>> projectsResult = projectService.findByName(query);
+        if (projectsResult.isError()) {
+            model.addAttribute("message", projectsResult.getMessage());
+            return projectsResult.getCode();
+        }
+        List<UserDto> userSurenames = userSurenamesResult.getObject();
+        List<UserDto> userNames = userNamesResult.getObject();
+        userNames.removeAll(userSurenames);
+        userNames.addAll(userSurenames);
+        model.addAttribute("usersList", userNames);
+        model.addAttribute("tasksList", tasksResult.getObject());
+        model.addAttribute("projectsList", projectsResult.getObject());
+        UserDto userDto = userRead.getObject();
+        model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
+        return "search/index";
     }
 
     @GetMapping("/signup")

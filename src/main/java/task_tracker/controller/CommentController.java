@@ -30,25 +30,6 @@ public class CommentController {
             return "redirect:/task/" + savedComment.getObject().getTaskId();
     }
 
-    @PostMapping("/submit")
-    public String inputSubmit(
-            @RequestParam(required = false, name = "id") UUID id,
-            @RequestParam(required = false, name = "employeeId") UUID employeeId,
-            @RequestParam(required = false, name = "inDateRange") boolean inDateRange,
-            @RequestParam(required = false, name = "dateStart") LocalDateTime dateStart,
-            @RequestParam(required = false, name = "dateFinish") LocalDateTime dateFinish
-    ) {
-        if (id != null)
-            return "redirect:/comment/" + id;
-        if (employeeId != null) {
-            if (inDateRange)
-                return "redirect:/comment/findByUserIdInRange/" + employeeId + "/" + dateStart + "/" + dateFinish;
-            else
-                return "redirect:/comment/findByUserId/" + employeeId;
-        }
-        return "redirect:/comment/";
-    }
-
     @DeleteMapping("/{id}/{taskId}")
     public String delete(@PathVariable("id") UUID id, @PathVariable("taskId") UUID taskId, Model model) {
         Result<String> delete = commentService.delete(id);

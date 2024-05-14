@@ -43,12 +43,6 @@ public class AttachmentController {
         }
     }
 
-    @GetMapping("/upload/{id}")
-    public String getNew(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("id", id);
-        return "attachment/upload";
-    }
-
     @PostMapping("/")
     public String create(@ModelAttribute("file") MultipartFile file, @ModelAttribute("user") UUID user, @ModelAttribute("task") UUID task, Model model) {
         Result<String> upload = attachmentService.upload(file, user, task);

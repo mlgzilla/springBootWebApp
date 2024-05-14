@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import task_tracker.domain.User;
 import task_tracker.dto.ProjectDto;
 import task_tracker.dto.UserDto;
-import task_tracker.enums.ContractType;
 import task_tracker.service.ProjectService;
 import task_tracker.service.UserService;
 import task_tracker.utils.Result;
@@ -26,28 +24,6 @@ public class UserController {
 
     private final ProjectService projectService;
 
-    @GetMapping("/findByName/{name}")
-    public String findByName(@PathVariable String name, Model model) {
-        Result<List<UserDto>> userList = userService.findByName(name);
-        if (userList.isError()) {
-            model.addAttribute("message", userList.getMessage());
-            return userList.getCode();
-        } else
-            model.addAttribute("userList", userList.getObject());
-        return "user/showList";
-    }
-
-    @GetMapping("/findBySurename/{surename}")
-    public String findByMiddleName(@PathVariable String surename, Model model) {
-        Result<List<UserDto>> userList = userService.findBySurename(surename);
-        if (userList.isError()) {
-            model.addAttribute("message", userList.getMessage());
-            return userList.getCode();
-        } else
-            model.addAttribute("userList", userList.getObject());
-        return "user/showList";
-    }
-
     @GetMapping("/update/{id}")
     public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
         Result<UserDto> userRead = userService.findById(id);
@@ -56,6 +32,8 @@ public class UserController {
             return userRead.getCode();
         }
         model.addAttribute("user", userRead.getObject());
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         return "user/update";
     }
 
@@ -95,6 +73,9 @@ public class UserController {
             }
             model.addAttribute("projectList", projectList);
             model.addAttribute("userDtoFound", userDtoFound);
+
+            String searchQuery = "";
+            model.addAttribute("searchQuery", searchQuery);
         }
         return "user/index";
     }

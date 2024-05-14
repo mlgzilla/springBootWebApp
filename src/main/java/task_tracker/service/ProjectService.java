@@ -8,10 +8,8 @@ import task_tracker.repository.ProjectRepository;
 import task_tracker.repository.UserRepository;
 import task_tracker.utils.Result;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -29,6 +27,16 @@ public class ProjectService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding Projects by task id", "500");
+        }
+    }
+
+    public Result<List<ProjectDto>> findByName(String name) {
+        try {
+            List<Project> projects = projectRepository.findByName(name + '%');
+            return Result.ok(projects.stream().map(Project::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Projects by name", "500");
         }
     }
 

@@ -24,6 +24,9 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
     @Query("select t from Task t where t.priority = :priority")
     List<Task> findByPriority(Priority priority);
 
+    @Query("select t from Task t where ?1 is null or lower(t.name) like ?1")
+    List<Task> findByName(String name);
+
     @Modifying
     @Transactional
     @Query("delete from Task where user.id = ?1")

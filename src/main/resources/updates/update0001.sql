@@ -17,7 +17,7 @@ CREATE TABLE public.user
     middle_name   varchar NULL,
     second_name   varchar NOT NULL,
     phone_number  varchar NULL,
-    card_number   int4 NULL,
+    card_number   int4    NULL,
     contract_type varchar NOT NULL,
     CONSTRAINT employee_pk PRIMARY KEY (id)
 );
@@ -35,12 +35,12 @@ CREATE TABLE public.report
 
 CREATE TABLE public.task
 (
-    id          serial4 NOT NULL,
-    "name"      varchar NOT NULL,
-    description varchar NOT NULL,
+    id          serial4   NOT NULL,
+    "name"      varchar   NOT NULL,
+    description varchar   NOT NULL,
     due_time    timestamp NULL,
-    assignee    int4    NOT NULL,
-    status      varchar NOT NULL,
+    assignee    int4      NOT NULL,
+    status      varchar   NOT NULL,
     CONSTRAINT task_pk PRIMARY KEY (id),
     CONSTRAINT task_fk FOREIGN KEY (assignee) REFERENCES public.user (id)
 );
@@ -51,7 +51,7 @@ CREATE TABLE public.vacation
     time_start  timestamp NOT NULL,
     time_finish timestamp NOT NULL,
     employee_id int4      NOT NULL,
-    description varchar NULL,
+    description varchar   NULL,
     status      varchar   NOT NULL,
     CONSTRAINT vacation_pk PRIMARY KEY (id),
     CONSTRAINT vacation_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
@@ -63,7 +63,7 @@ CREATE TABLE public.work_hours
     time_start  timestamp NOT NULL,
     time_finish timestamp NOT NULL,
     employee_id int4      NOT NULL,
-    "comment"   varchar NULL,
+    "comment"   varchar   NULL,
     CONSTRAINT work_hours_pk PRIMARY KEY (id),
     CONSTRAINT work_hours_fk FOREIGN KEY (employee_id) REFERENCES public.user (id)
 );

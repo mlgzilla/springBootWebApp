@@ -18,6 +18,10 @@
             </li>
         </ul>
     </div>
+    <form th:action="@{/search}" class="justify-content-md-center" th:method="post">
+        <input type="text" name="searchQuery" class="" th:object="${searchQuery}" placeholder="Search">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">

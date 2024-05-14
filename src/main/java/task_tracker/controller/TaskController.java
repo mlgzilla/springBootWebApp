@@ -67,6 +67,8 @@ public class TaskController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         Task task = new Task();
         task.setPriority(Priority.Lowest);
         model.addAttribute(task);
@@ -84,6 +86,8 @@ public class TaskController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         Task task = new Task();
         task.setProjectId(id);
         task.setPriority(Priority.Lowest);
@@ -107,6 +111,8 @@ public class TaskController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         model.addAttribute("task", taskRead.getObject());
         model.addAttribute("taskStatus", TaskStatus.values());
         model.addAttribute("priorities", Priority.values());
@@ -152,6 +158,8 @@ public class TaskController {
 
         model.addAttribute("taskDto", taskDto);
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         model.addAttribute("newComment", new Comment());
         model.addAttribute("newAttachment", new Attachment());
         model.addAttribute("priorities", Priority.values());

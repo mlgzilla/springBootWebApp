@@ -51,6 +51,9 @@ public class ProjectController {
                     model.addAttribute("tasks", tasks);
                 }
                 model.addAttribute("project", projectDto);
+
+                String searchQuery = "";
+                model.addAttribute("searchQuery", searchQuery);
             }
         }
         return "index";
@@ -65,6 +68,8 @@ public class ProjectController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         model.addAttribute(new Project());
         return "project/new";
     }
@@ -78,6 +83,8 @@ public class ProjectController {
         }
         UserDto userDto = userRead.getObject();
         model.addAttribute("userDto", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
         Result<ProjectDto> projectRead = projectService.findById(id);
         if (projectRead.isError()) {
             model.addAttribute("message", projectRead.getMessage());
@@ -103,6 +110,9 @@ public class ProjectController {
                         .toList();
             }
             model.addAttribute("userDto", userDto);
+
+            String searchQuery = "";
+            model.addAttribute("searchQuery", searchQuery);
             model.addAttribute("projectList", projectList);
         }
         return "project/index";

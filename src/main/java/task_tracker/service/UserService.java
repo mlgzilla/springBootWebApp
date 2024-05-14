@@ -67,10 +67,7 @@ public class UserService {
     public Result<List<UserDto>> findByName(String name) {
         try {
             List<User> users = userRepository.findByName(name + '%');
-            if (users.isEmpty())
-                return Result.error("Users by first name were not found", "404");
-            else
-                return Result.ok(users.stream().map(User::mapToDto).collect(Collectors.toList()));
+            return Result.ok(users.stream().map(User::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding Users by first name", "500");
@@ -80,10 +77,7 @@ public class UserService {
     public Result<List<UserDto>> findBySurename(String surename) {
         try {
             List<User> users = userRepository.findBySurename(surename + '%');
-            if (users.isEmpty())
-                return Result.error("Users by middle name were not found", "404");
-            else
-                return Result.ok(users.stream().map(User::mapToDto).collect(Collectors.toList()));
+            return Result.ok(users.stream().map(User::mapToDto).collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Result.error("Error finding Users by middle name", "500");

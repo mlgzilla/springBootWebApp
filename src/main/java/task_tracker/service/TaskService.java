@@ -75,6 +75,16 @@ public class TaskService {
         }
     }
 
+    public Result<List<TaskDto>> findByName(String name) {
+        try {
+            List<Task> tasks = taskRepository.findByName(name + '%');
+            return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error("Error finding Tasks by first name", "500");
+        }
+    }
+
     public Result<String> create(Task task) {
         try {
             task.setStatus(TaskStatus.NotStarted);
