@@ -1,12 +1,14 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import task_tracker.domain.Role;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 public class UserDto {
     private UUID id;
     private String name;

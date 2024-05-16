@@ -1,6 +1,7 @@
 package task_tracker.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import task_tracker.enums.Priority;
 import task_tracker.enums.TaskStatus;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 public class TaskDto {
     private UUID id;
 
