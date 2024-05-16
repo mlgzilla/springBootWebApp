@@ -23,17 +23,17 @@ public class UserService {
     private final TaskRepository taskRepository;
     private final WorkTimeRepository workTimeRepository;
     private final ContactInfoRepository contactInfoRepository;
-    private final ProjectRepository projectRepository;
     private final RoleRepository roleRepository;
+    private final CommentRepository commentRepository;
 
-    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository, ProjectRepository projectRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, AttachmentRepository attachmentRepository, TaskRepository taskRepository, WorkTimeRepository workTimeRepository, ContactInfoRepository contactInfoRepository, RoleRepository roleRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.attachmentRepository = attachmentRepository;
         this.taskRepository = taskRepository;
         this.workTimeRepository = workTimeRepository;
         this.contactInfoRepository = contactInfoRepository;
-        this.projectRepository = projectRepository;
         this.roleRepository = roleRepository;
+        this.commentRepository = commentRepository;
     }
 
     public Result<UserDto> findById(UUID id) {
@@ -109,23 +109,10 @@ public class UserService {
                 return Result.error("User was not found", "404");
             User user = userRead.get();
             user.setName(userDto.getName());
+            if (!user.getPassword().equals(""))
+                user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
             user.setSurename(userDto.getSurename());
             user.setLogin(userDto.getLogin());
-            userRepository.saveAndFlush(user);
-            return Result.ok("Update ok");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Failed to update user", "500");
-        }
-    }
-
-    public Result<String> updatePassword(UUID id, String newPassword) {
-        try {
-            Optional<User> userRead = userRepository.findById(id);
-            if (userRead.isEmpty())
-                return Result.error("User was not found", "404");
-            User user = userRead.get();
-            user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {
@@ -137,6 +124,7 @@ public class UserService {
     public Result<String> delete(UUID id) {
         try {
             attachmentRepository.deleteAllByUserId(id);
+            commentRepository.deleteAllByUserId(id);
             taskRepository.deleteAllByUserId(id);
             workTimeRepository.deleteAllByUserId(id);
             contactInfoRepository.deleteAllByUserId(id);

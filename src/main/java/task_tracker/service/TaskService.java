@@ -49,32 +49,6 @@ public class TaskService {
         }
     }
 
-    public Result<List<TaskDto>> findByStatus(TaskStatus status) {
-        try {
-            List<Task> tasks = taskRepository.findByStatus(status);
-            if (tasks.isEmpty())
-                return Result.error("Tasks by status were not found", "404");
-            else
-                return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Error finding status by employee", "500");
-        }
-    }
-
-    public Result<List<TaskDto>> findByPriority(Priority priority) {
-        try {
-            List<Task> tasks = taskRepository.findByPriority(priority);
-            if (tasks.isEmpty())
-                return Result.error("Tasks by priority were not found", "404");
-            else
-                return Result.ok(tasks.stream().map(Task::mapToDto).collect(Collectors.toList()));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Error finding status by employee", "500");
-        }
-    }
-
     public Result<List<TaskDto>> findByName(String name) {
         try {
             List<Task> tasks = taskRepository.findByName(name + '%');
@@ -117,36 +91,6 @@ public class TaskService {
             task.setPriority(taskDto.getPriority());
             task.setStatus(taskDto.getStatus());
             task.setDeadline(taskDto.getDeadline());
-            taskRepository.saveAndFlush(task);
-            return Result.ok("Update ok");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Failed to update task", "500");
-        }
-    }
-
-    public Result<String> updateStatus(UUID id, TaskStatus taskStatus) {
-        try {
-            Optional<Task> taskRead = taskRepository.findById(id);
-            if (taskRead.isEmpty())
-                return Result.error("Task was not found", "404");
-            Task task = taskRead.get();
-            task.setStatus(taskStatus);
-            taskRepository.saveAndFlush(task);
-            return Result.ok("Update ok");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Result.error("Failed to update task", "500");
-        }
-    }
-
-    public Result<String> updatePriority(UUID id, Priority priority) {
-        try {
-            Optional<Task> taskRead = taskRepository.findById(id);
-            if (taskRead.isEmpty())
-                return Result.error("Task was not found", "404");
-            Task task = taskRead.get();
-            task.setPriority(priority);
             taskRepository.saveAndFlush(task);
             return Result.ok("Update ok");
         } catch (Exception e) {

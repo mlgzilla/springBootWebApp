@@ -21,4 +21,9 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
     @Query("delete from Comment where task.id = ?1")
     void deleteAllByTaskId(UUID id);
 
+    @Modifying
+    @Transactional
+    @Query("delete from Comment where user.id = ?1")
+    void deleteAllByUserId(UUID id);
+
 }

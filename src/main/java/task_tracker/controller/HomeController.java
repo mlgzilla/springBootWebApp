@@ -113,6 +113,26 @@ public class HomeController {
             model.addAttribute(new User());
             return "signup";
         }
+        if (user.getPassword().equals("")) {
+            model.addAttribute("error", "Пароль должен быть указан");
+            model.addAttribute(new User());
+            return "signup";
+        }
+        if (user.getLogin().equals("")) {
+            model.addAttribute("error", "Логин должен быть указан");
+            model.addAttribute(new User());
+            return "signup";
+        }
+        if (user.getName().equals("")) {
+            model.addAttribute("error", "Имя должен быть указан");
+            model.addAttribute(new User());
+            return "signup";
+        }
+        if (user.getSurename().equals("")) {
+            model.addAttribute("error", "Фамилия должен быть указан");
+            model.addAttribute(new User());
+            return "signup";
+        }
         Result<User> result = userService.create(user);
         if (result.isError()) {
             model.addAttribute("error", "Не удалось создать пользователя ");

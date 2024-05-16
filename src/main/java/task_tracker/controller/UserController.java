@@ -24,19 +24,6 @@ public class UserController {
 
     private final ProjectService projectService;
 
-    @GetMapping("/update/{id}")
-    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
-        Result<UserDto> userRead = userService.findById(id);
-        if (userRead.isError()) {
-            model.addAttribute("message", userRead.getMessage());
-            return userRead.getCode();
-        }
-        model.addAttribute("user", userRead.getObject());
-        String searchQuery = "";
-        model.addAttribute("searchQuery", searchQuery);
-        return "user/update";
-    }
-
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") UUID userId, Principal principal, Model model) {
         Result<UserDto> userRead = userService.findByPrincipal(principal);
@@ -80,6 +67,21 @@ public class UserController {
         return "user/index";
     }
 
+    @GetMapping("/update/{id}")
+    public String getUpdateForm(@PathVariable("id") UUID id, Model model) {
+        Result<UserDto> userRead = userService.findById(id);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        userDto.setPassword("");
+        model.addAttribute("user", userDto);
+        String searchQuery = "";
+        model.addAttribute("searchQuery", searchQuery);
+        return "user/update";
+    }
+
     @PutMapping("/{id}")
     public String update(@ModelAttribute("user") UserDto user, @PathVariable("id") UUID id, Model model) {
         Result<String> upload = userService.update(id, user);
@@ -100,16 +102,6 @@ public class UserController {
 //            return "redirect:/project/" + id;
 //    }
 
-    @PutMapping("/updatePassword/{id}")
-    public String updatePassword(@ModelAttribute("roleId") String newPassword, @PathVariable("id") UUID id, Model model) {
-        Result<String> upload = userService.updatePassword(id, newPassword);
-        if (upload.isError()) {
-            model.addAttribute("message", upload.getMessage());
-            return upload.getCode();
-        } else
-            return "redirect:/project/" + id;
-    }
-
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id, Model model) {
         Result<String> delete = userService.delete(id);
@@ -118,7 +110,7 @@ public class UserController {
             return delete.getCode();
         } else {
             model.addAttribute("message", delete.getObject());
-            return "redirect:/user/";
+            return "redirect:/";
         }
     }
 }
