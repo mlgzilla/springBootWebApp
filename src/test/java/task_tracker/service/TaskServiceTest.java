@@ -29,6 +29,12 @@ public class TaskServiceTest {
     private TaskRepository taskRepository;
 
     @Mock
+    private CommentRepository commentRepository;
+
+    @Mock
+    private AttachmentRepository attachmentRepository;
+
+    @Mock
     private ProjectRepository projectRepository;
 
     @InjectMocks
