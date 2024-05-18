@@ -44,7 +44,7 @@
     <p class="" th:text="${userDtoFound.contactInfoDto.phoneNumber}">User phone mumber</p>
     <p class="" th:text="${userDtoFound.contactInfoDto.email}">User email</p>
 
-    <a class="" th:href="@{/user/update/{id}(id=${userDtoFound.id})}">
+    <a class="" th:if="${userDto.id==userDtoFound.id}" th:href="@{/user/update/{id}(id=${userDtoFound.id})}">
         <button class="btn btn-primary">Изменить данные</button>
     </a>
 </div>

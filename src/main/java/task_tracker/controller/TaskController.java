@@ -116,7 +116,13 @@ public class TaskController {
         Task task = new Task();
         task.setProjectId(id);
         task.setPriority(Priority.Lowest);
-        model.addAttribute(task);
+        ProjectDto projectDto = projectService.findById(id).getObject();
+        List<UserDto> projectUsers = projectDto.getUsers()
+                .stream()
+                .map(userId -> userService.findById(userId).getObject())
+                .toList();
+        model.addAttribute("projectUsers", projectUsers);
+        model.addAttribute("task", task);
         model.addAttribute("taskStatus", TaskStatus.values());
         model.addAttribute("priorities", Priority.values());
         return "task/new";
@@ -151,10 +157,12 @@ public class TaskController {
             model.addAttribute("message", userRead.getMessage());
             return userRead.getCode();
         }
-        UserDto userDto = userRead.getObject();
-        User user = new User();
-        user.setId(userDto.getId());
-        task.setUser(user);
+        if (task.getProjectId()==null){
+            UserDto userDto = userRead.getObject();
+            User user = new User();
+            user.setId(userDto.getId());
+            task.setUser(user);
+        }
         Result<String> savedTask = taskService.create(task);
         if (savedTask.isError()) {
             model.addAttribute("message", savedTask.getMessage());

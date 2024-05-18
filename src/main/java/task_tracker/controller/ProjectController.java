@@ -52,11 +52,36 @@ public class ProjectController {
                 }
                 model.addAttribute("project", projectDto);
 
+                model.addAttribute("projectUsers", projectDto.getUsers()
+                        .stream()
+                        .map(user -> userService.findById(user).getObject())
+                        .toList());
+
                 String searchQuery = "";
                 model.addAttribute("searchQuery", searchQuery);
             }
         }
         return "index";
+    }
+
+    @GetMapping("/subscribe/{id}")
+    public String subscribeToProject(@PathVariable("id") UUID projectId, Principal principal, Model model) {
+        Result<UserDto> userRead = userService.findByPrincipal(principal);
+        if (userRead.isError()) {
+            model.addAttribute("message", userRead.getMessage());
+            return userRead.getCode();
+        }
+        UserDto userDto = userRead.getObject();
+        Result<ProjectDto> projectRead = projectService.findById(projectId);
+        if (projectRead.isError()) {
+            model.addAttribute("message", projectRead.getMessage());
+            return projectRead.getCode();
+        }
+
+        ProjectDto projectDto = projectRead.getObject();
+        projectService.addUser(projectDto.getId(), userDto.getId());
+
+        return "redirect:/project/" + projectId;
     }
 
     @GetMapping("/new")

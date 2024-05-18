@@ -52,6 +52,14 @@
                     th:value="${priority}"></option>
         </select>
     </p>
+    <p th:if="${task.projectId!=null}" class="form-control">
+        <label>Назначенный пользователь </label>
+        <select th:field="*{user.id}" class="custom-select">
+            <option th:each="projectUser: ${projectUsers}"
+                    th:text="${projectUser.name} + ${projectUser.surename}"
+                    th:value="${projectUser.id}"></option>
+        </select>
+    </p>
     <p class="form-control">
         <label for="deadline">Конечная дата </label>
         <input type="datetime-local" th:field="*{deadline}" id="deadline"/>

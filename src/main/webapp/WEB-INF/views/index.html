@@ -33,14 +33,44 @@
         </ul>
     </div>
 </nav>
-<a th:if="${project==null}" class="btn btn-primary mx-3 my-3" th:href="@{/task/new}">Создать задачу</a>
-<a th:if="${project!=null}" class="btn btn-primary mx-3 my-3" th:href="@{/task/new/project/{id}(id=${project.id})}">Создать
-    задачу в проекте</a>
-<p th:if="${project!=null}" class="h1 mx-4 my-4">Проект: <span th:text="${project.name}"></span></p>
-<a th:if="${project!=null && (userDto.role.name==ROLE_ADMIN || project.users.contains(userDto.id))}"
-   class="btn btn-primary mx-3 my-3" th:href="@{/project/update/{id}(id=${project.id})}">Изменить
-    название</a>
-<p th:if="${project==null}" class="h1 mx-4 my-4">Задачи</p>
+<div th:if="${project!=null}" class="mx-4 my-4">
+    <p class="h1">Проект: <span th:text="${project.name}"></span></p>
+    <p th:if="${userDto.role.name==ROLE_ADMIN || project.users.contains(userDto.id)}"
+       class="btn btn-primary my-1" th:href="@{/project/update/{id}(id=${project.id})}">Изменить название</p>
+    <p th:if="${userDto.projects!=null}">
+        <a th:if="${userDto.projects.contains(project.id)}" class="btn btn-primary"
+           th:href="@{/task/new/project/{id}(id=${project.id})}">Создать задачу в проекте</a>
+    </p>
+    <form class="my-1" th:if="${userDto.role.name==ROLE_ADMIN || project.users.contains(userDto.id)}"
+          th:action="@{/project/{id}(id=${project.id})}" th:method="delete">
+        <input class="btn btn-danger" type="submit" value="Удалить проект"/>
+    </form>
+    <br>
+    <br>
+    <span th:if="${userDto.projects!=null}">
+        <a th:if="${!userDto.projects.contains(project.id)}" class="btn btn-primary my-3"
+           th:href="@{/project/subscribe/{id}(id=${project.id})}">Подписаться на проект</a>
+    </span>
+    <span th:if="${userDto.projects==null}">
+        <a class="btn btn-primary my-3"
+           th:href="@{/project/subscribe/{id}(id=${project.id})}">Подписаться на проект</a>
+    </span>
+
+    <div class="my-4">
+        <p class="h1">Подписчики проекта: </p>
+        <p th:each="projectUser: ${projectUsers}">
+            <a th:href="@{/user/{id}(id=${projectUser.id})}">
+                <span th:text="${projectUser.name} "></span>
+                <span th:text="${projectUser.surename}"></span>
+            </a>
+        </p>
+    </div>
+
+</div>
+
+<a th:if="${project==null}" class="btn btn-primary mx-4 my-4" th:href="@{/task/new}">Создать задачу</a>
+
+<p class="h1 mx-4 my-4">Задачи: </p>
 <div th:if="${tasks!=null}" class="row row-cols-1 row-cols-md-4 mx-4 my-4">
     <div class="col mb-4" th:each="task: ${tasks}">
         <a th:href="@{/task/{id}(id=${task.id})}" class="text-decoration-none">
@@ -53,11 +83,5 @@
         </a>
     </div>
 </div>
-<form th:if="${project!=null && (userDto.role.name==ROLE_ADMIN || project.users.contains(userDto.id))}"
-      th:action="@{/project/{id}(id=${project.id})}" th:method="delete">
-    <p class="form-control">
-        <input class="btn btn-danger" type="submit" value="Удалить проект"/>
-    </p>
-</form>
 </body>
 </html>

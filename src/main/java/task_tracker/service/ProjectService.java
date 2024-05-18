@@ -1,6 +1,7 @@
 package task_tracker.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import task_tracker.domain.Project;
 import task_tracker.domain.User;
 import task_tracker.dto.ProjectDto;
@@ -72,6 +73,7 @@ public class ProjectService {
         }
     }
 
+    @Transactional
     public Result<String> addUser(UUID id, UUID userId) {
         try {
             Optional<Project> projectRead = projectRepository.findById(id);
@@ -86,6 +88,12 @@ public class ProjectService {
             projectUsers.add(user.getId());
             project.setUsers(projectUsers);
             projectRepository.saveAndFlush(project);
+            HashSet<UUID> projects = new HashSet<>();
+            if (user.getProjects() != null)
+                projects = (HashSet<UUID>) user.getProjects();
+            projects.add(project.getId());
+            user.setProjects(projects);
+            userRepository.saveAndFlush(user);
             return Result.ok("Update ok");
         } catch (Exception e) {
             System.out.println(e.getMessage());
